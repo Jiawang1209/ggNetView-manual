@@ -31,7 +31,7 @@
   
   
 
-
+<link rel="next" href="create-graph-object.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -124,6 +124,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 </style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 </head>
 
@@ -137,13 +160,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="#ggnetview-manual-documentation"><i class="fa fa-check"></i><b>1</b> ggNetView manual documentation</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> ggNetView manual documentation</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="#introdution"><i class="fa fa-check"></i><b>1.1</b> Introdution</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="#installation"><i class="fa fa-check"></i><b>1.2</b> Installation</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="#citation"><i class="fa fa-check"></i><b>1.3</b> Citation</a></li>
-<li class="chapter" data-level="1.4" data-path="index.html"><a href="#source-code"><i class="fa fa-check"></i><b>1.4</b> Source Code</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#introdution"><i class="fa fa-check"></i><b>1.1</b> Introdution</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.2</b> Installation</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i><b>1.3</b> Citation</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#source-code"><i class="fa fa-check"></i><b>1.4</b> Source Code</a></li>
 </ul></li>
+<li class="chapter" data-level="2" data-path="create-graph-object.html"><a href="create-graph-object.html"><i class="fa fa-check"></i><b>2</b> Create Graph object</a></li>
 </ul>
 
       </nav>
@@ -167,43 +191,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p class="date"><em>2026-01-08</em></p>
 </div>
 <div id="ggnetview-manual-documentation" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">1</span> ggNetView manual documentation<a href="#ggnetview-manual-documentation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<h1><span class="header-section-number">1</span> ggNetView manual documentation<a href="index.html#ggnetview-manual-documentation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="introdution" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Introdution<a href="#introdution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2><span class="header-section-number">1.1</span> Introdution<a href="index.html#introdution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><strong>Network analysis</strong> has been widely applied in the <strong>life sciences, microbiology, ecology, and agronomy</strong> to quantify interactions among <strong>genes, proteins, metabolites, microorganisms, and environmental factors</strong>. These interactions collectively shape the functioning of biological and ecological systems. Despite its broad adoption, existing tools often face limitations in flexibility, customization, reproducibility, and the generation of publication-ready figures.</p>
 <p>To address these challenges, <strong>ggNetView</strong> was developed as an <strong>R package</strong> that integrates <strong>ggplot2, ggraph, and tidygraph</strong> within the <strong>Grammar of Graphics framework</strong>, enabling fully reproducible and highly customizable network visualizations. The package provides deterministic layout algorithms, comprehensive topological analyses, modular coloring schemes, hierarchical annotations, and consistent theming, ensuring standardized and interpretable graphical output.</p>
 <p>Although initially designed for applications in <strong>soil science and microbial ecology</strong>, <strong>ggNetView</strong> is broadly applicable to network analyses in <code>molecular biology</code>, including <strong>WGCNA and protein–protein interaction (PPI) networks</strong>. By lowering technical barriers in network construction and visualization, <strong>ggNetView</strong> enables researchers across disciplines to efficiently produce reproducible, publication-quality network figures.</p>
 </div>
 <div id="installation" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> Installation<a href="#installation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2><span class="header-section-number">1.2</span> Installation<a href="index.html#installation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <blockquote>
 <p>First, install the required dependencies</p>
 </blockquote>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages(&quot;BiocManager&quot;)</span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;WGCNA&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># install.packages(&quot;remotes&quot;)</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;alserglab/mascarade&quot;</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;zdk123/SpiecEasi&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" tabindex="-1"></a><span class="co"># install.packages(&quot;BiocManager&quot;)</span></span>
+<span id="cb1-2"><a href="index.html#cb1-2" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;WGCNA&quot;</span>)</span>
+<span id="cb1-3"><a href="index.html#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="index.html#cb1-4" tabindex="-1"></a><span class="co"># install.packages(&quot;remotes&quot;)</span></span>
+<span id="cb1-5"><a href="index.html#cb1-5" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;alserglab/mascarade&quot;</span>)</span>
+<span id="cb1-6"><a href="index.html#cb1-6" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;zdk123/SpiecEasi&quot;</span>)</span></code></pre></div>
 <blockquote>
 <p>and then install ggNetView.</p>
 </blockquote>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Jiawang1209/ggNetView&quot;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co"># install.packages(&quot;pak&quot;)</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>pak<span class="sc">::</span><span class="fu">pak</span>(<span class="st">&quot;Jiawang1209/ggNetView&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
+<span id="cb2-2"><a href="index.html#cb2-2" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Jiawang1209/ggNetView&quot;</span>)</span>
+<span id="cb2-3"><a href="index.html#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="index.html#cb2-4" tabindex="-1"></a><span class="co"># install.packages(&quot;pak&quot;)</span></span>
+<span id="cb2-5"><a href="index.html#cb2-5" tabindex="-1"></a>pak<span class="sc">::</span><span class="fu">pak</span>(<span class="st">&quot;Jiawang1209/ggNetView&quot;</span>)</span></code></pre></div>
 </div>
 <div id="citation" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> Citation<a href="#citation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2><span class="header-section-number">1.3</span> Citation<a href="index.html#citation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <blockquote>
 <p>If you use ggNetView in your research, please cite:</p>
 </blockquote>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>Yue <span class="fu">Liu</span> (<span class="dv">2025</span>). ggNetView<span class="sc">:</span> An R package <span class="cf">for</span> complex biological and ecological network analysis and visualization. R package version <span class="dv">0</span>.<span class="dv">1</span>.<span class="fl">0.</span> </span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>Jiawang1209<span class="sc">/</span>ggNetView</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" tabindex="-1"></a>Yue Liu, Chao <span class="fu">Wang</span> (<span class="dv">2025</span>). ggNetView<span class="sc">:</span> An R package <span class="cf">for</span> complex biological and ecological network analysis and visualization. R package version <span class="dv">0</span>.<span class="dv">1</span>.<span class="fl">0.</span> </span>
+<span id="cb3-2"><a href="index.html#cb3-2" tabindex="-1"></a>https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>Jiawang1209<span class="sc">/</span>ggNetView</span></code></pre></div>
 </div>
 <div id="source-code" class="section level2 hasAnchor" number="1.4">
-<h2><span class="header-section-number">1.4</span> Source Code<a href="#source-code" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<h2><span class="header-section-number">1.4</span> Source Code<a href="index.html#source-code" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <blockquote>
 <p>The source code for ggNetView is available in the ggNetView repository.</p>
 </blockquote>
@@ -217,7 +241,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 
-
+<a href="create-graph-object.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

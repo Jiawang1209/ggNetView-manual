@@ -58,7 +58,7 @@ pak::pak("Jiawang1209/ggNetView")
 > If you use ggNetView in your research, please cite:
 
 ``` {r eval=FALSE}
-Yue Liu (2025). ggNetView: An R package for complex biological and ecological network analysis and visualization. R package version 0.1.0. 
+Yue Liu, Chao Wang (2025). ggNetView: An R package for complex biological and ecological network analysis and visualization. R package version 0.1.0. 
 https://github.com/Jiawang1209/ggNetView
 ```
 

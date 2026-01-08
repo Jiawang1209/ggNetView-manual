@@ -3,3 +3,7 @@ introdution
 installation
 citation
 source-code
+fig:nice-fig
+tab:nice-tab
+intro
+create-graph-object
