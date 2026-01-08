@@ -1,0 +1,22 @@
+# Build graph object
+
+
+## Build graph from matrix
+
+
+## Build graph from data frame
+
+
+## Build graph from igraph
+
+
+
+## Build graph from double matrix
+
+
+
+## Build graph from adjacency matrix
+
+
+## Build graph from adjacency matrix with module Information
+

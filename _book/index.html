@@ -31,7 +31,7 @@
   
   
 
-<link rel="next" href="create-graph-object.html"/>
+<link rel="next" href="build-graph-object.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -124,30 +124,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 </style>
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -160,6 +138,9 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
+<li><a href="./">ggNetView-manial</a></li>
+
+<li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> ggNetView manual documentation</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#introdution"><i class="fa fa-check"></i><b>1.1</b> Introdution</a></li>
@@ -167,7 +148,38 @@ div.csl-indent {
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i><b>1.3</b> Citation</a></li>
 <li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#source-code"><i class="fa fa-check"></i><b>1.4</b> Source Code</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="create-graph-object.html"><a href="create-graph-object.html"><i class="fa fa-check"></i><b>2</b> Create Graph object</a></li>
+<li class="chapter" data-level="2" data-path="build-graph-object.html"><a href="build-graph-object.html"><i class="fa fa-check"></i><b>2</b> Build graph object</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-matrix"><i class="fa fa-check"></i><b>2.1</b> Build graph from matrix</a></li>
+<li class="chapter" data-level="2.2" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-data-frame"><i class="fa fa-check"></i><b>2.2</b> Build graph from data frame</a></li>
+<li class="chapter" data-level="2.3" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-igraph"><i class="fa fa-check"></i><b>2.3</b> Build graph from igraph</a></li>
+<li class="chapter" data-level="2.4" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-double-matrix"><i class="fa fa-check"></i><b>2.4</b> Build graph from double matrix</a></li>
+<li class="chapter" data-level="2.5" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-adjacency-matrix"><i class="fa fa-check"></i><b>2.5</b> Build graph from adjacency matrix</a></li>
+<li class="chapter" data-level="2.6" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-adjacency-matrix-with-module-information"><i class="fa fa-check"></i><b>2.6</b> Build graph from adjacency matrix with module Information</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="extract-subgraph.html"><a href="extract-subgraph.html"><i class="fa fa-check"></i><b>3</b> Extract subgraph</a></li>
+<li class="chapter" data-level="4" data-path="network-layout.html"><a href="network-layout.html"><i class="fa fa-check"></i><b>4</b> Network layout</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="network-layout.html"><a href="network-layout.html#gephi-layout"><i class="fa fa-check"></i><b>4.1</b> Gephi layout</a></li>
+<li class="chapter" data-level="4.2" data-path="network-layout.html"><a href="network-layout.html#fruchtermanreingold-force-directed-layout"><i class="fa fa-check"></i><b>4.2</b> Fruchterman–Reingold force-directed layout</a></li>
+<li class="chapter" data-level="4.3" data-path="network-layout.html"><a href="network-layout.html#diamond-layout"><i class="fa fa-check"></i><b>4.3</b> Diamond layout</a></li>
+<li class="chapter" data-level="4.4" data-path="network-layout.html"><a href="network-layout.html#grid-layout"><i class="fa fa-check"></i><b>4.4</b> Grid layout</a></li>
+<li class="chapter" data-level="4.5" data-path="network-layout.html"><a href="network-layout.html#kk-layout"><i class="fa fa-check"></i><b>4.5</b> kk layout</a></li>
+<li class="chapter" data-level="4.6" data-path="network-layout.html"><a href="network-layout.html#nicley-layout"><i class="fa fa-check"></i><b>4.6</b> nicley layout</a></li>
+<li class="chapter" data-level="4.7" data-path="network-layout.html"><a href="network-layout.html#multrings-layout"><i class="fa fa-check"></i><b>4.7</b> multrings layout</a></li>
+<li class="chapter" data-level="4.8" data-path="network-layout.html"><a href="network-layout.html#petal-layout"><i class="fa fa-check"></i><b>4.8</b> petal layout</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="network-topology-information.html"><a href="network-topology-information.html"><i class="fa fa-check"></i><b>5</b> Network topology information</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information"><i class="fa fa-check"></i><b>5.1</b> Get network topology information</a></li>
+<li class="chapter" data-level="5.2" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information-with-matrix"><i class="fa fa-check"></i><b>5.2</b> Get network topology information with matrix</a></li>
+<li class="chapter" data-level="5.3" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information-by-parallel"><i class="fa fa-check"></i><b>5.3</b> Get network topology information by parallel</a></li>
+<li class="chapter" data-level="5.4" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information-with-matrix-by-parallel"><i class="fa fa-check"></i><b>5.4</b> Get network topology information with matrix by parallel</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="network-comparison.html"><a href="network-comparison.html"><i class="fa fa-check"></i><b>6</b> Network comparison</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/Jiawang1209/ggNetView" target="blank">Published with bookdown</a></li>
+
 </ul>
 
       </nav>
@@ -191,7 +203,7 @@ div.csl-indent {
 <p class="date"><em>2026-01-08</em></p>
 </div>
 <div id="ggnetview-manual-documentation" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">1</span> ggNetView manual documentation<a href="index.html#ggnetview-manual-documentation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<h1><span class="header-section-number">Chapter 1</span> ggNetView manual documentation<a href="index.html#ggnetview-manual-documentation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="introdution" class="section level2 hasAnchor" number="1.1">
 <h2><span class="header-section-number">1.1</span> Introdution<a href="index.html#introdution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><strong>Network analysis</strong> has been widely applied in the <strong>life sciences, microbiology, ecology, and agronomy</strong> to quantify interactions among <strong>genes, proteins, metabolites, microorganisms, and environmental factors</strong>. These interactions collectively shape the functioning of biological and ecological systems. Despite its broad adoption, existing tools often face limitations in flexibility, customization, reproducibility, and the generation of publication-ready figures.</p>
@@ -241,7 +253,7 @@ div.csl-indent {
         </div>
       </div>
 
-<a href="create-graph-object.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="build-graph-object.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -272,8 +284,8 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": null,
-    "text": null
+    "link": "https://github.com/Jiawang1209/ggNetView/index.Rmd",
+    "text": "Edit"
   },
   "history": {
     "link": null,
@@ -283,7 +295,7 @@ gitbook.start({
     "link": null,
     "text": null
   },
-  "download": null,
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
   "search": {
     "engine": "fuse",
     "options": null
