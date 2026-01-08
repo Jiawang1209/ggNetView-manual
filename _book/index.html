@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>ggNetView manual documentation</title>
+  <meta name="description" content="This book serves as a systematic user guide for the R package ggNetView. It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization." />
+  <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="ggNetView manual documentation" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This book serves as a systematic user guide for the R package ggNetView. It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="ggNetView manual documentation" />
+  
+  <meta name="twitter:description" content="This book serves as a systematic user guide for the R package ggNetView. It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization." />
+  
+
+<meta name="author" content="Yue Liu" />
+
+
+<meta name="date" content="2026-01-08" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="#ggnetview-manual-documentation"><i class="fa fa-check"></i><b>1</b> ggNetView manual documentation</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="#introdution"><i class="fa fa-check"></i><b>1.1</b> Introdution</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="#installation"><i class="fa fa-check"></i><b>1.2</b> Installation</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="#citation"><i class="fa fa-check"></i><b>1.3</b> Citation</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="#source-code"><i class="fa fa-check"></i><b>1.4</b> Source Code</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ggNetView manual documentation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">ggNetView manual documentation</h1>
+<p class="author"><em>Yue Liu</em></p>
+<p class="date"><em>2026-01-08</em></p>
+</div>
+<div id="ggnetview-manual-documentation" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">1</span> ggNetView manual documentation<a href="#ggnetview-manual-documentation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introdution" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Introdution<a href="#introdution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Network analysis</strong> has been widely applied in the <strong>life sciences, microbiology, ecology, and agronomy</strong> to quantify interactions among <strong>genes, proteins, metabolites, microorganisms, and environmental factors</strong>. These interactions collectively shape the functioning of biological and ecological systems. Despite its broad adoption, existing tools often face limitations in flexibility, customization, reproducibility, and the generation of publication-ready figures.</p>
+<p>To address these challenges, <strong>ggNetView</strong> was developed as an <strong>R package</strong> that integrates <strong>ggplot2, ggraph, and tidygraph</strong> within the <strong>Grammar of Graphics framework</strong>, enabling fully reproducible and highly customizable network visualizations. The package provides deterministic layout algorithms, comprehensive topological analyses, modular coloring schemes, hierarchical annotations, and consistent theming, ensuring standardized and interpretable graphical output.</p>
+<p>Although initially designed for applications in <strong>soil science and microbial ecology</strong>, <strong>ggNetView</strong> is broadly applicable to network analyses in <code>molecular biology</code>, including <strong>WGCNA and protein–protein interaction (PPI) networks</strong>. By lowering technical barriers in network construction and visualization, <strong>ggNetView</strong> enables researchers across disciplines to efficiently produce reproducible, publication-quality network figures.</p>
+</div>
+<div id="installation" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Installation<a href="#installation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<blockquote>
+<p>First, install the required dependencies</p>
+</blockquote>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages(&quot;BiocManager&quot;)</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;WGCNA&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># install.packages(&quot;remotes&quot;)</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;alserglab/mascarade&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;zdk123/SpiecEasi&quot;</span>)</span></code></pre></div>
+<blockquote>
+<p>and then install ggNetView.</p>
+</blockquote>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Jiawang1209/ggNetView&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co"># install.packages(&quot;pak&quot;)</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>pak<span class="sc">::</span><span class="fu">pak</span>(<span class="st">&quot;Jiawang1209/ggNetView&quot;</span>)</span></code></pre></div>
+</div>
+<div id="citation" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Citation<a href="#citation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<blockquote>
+<p>If you use ggNetView in your research, please cite:</p>
+</blockquote>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>Yue <span class="fu">Liu</span> (<span class="dv">2025</span>). ggNetView<span class="sc">:</span> An R package <span class="cf">for</span> complex biological and ecological network analysis and visualization. R package version <span class="dv">0</span>.<span class="dv">1</span>.<span class="fl">0.</span> </span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>Jiawang1209<span class="sc">/</span>ggNetView</span></code></pre></div>
+</div>
+<div id="source-code" class="section level2 hasAnchor" number="1.4">
+<h2><span class="header-section-number">1.4</span> Source Code<a href="#source-code" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<blockquote>
+<p>The source code for ggNetView is available in the ggNetView repository.</p>
+</blockquote>
+<p><a href="https://github.com/Jiawang1209/ggNetView" class="uri">https://github.com/Jiawang1209/ggNetView</a></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+</body>
+
+</html>

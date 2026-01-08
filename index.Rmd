@@ -1,0 +1,73 @@
+--- 
+title: "ggNetView manual documentation"
+author: "Yue Liu"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+description: "This book serves as a systematic user guide for the R package ggNetView.
+It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization."
+---
+
+# ggNetView manual documentation
+
+
+
+
+## Introdution
+
+**Network analysis** has been widely applied in the **life sciences, microbiology, ecology, and agronomy** to quantify interactions among **genes, proteins, metabolites, microorganisms, and environmental factors**. These interactions collectively shape the functioning of biological and ecological systems. Despite its broad adoption, existing tools often face limitations in flexibility, customization, reproducibility, and the generation of publication-ready figures.
+
+To address these challenges, **ggNetView** was developed as an **R package** that integrates **ggplot2, ggraph, and tidygraph** within the **Grammar of Graphics framework**, enabling fully reproducible and highly customizable network visualizations. The package provides deterministic layout algorithms, comprehensive topological analyses, modular coloring schemes, hierarchical annotations, and consistent theming, ensuring standardized and interpretable graphical output.
+
+Although initially designed for applications in **soil science and microbial ecology**, **ggNetView** is broadly applicable to network analyses in `molecular biology`, including **WGCNA and protein–protein interaction (PPI) networks**. By lowering technical barriers in network construction and visualization, **ggNetView** enables researchers across disciplines to efficiently produce reproducible, publication-quality network figures.
+
+
+
+## Installation
+
+> First, install the required dependencies
+
+```{r eval=FALSE}
+# install.packages("BiocManager")
+BiocManager::install("WGCNA")
+
+# install.packages("remotes")
+remotes::install_github("alserglab/mascarade")
+remotes::install_github("zdk123/SpiecEasi")
+```
+
+> and then install ggNetView.
+
+```{r eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("Jiawang1209/ggNetView")
+
+# install.packages("pak")
+pak::pak("Jiawang1209/ggNetView")
+```
+
+
+
+## Citation
+
+> If you use ggNetView in your research, please cite:
+
+``` {r eval=FALSE}
+Yue Liu (2025). ggNetView: An R package for complex biological and ecological network analysis and visualization. R package version 0.1.0. 
+https://github.com/Jiawang1209/ggNetView
+```
+
+
+## Source Code
+
+> The source code for ggNetView is available in the ggNetView repository.
+
+<https://github.com/Jiawang1209/ggNetView>
+
+
+
