@@ -116,6 +116,39 @@ graph_obj_from_df2 <- build_graph_from_df(
 graph_obj_from_df2
 ```
 
+
+
+----
+
+## Build graph from data frame with module
+
+>  Example data
+
+```{r}
+# Access built-in example datasets in ggNetView
+data("ppi_module")
+df = ppi_module$ppi
+head(df)
+
+node_annotation = ppi_module$annotation
+head(node_annotation)
+```
+
+> Build graph object
+
+```{r message=F}
+graph_obj_from_module <- build_graph_from_module(
+  df = df,
+  node_annotation = node_annotation,
+  directed = F,
+  top_modules = 15,
+  seed = 1115
+)
+
+graph_obj_from_module
+```
+
+
 ----
 
 ## Build graph from adjacency matrix
@@ -123,16 +156,31 @@ graph_obj_from_df2
 >  Example data
 
 ```{r}
+data("adjacency_matrix_example")
+dim(adjacency_matrix_example)
+adjacency_matrix_example[1:5, 1:5]
+
+data("tax_tab")
+dim(tax_tab)
+tax_tab[1:5, 1:5]
 
 ```
 
 
 > Build graph object
 
-```{r}
+```{r message=F}
+graph_obj_adj <- build_graph_from_adj_mat(
+  adjacency_matrix = adjacency_matrix_example,
+  module.method = "Fast_greedy",
+  node_annotation = tax_tab,
+  top_modules = 15,
+  seed = 1115
+)
+
+graph_obj_adj
 
 ```
-
 
 ----
 
@@ -141,13 +189,34 @@ graph_obj_from_df2
 >  Example data
 
 ```{r}
+data("BASV_tab")
+dim(BASV_tab)
+BASV_tab[1:5, 1:5]
 
+data("FASV_tab")
+dim(FASV_tab)
+FASV_tab[1:5, 1:5]
+
+
+data("double_mat_node_df")
+dim(double_mat_node_df)
+head(double_mat_node_df)
 ```
 
 
 > Build graph object
 
 ```{r}
+graph_obj_double_mat <- build_graph_from_double_mat(
+  mat1 = BASV_tab,
+  mat2 = FASV_tab,
+   module.method = "Fast_greedy",
+  node_annotation = double_mat_node_df,
+  top_modules = 15,
+  seed = 1115
+)
+
+graph_obj_double_mat
 
 ```
 
@@ -155,36 +224,7 @@ graph_obj_from_df2
 
 ----
 
-## Build graph from adjacency matrix with module Information
-
->  Example data
-
-```{r}
-
-```
 
 
-> Build graph object
 
-```{r}
-
-```
-
-----
-
-
-## Build graph from igraph
-
->  Example data
-
-```{r}
-
-```
-
-
-> Build graph object
-
-```{r}
-
-```
 

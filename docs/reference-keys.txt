@@ -7,10 +7,9 @@ contact
 build-graph-object
 build-graph-from-matrix
 build-graph-from-data-frame
+build-graph-from-data-frame-with-module
 build-graph-from-adjacency-matrix
 build-graph-from-double-matrix
-build-graph-from-adjacency-matrix-with-module-information
-build-graph-from-igraph
 random-matrix-theory-rmtbased-random-network
 rmt
 get-network-information

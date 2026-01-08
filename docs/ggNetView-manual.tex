@@ -540,15 +540,205 @@ Build graph object
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
+\section{Build graph from data frame with module}\label{build-graph-from-data-frame-with-module}
+
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Access built{-}in example datasets in ggNetView}
+\FunctionTok{data}\NormalTok{(}\StringTok{"ppi\_module"}\NormalTok{)}
+\NormalTok{df }\OtherTok{=}\NormalTok{ ppi\_module}\SpecialCharTok{$}\NormalTok{ppi}
+\FunctionTok{head}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   from  to    weight
+## 1   A1 D40  9.306533
+## 2   A2 D39 11.783920
+## 3   A3 D38 23.005025
+## 4   A4 D37  7.412060
+## 5   A5 D36 18.778894
+## 6   A6 D35 16.592965
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{node\_annotation }\OtherTok{=}\NormalTok{ ppi\_module}\SpecialCharTok{$}\NormalTok{annotation}
+\FunctionTok{head}\NormalTok{(node\_annotation)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   node Modularity
+## 1   A1          A
+## 2   A2          A
+## 3   A3          A
+## 4   A4          A
+## 5   A5          A
+## 6   A6          A
+\end{verbatim}
+
+\begin{quote}
+Build graph object
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj\_from\_module }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_module}\NormalTok{(}
+  \AttributeTok{df =}\NormalTok{ df,}
+  \AttributeTok{node\_annotation =}\NormalTok{ node\_annotation,}
+  \AttributeTok{directed =}\NormalTok{ F,}
+  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed =} \DecValTok{1115}
+\NormalTok{)}
+
+\NormalTok{graph\_obj\_from\_module}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 100 nodes and 50 edges
+## #
+## # An unrooted forest with 50 trees
+## #
+## # Node Data: 100 x 7 (active)
+##    name  Modularity modularity2 modularity3 Degree Segree Strength
+##    <chr> <ord>      <ord>       <chr>        <dbl>  <dbl>    <dbl>
+##  1 D1    D          D           D                1      1     37.1
+##  2 D2    D          D           D                1      1     63.9
+##  3 D3    D          D           D                1      1     54.6
+##  4 D4    D          D           D                1      1     61.7
+##  5 D5    D          D           D                1      1     36.1
+##  6 D6    D          D           D                1      1     71.0
+##  7 D7    D          D           D                1      1     27.9
+##  8 D8    D          D           D                1      1     34.6
+##  9 D9    D          D           D                1      1     37.4
+## 10 D10   D          D           D                1      1     63.2
+## # i 90 more rows
+## #
+## # Edge Data: 50 x 4
+##    from    to weight correlation
+##   <int> <int>  <dbl>       <dbl>
+## 1    40    91   45.2        45.2
+## 2    39    92   50.6        50.6
+## 3    38    93   37.8        37.8
+## # i 47 more rows
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 \section{Build graph from adjacency matrix}\label{build-graph-from-adjacency-matrix}
 
 \begin{quote}
 Example data
 \end{quote}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{data}\NormalTok{(}\StringTok{"adjacency\_matrix\_example"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(adjacency\_matrix\_example)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859 2859
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{adjacency\_matrix\_example[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       ASV_1     ASV_2 ASV_3 ASV_4     ASV_6
+## ASV_1     0 0.0000000     0     0 0.0000000
+## ASV_2     0 0.0000000     0     0 0.8947427
+## ASV_3     0 0.0000000     0     0 0.0000000
+## ASV_4     0 0.0000000     0     0 0.0000000
+## ASV_6     0 0.8947427     0     0 0.0000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{data}\NormalTok{(}\StringTok{"tax\_tab"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(tax\_tab)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859    8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tax\_tab[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 5
+##   OTUID  Kingdom  Phylum          Class          Order            
+##   <chr>  <chr>    <chr>           <chr>          <chr>            
+## 1 ASV_2  Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 2 ASV_3  Bacteria Verrucomicrobia Spartobacteria Unassigned       
+## 3 ASV_31 Bacteria Actinobacteria  Actinobacteria Actinomycetales  
+## 4 ASV_27 Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 5 ASV_9  Bacteria Unassigned      Unassigned     Unassigned
+\end{verbatim}
+
 \begin{quote}
 Build graph object
 \end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj\_adj }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_adj\_mat}\NormalTok{(}
+  \AttributeTok{adjacency\_matrix =}\NormalTok{ adjacency\_matrix\_example,}
+  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{node\_annotation =}\NormalTok{ tax\_tab,}
+  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed =} \DecValTok{1115}
+\NormalTok{)}
+
+\NormalTok{graph\_obj\_adj}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 2049 nodes and 9602 edges
+## #
+## # An undirected simple graph with 100 components
+## #
+## # Node Data: 2,049 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_916 1          1           1           1              58     50.5 Bacter~
+##  2 ASV_777 1          1           1           1              58     48.7 Bacter~
+##  3 ASV_606 1          1           1           1              55     45.8 Bacter~
+##  4 ASV_740 1          1           1           1              54     47.2 Bacter~
+##  5 ASV_14~ 1          1           1           1              54     44.5 Bacter~
+##  6 ASV_23~ 1          1           1           1              54     47.4 Bacter~
+##  7 ASV_15~ 1          1           1           1              52     45.3 Bacter~
+##  8 ASV_24~ 1          1           1           1              52     43.0 Bacter~
+##  9 ASV_19~ 1          1           1           1              52     43.0 Bacter~
+## 10 ASV_568 1          1           1           1              51     45.1 Bacter~
+## # i 2,039 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 9,602 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1  1771  1825  0.793       0.793 Positive      
+## 2   594   597  0.895       0.895 Positive      
+## 3   588   597  0.864       0.864 Positive      
+## # i 9,599 more rows
+\end{verbatim}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -558,33 +748,143 @@ Build graph object
 Example data
 \end{quote}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{data}\NormalTok{(}\StringTok{"BASV\_tab"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(BASV\_tab)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 50 10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{BASV\_tab[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         Sample1   Sample2   Sample3   Sample4   Sample5
+## BASV1  7.769249 14.676091  6.822246 11.806957 12.086254
+## BASV2 10.771846  7.749385 14.966987  7.486507 12.645461
+## BASV3 11.746937 10.023547 10.025906 11.967562  8.748440
+## BASV4  8.210859  4.408296 10.070862  8.954202 14.639298
+## BASV5  9.833271  9.776280 10.465463  8.380012  8.905738
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{data}\NormalTok{(}\StringTok{"FASV\_tab"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(FASV\_tab)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 50 10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{FASV\_tab[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         Sample1   Sample2   Sample3   Sample4   Sample5
+## FASV1  8.195641  7.715472 13.247401 10.419618 11.961410
+## FASV2 10.032701 12.427388  7.693471 10.711077 12.157527
+## FASV3 10.109549 11.891917  9.607849  8.256637  9.989264
+## FASV4  9.817056  8.038730  5.519155  7.601228 12.688531
+## FASV5 13.370263  9.795554 13.639041 11.071635  8.176218
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{data}\NormalTok{(}\StringTok{"double\_mat\_node\_df"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(double\_mat\_node\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 100   2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(double\_mat\_node\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    name      type
+## 1 BASV1 Bacterial
+## 2 BASV2 Bacterial
+## 3 BASV3 Bacterial
+## 4 BASV4 Bacterial
+## 5 BASV5 Bacterial
+## 6 BASV6 Bacterial
+\end{verbatim}
+
 \begin{quote}
 Build graph object
 \end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj\_double\_mat }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_double\_mat}\NormalTok{(}
+  \AttributeTok{mat1 =}\NormalTok{ BASV\_tab,}
+  \AttributeTok{mat2 =}\NormalTok{ FASV\_tab,}
+   \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{node\_annotation =}\NormalTok{ double\_mat\_node\_df,}
+  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed =} \DecValTok{1115}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The max module in network is 4 we use the 4  modules for next analysis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj\_double\_mat}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 100 nodes and 2500 edges
+## #
+## # A bipartite simple graph with 1 component
+## #
+## # Node Data: 100 x 9 (active)
+##    name   type      modularity modularity2 modularity3 Modularity Degree Segree
+##    <chr>  <chr>     <fct>      <fct>       <chr>       <fct>       <dbl>  <dbl>
+##  1 BASV3  Bacterial 1          1           1           1              50     50
+##  2 BASV6  Bacterial 1          1           1           1              50     50
+##  3 BASV8  Bacterial 1          1           1           1              50     50
+##  4 BASV13 Bacterial 1          1           1           1              50     50
+##  5 BASV17 Bacterial 1          1           1           1              50     50
+##  6 BASV19 Bacterial 1          1           1           1              50     50
+##  7 BASV25 Bacterial 1          1           1           1              50     50
+##  8 BASV26 Bacterial 1          1           1           1              50     50
+##  9 BASV27 Bacterial 1          1           1           1              50     50
+## 10 BASV31 Bacterial 1          1           1           1              50     50
+## # i 90 more rows
+## # i 1 more variable: Strength <dbl>
+## #
+## # Edge Data: 2,500 x 4
+##    from    to weight correlation
+##   <int> <int>  <dbl>       <dbl>
+## 1    15    57  0.338      -0.338
+## 2    57    90  0.648       0.648
+## 3    16    57  0.162       0.162
+## # i 2,497 more rows
+\end{verbatim}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\section{Build graph from adjacency matrix with module Information}\label{build-graph-from-adjacency-matrix-with-module-information}
-
-\begin{quote}
-Example data
-\end{quote}
-
-\begin{quote}
-Build graph object
-\end{quote}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\section{Build graph from igraph}\label{build-graph-from-igraph}
-
-\begin{quote}
-Example data
-\end{quote}
-
-\begin{quote}
-Build graph object
-\end{quote}
 
 \chapter{Random Matrix Theory (RMT)--based random network}\label{random-matrix-theory-rmtbased-random-network}
 
