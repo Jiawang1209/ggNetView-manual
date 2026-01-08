@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 6 Network layout | ggNetView manual documentation</title>
+  <title>Chapter 9 Network &amp; Environment | ggNetView manual documentation</title>
   <meta name="description" content="This book serves as a systematic user guide for the R package ggNetView. It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization." />
   <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 6 Network layout | ggNetView manual documentation" />
+  <meta property="og:title" content="Chapter 9 Network &amp; Environment | ggNetView manual documentation" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This book serves as a systematic user guide for the R package ggNetView. It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization." />
   <meta name="github-repo" content="Jiawang1209/ggNetView-manual" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 6 Network layout | ggNetView manual documentation" />
+  <meta name="twitter:title" content="Chapter 9 Network &amp; Environment | ggNetView manual documentation" />
   
   <meta name="twitter:description" content="This book serves as a systematic user guide for the R package ggNetView. It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="extract-subgraph.html"/>
-<link rel="next" href="network-topology-information.html"/>
+<link rel="prev" href="network-comparison.html"/>
+<link rel="next" href="multi-omics-network-analysis.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -170,70 +170,10 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="network-layout" class="section level1 hasAnchor" number="6">
-<h1><span class="header-section-number">Chapter 6</span> Network layout<a href="network-layout.html#network-layout" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="gephi-layout" class="section level2 hasAnchor" number="6.1">
-<h2><span class="header-section-number">6.1</span> Gephi layout<a href="network-layout.html#gephi-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="fruchtermanreingold-force-directed-layout" class="section level2 hasAnchor" number="6.2">
-<h2><span class="header-section-number">6.2</span> Fruchterman–Reingold force-directed layout<a href="network-layout.html#fruchtermanreingold-force-directed-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="diamond-layout" class="section level2 hasAnchor" number="6.3">
-<h2><span class="header-section-number">6.3</span> Diamond layout<a href="network-layout.html#diamond-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="kk-layout" class="section level2 hasAnchor" number="6.4">
-<h2><span class="header-section-number">6.4</span> Kk layout<a href="network-layout.html#kk-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="nicley-layout" class="section level2 hasAnchor" number="6.5">
-<h2><span class="header-section-number">6.5</span> Nicley layout<a href="network-layout.html#nicley-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="multrings-layout" class="section level2 hasAnchor" number="6.6">
-<h2><span class="header-section-number">6.6</span> Multrings layout<a href="network-layout.html#multrings-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="petal-layout" class="section level2 hasAnchor" number="6.7">
-<h2><span class="header-section-number">6.7</span> Petal layout<a href="network-layout.html#petal-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="circle-layout" class="section level2 hasAnchor" number="6.8">
-<h2><span class="header-section-number">6.8</span> Circle layout<a href="network-layout.html#circle-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="circle-outline-layout" class="section level2 hasAnchor" number="6.9">
-<h2><span class="header-section-number">6.9</span> Circle outline layout<a href="network-layout.html#circle-outline-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="diamond-outline-layout" class="section level2 hasAnchor" number="6.10">
-<h2><span class="header-section-number">6.10</span> Diamond outline layout<a href="network-layout.html#diamond-outline-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="grid-layout" class="section level2 hasAnchor" number="6.11">
-<h2><span class="header-section-number">6.11</span> Grid layout<a href="network-layout.html#grid-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="heart_centered-layout" class="section level2 hasAnchor" number="6.12">
-<h2><span class="header-section-number">6.12</span> Heart_centered layout<a href="network-layout.html#heart_centered-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="lgl-layout" class="section level2 hasAnchor" number="6.13">
-<h2><span class="header-section-number">6.13</span> Lgl layout<a href="network-layout.html#lgl-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="randomly-layout" class="section level2 hasAnchor" number="6.14">
-<h2><span class="header-section-number">6.14</span> Randomly layout<a href="network-layout.html#randomly-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="rectangle-layout" class="section level2 hasAnchor" number="6.15">
-<h2><span class="header-section-number">6.15</span> Rectangle layout<a href="network-layout.html#rectangle-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="rightiso-layout" class="section level2 hasAnchor" number="6.16">
-<h2><span class="header-section-number">6.16</span> Rightiso layout<a href="network-layout.html#rightiso-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="square-layout" class="section level2 hasAnchor" number="6.17">
-<h2><span class="header-section-number">6.17</span> Square layout<a href="network-layout.html#square-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="square-outline-layout" class="section level2 hasAnchor" number="6.18">
-<h2><span class="header-section-number">6.18</span> Square outline layout<a href="network-layout.html#square-outline-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="star-layout" class="section level2 hasAnchor" number="6.19">
-<h2><span class="header-section-number">6.19</span> Star layout<a href="network-layout.html#star-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="star_concentric-layout" class="section level2 hasAnchor" number="6.20">
-<h2><span class="header-section-number">6.20</span> Star_concentric layout<a href="network-layout.html#star_concentric-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-</div>
-<div id="stress-layout" class="section level2 hasAnchor" number="6.21">
-<h2><span class="header-section-number">6.21</span> Stress layout<a href="network-layout.html#stress-layout" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="network-environment" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Network &amp; Environment<a href="network-environment.html#network-environment" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="network-environment-1" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Network Environment<a href="network-environment.html#network-environment-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
 </div>
 </div>
@@ -242,8 +182,8 @@
           </div>
         </div>
       </div>
-<a href="extract-subgraph.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="network-topology-information.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="network-comparison.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="multi-omics-network-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -274,7 +214,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/Jiawang1209/ggNetView/05-layout.Rmd",
+    "link": "https://github.com/Jiawang1209/ggNetView/08-network_environment.Rmd",
     "text": "Edit"
   },
   "history": {
