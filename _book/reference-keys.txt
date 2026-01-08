@@ -3,13 +3,6 @@ introdution
 installation
 citation
 source-code
-fig:nice-fig
-tab:nice-tab
-intro
-create-graph-object
-extract-a-subgraph
-network-layout
-extract-subgraph
 build-graph-object
 build-graph-from-matrix
 build-graph-from-data-frame
@@ -17,6 +10,8 @@ build-graph-from-igraph
 build-graph-from-double-matrix
 build-graph-from-adjacency-matrix
 build-graph-from-adjacency-matrix-with-module-information
+extract-subgraph
+network-layout
 gephi-layout
 fruchtermanreingold-force-directed-layout
 diamond-layout

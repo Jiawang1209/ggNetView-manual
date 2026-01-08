@@ -8,7 +8,7 @@ documentclass: book
 bibliography: [book.bib, packages.bib]
 biblio-style: apalike
 link-citations: yes
-github-repo: rstudio/bookdown-demo
+github-repo: Jiawang1209/ggNetView-manual
 description: "This book serves as a systematic user guide for the R package ggNetView.
 It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization."
 ---
