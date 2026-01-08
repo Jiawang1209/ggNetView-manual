@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 2 Build graph object | ggNetView manual documentation</title>
+<meta name="author" content="Yue Liu">
+<meta name="description" content="Basic workflow of ggNetView： Build a graph object Understand and manipulate the graph object Visualize the network using layout algorithms Retrieve topology of network Load R Package...">
+<meta name="generator" content="bookdown 0.45 with bs4_book()">
+<meta property="og:title" content="Chapter 2 Build graph object | ggNetView manual documentation">
+<meta property="og:type" content="book">
+<meta property="og:description" content="Basic workflow of ggNetView： Build a graph object Understand and manipulate the graph object Visualize the network using layout algorithms Retrieve topology of network Load R Package...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 2 Build graph object | ggNetView manual documentation">
+<meta name="twitter:description" content="Basic workflow of ggNetView： Build a graph object Understand and manipulate the graph object Visualize the network using layout algorithms Retrieve topology of network Load R Package...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">ggNetView manual documentation</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"><span class="header-section-number">1</span> ggNetView manual documentation</a></li>
+<li><a class="active" href="build-graph-object.html"><span class="header-section-number">2</span> Build graph object</a></li>
+<li><a class="" href="random-matrix-theory-rmtbased-random-network.html"><span class="header-section-number">3</span> Random Matrix Theory (RMT)–based random network</a></li>
+<li><a class="" href="get-network-information.html"><span class="header-section-number">4</span> Get network information</a></li>
+<li><a class="" href="extract-subgraph.html"><span class="header-section-number">5</span> Extract subgraph</a></li>
+<li><a class="" href="network-layout.html"><span class="header-section-number">6</span> Network layout</a></li>
+<li><a class="" href="network-topology-information.html"><span class="header-section-number">7</span> Network topology information</a></li>
+<li><a class="" href="network-comparison.html"><span class="header-section-number">8</span> Network comparison</a></li>
+<li><a class="" href="network-environment.html"><span class="header-section-number">9</span> Network &amp; Environment</a></li>
+<li><a class="" href="multi-omics-network-analysis.html"><span class="header-section-number">10</span> Multi-omics network analysis</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="build-graph-object" class="section level1" number="2">
+<h1>
+<span class="header-section-number">2</span> Build graph object<a class="anchor" aria-label="anchor" href="#build-graph-object"><i class="fas fa-link"></i></a>
+</h1>
+<hr>
+<p>Basic workflow of <strong>ggNetView</strong>：</p>
+<ol style="list-style-type: decimal">
+<li>Build a <strong>graph object</strong>
+</li>
+<li>Understand and manipulate the <strong>graph object</strong>
+</li>
+<li>Visualize the network using <strong>layout algorithms</strong>
+</li>
+<li>Retrieve <strong>topology</strong> of network</li>
+</ol>
+<hr>
+<blockquote>
+<p>Load R Package</p>
+</blockquote>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Jiawang1209/ggNetView">ggNetView</a></span><span class="op">)</span></span></code></pre></div>
+<hr>
+<div id="build-graph-from-matrix" class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> Build graph from matrix<a class="anchor" aria-label="anchor" href="#build-graph-from-matrix"><i class="fas fa-link"></i></a>
+</h2>
+<blockquote>
+<p>Example data</p>
+</blockquote>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Access built-in example datasets in ggNetView</span></span>
+<span></span>
+<span><span class="co"># Raw ASV or OTU table</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"otu_tab"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">otu_tab</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] 2859   18</code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">otu_tab</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
+<pre><code>##        KO1  KO2  KO3  KO4  KO5
+## ASV_1 1113 1968  816 1372 1062
+## ASV_2 1922 1227 2355 2218 2885
+## ASV_3  568  460  899  902 1226
+## ASV_4 1433  400  535  759 1287
+## ASV_6  882  673  819  888 1475</code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Rarefied ASV or OTU table</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"otu_rare"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">otu_rare</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] 2859   18</code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">otu_rare</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
+<pre><code>##        KO1  KO2  KO3  KO4  KO5
+## ASV_1  992 1636  604 1084  806
+## ASV_2 1725 1018 1814 1743 2196
+## ASV_3  520  389  687  701  932
+## ASV_4 1280  328  425  580 1004
+## ASV_6  794  557  633  706 1142</code></pre>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Relative abundance table of rarefied ASVs or OTUs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"otu_rare_relative"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">otu_rare_relative</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] 2859   18</code></pre>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">otu_rare_relative</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
+<pre><code>##              KO1        KO2        KO3        KO4        KO5
+## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
+## ASV_2 0.05750000 0.03393333 0.06046667 0.05810000 0.07320000
+## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
+## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
+## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667</code></pre>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Taxonomic annotation table of ASVs or OTUs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"tax_tab"</span><span class="op">)</span></span>
+<span><span class="va">tax_tab</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
+<pre><code>## # A tibble: 5 × 5
+##   OTUID  Kingdom  Phylum          Class          Order            
+##   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;            
+## 1 ASV_2  Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 2 ASV_3  Bacteria Verrucomicrobia Spartobacteria Unassigned       
+## 3 ASV_31 Bacteria Actinobacteria  Actinobacteria Actinomycetales  
+## 4 ASV_27 Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 5 ASV_9  Bacteria Unassigned      Unassigned     Unassigned</code></pre>
+<blockquote>
+<p>Build graph object</p>
+</blockquote>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/build_graph_from_mat.html">build_graph_from_mat</a></span><span class="op">(</span></span>
+<span>  mat <span class="op">=</span> <span class="va">otu_rare_relative</span>,</span>
+<span>  transfrom.method <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#  based your input data</span></span>
+<span>  r.threshold <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>  p.threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"WGCNA"</span>,</span>
+<span>  cor.method <span class="op">=</span> <span class="st">"pearson"</span>,</span>
+<span>  proc <span class="op">=</span> <span class="st">"Bonferroni"</span>,</span>
+<span>  module.method <span class="op">=</span> <span class="st">"Fast_greedy"</span>,</span>
+<span>  node_annotation <span class="op">=</span> <span class="va">tax_tab</span>,</span>
+<span>  top_modules <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1115</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">graph_obj</span></span></code></pre></div>
+<pre><code>## # A tbl_graph: 213 nodes and 844 edges
+## #
+## # An undirected simple graph with 29 components
+## #
+## # Node Data: 213 × 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    &lt;chr&gt;   &lt;fct&gt;      &lt;ord&gt;       &lt;chr&gt;       &lt;ord&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
+##  1 ASV_649 5          5           5           5              27     26.5 Bacter…
+##  2 ASV_705 5          5           5           5              27     26.5 Bacter…
+##  3 ASV_12… 5          5           5           5              27     26.5 Bacter…
+##  4 ASV_13… 5          5           5           5              27     26.5 Bacter…
+##  5 ASV_14… 5          5           5           5              27     26.5 Bacter…
+##  6 ASV_14… 5          5           5           5              27     26.5 Bacter…
+##  7 ASV_24… 5          5           5           5              27     26.5 Bacter…
+##  8 ASV_25… 5          5           5           5              27     26.4 Bacter…
+##  9 ASV_28… 5          5           5           5              27     26.5 Bacter…
+## 10 ASV_28… 5          5           5           5              27     26.5 Bacter…
+## # ℹ 203 more rows
+## # ℹ 6 more variables: Phylum &lt;chr&gt;, Class &lt;chr&gt;, Order &lt;chr&gt;, Family &lt;chr&gt;,
+## #   Genus &lt;chr&gt;, Species &lt;chr&gt;
+## #
+## # Edge Data: 844 × 5
+##    from    to weight correlation corr_direction
+##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;         
+## 1   194   195  0.959       0.959 Positive      
+## 2   185   208  0.954       0.954 Positive      
+## 3   185   213  0.957       0.957 Positive      
+## # ℹ 841 more rows</code></pre>
+<hr>
+</div>
+<div id="build-graph-from-data-frame" class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> Build graph from data frame<a class="anchor" aria-label="anchor" href="#build-graph-from-data-frame"><i class="fas fa-link"></i></a>
+</h2>
+<blockquote>
+<p>Example data</p>
+</blockquote>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Access built-in example datasets in ggNetView</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"ppi_example"</span><span class="op">)</span></span>
+<span><span class="va">df</span> <span class="op">=</span> <span class="va">ppi_example</span><span class="op">$</span><span class="va">ppi</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##   from  to    weight
+## 1   A1 D40  9.306533
+## 2   A2 D39 11.783920
+## 3   A3 D38 23.005025
+## 4   A4 D37  7.412060
+## 5   A5 D36 18.778894
+## 6   A6 D35 16.592965</code></pre>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">node_annotation</span> <span class="op">=</span> <span class="va">ppi_example</span><span class="op">$</span><span class="va">annotation</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">node_annotation</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##   node group
+## 1   A1     A
+## 2   A2     A
+## 3   A3     A
+## 4   A4     A
+## 5   A5     A
+## 6   A6     A</code></pre>
+<blockquote>
+<p>Build graph object</p>
+</blockquote>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph_obj_from_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/build_graph_from_df.html">build_graph_from_df</a></span><span class="op">(</span></span>
+<span>  df <span class="op">=</span> <span class="va">df</span>,</span>
+<span>  node_annotation <span class="op">=</span> <span class="va">node_annotation</span>,</span>
+<span>  directed <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  module.method <span class="op">=</span> <span class="st">"Fast_greedy"</span>,</span>
+<span>  top_modules <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1115</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">graph_obj_from_df</span></span></code></pre></div>
+<pre><code>## # A tbl_graph: 100 nodes and 50 edges
+## #
+## # An unrooted forest with 50 trees
+## #
+## # Node Data: 100 × 9 (active)
+##    name  group modularity modularity2 modularity3 Modularity Degree Segree
+##    &lt;chr&gt; &lt;chr&gt; &lt;fct&gt;      &lt;fct&gt;       &lt;chr&gt;       &lt;fct&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+##  1 C13   C     1          1           1           1               1      1
+##  2 C28   C     1          1           1           1               1      1
+##  3 C2    C     10         10          10          10              1      1
+##  4 D9    D     10         10          10          10              1      1
+##  5 A3    A     11         11          11          11              1      1
+##  6 D38   D     11         11          11          11              1      1
+##  7 B12   B     12         12          12          12              1      1
+##  8 D19   D     12         12          12          12              1      1
+##  9 A1    A     13         13          13          13              1      1
+## 10 D40   D     13         13          13          13              1      1
+## # ℹ 90 more rows
+## # ℹ 1 more variable: Strength &lt;dbl&gt;
+## #
+## # Edge Data: 50 × 4
+##    from    to weight correlation
+##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;       &lt;dbl&gt;
+## 1     9    10   45.2        45.2
+## 2    15    16   50.6        50.6
+## 3     5     6   37.8        37.8
+## # ℹ 47 more rows</code></pre>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph_obj_from_df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/build_graph_from_df.html">build_graph_from_df</a></span><span class="op">(</span></span>
+<span>  df <span class="op">=</span> <span class="va">df</span>,</span>
+<span>  node_annotation <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  directed <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  module.method <span class="op">=</span> <span class="st">"Fast_greedy"</span>,</span>
+<span>  top_modules <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1115</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">graph_obj_from_df2</span></span></code></pre></div>
+<pre><code>## # A tbl_graph: 100 nodes and 50 edges
+## #
+## # An unrooted forest with 50 trees
+## #
+## # Node Data: 100 × 8 (active)
+##    name  modularity modularity2 modularity3 Modularity Degree Segree Strength
+##    &lt;chr&gt; &lt;fct&gt;      &lt;fct&gt;       &lt;chr&gt;       &lt;fct&gt;       &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
+##  1 C13   1          1           1           1               1      1     26.7
+##  2 C28   1          1           1           1               1      1     26.7
+##  3 C2    10         10          10          10              1      1     37.4
+##  4 D9    10         10          10          10              1      1     37.4
+##  5 A3    11         11          11          11              1      1     37.8
+##  6 D38   11         11          11          11              1      1     37.8
+##  7 B12   12         12          12          12              1      1     41.3
+##  8 D19   12         12          12          12              1      1     41.3
+##  9 A1    13         13          13          13              1      1     45.2
+## 10 D40   13         13          13          13              1      1     45.2
+## # ℹ 90 more rows
+## #
+## # Edge Data: 50 × 4
+##    from    to weight correlation
+##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;       &lt;dbl&gt;
+## 1     9    10   45.2        45.2
+## 2    15    16   50.6        50.6
+## 3     5     6   37.8        37.8
+## # ℹ 47 more rows</code></pre>
+<hr>
+</div>
+<div id="build-graph-from-adjacency-matrix" class="section level2" number="2.3">
+<h2>
+<span class="header-section-number">2.3</span> Build graph from adjacency matrix<a class="anchor" aria-label="anchor" href="#build-graph-from-adjacency-matrix"><i class="fas fa-link"></i></a>
+</h2>
+<blockquote>
+<p>Example data</p>
+</blockquote>
+<blockquote>
+<p>Build graph object</p>
+</blockquote>
+<hr>
+</div>
+<div id="build-graph-from-double-matrix" class="section level2" number="2.4">
+<h2>
+<span class="header-section-number">2.4</span> Build graph from double matrix<a class="anchor" aria-label="anchor" href="#build-graph-from-double-matrix"><i class="fas fa-link"></i></a>
+</h2>
+<blockquote>
+<p>Example data</p>
+</blockquote>
+<blockquote>
+<p>Build graph object</p>
+</blockquote>
+<hr>
+</div>
+<div id="build-graph-from-adjacency-matrix-with-module-information" class="section level2" number="2.5">
+<h2>
+<span class="header-section-number">2.5</span> Build graph from adjacency matrix with module Information<a class="anchor" aria-label="anchor" href="#build-graph-from-adjacency-matrix-with-module-information"><i class="fas fa-link"></i></a>
+</h2>
+<blockquote>
+<p>Example data</p>
+</blockquote>
+<blockquote>
+<p>Build graph object</p>
+</blockquote>
+<hr>
+</div>
+<div id="build-graph-from-igraph" class="section level2" number="2.6">
+<h2>
+<span class="header-section-number">2.6</span> Build graph from igraph<a class="anchor" aria-label="anchor" href="#build-graph-from-igraph"><i class="fas fa-link"></i></a>
+</h2>
+<blockquote>
+<p>Example data</p>
+</blockquote>
+<blockquote>
+<p>Build graph object</p>
+</blockquote>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="index.html"><span class="header-section-number">1</span> ggNetView manual documentation</a></div>
+<div class="next"><a href="random-matrix-theory-rmtbased-random-network.html"><span class="header-section-number">3</span> Random Matrix Theory (RMT)–based random network</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#build-graph-object"><span class="header-section-number">2</span> Build graph object</a></li>
+<li><a class="nav-link" href="#build-graph-from-matrix"><span class="header-section-number">2.1</span> Build graph from matrix</a></li>
+<li><a class="nav-link" href="#build-graph-from-data-frame"><span class="header-section-number">2.2</span> Build graph from data frame</a></li>
+<li><a class="nav-link" href="#build-graph-from-adjacency-matrix"><span class="header-section-number">2.3</span> Build graph from adjacency matrix</a></li>
+<li><a class="nav-link" href="#build-graph-from-double-matrix"><span class="header-section-number">2.4</span> Build graph from double matrix</a></li>
+<li><a class="nav-link" href="#build-graph-from-adjacency-matrix-with-module-information"><span class="header-section-number">2.5</span> Build graph from adjacency matrix with module Information</a></li>
+<li><a class="nav-link" href="#build-graph-from-igraph"><span class="header-section-number">2.6</span> Build graph from igraph</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-01-08.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>

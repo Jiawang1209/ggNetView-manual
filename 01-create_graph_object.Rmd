@@ -1,24 +1,190 @@
 # Build graph object
 
+----
+
+Basic workflow of **ggNetView**：
+
+1. Build a **graph object**
+2. Understand and manipulate the **graph object**
+3. Visualize the network using **layout algorithms**
+4. Retrieve **topology** of network
+
+----
 
 
+> Load R Package
+
+
+```{r warning=F, message=F}
+library(tidyverse)
+library(ggNetView)
+```
+
+----
 
 ## Build graph from matrix
 
+>  Example data
+
+```{r}
+# Access built-in example datasets in ggNetView
+
+# Raw ASV or OTU table
+data("otu_tab")
+dim(otu_tab)
+otu_tab[1:5, 1:5]
+
+
+# Rarefied ASV or OTU table
+data("otu_rare")
+dim(otu_rare)
+otu_rare[1:5, 1:5]
+
+# Relative abundance table of rarefied ASVs or OTUs
+data("otu_rare_relative")
+dim(otu_rare_relative)
+otu_rare_relative[1:5, 1:5]
+
+# Taxonomic annotation table of ASVs or OTUs
+data("tax_tab")
+tax_tab[1:5, 1:5]
+```
+
+> Build graph object
+
+```{r message=F}
+graph_obj <- build_graph_from_mat(
+  mat = otu_rare_relative,
+  transfrom.method = "none", #  based your input data
+  r.threshold = 0.7,
+  p.threshold = 0.05,
+  method = "WGCNA",
+  cor.method = "pearson",
+  proc = "Bonferroni",
+  module.method = "Fast_greedy",
+  node_annotation = tax_tab,
+  top_modules = 15,
+  seed = 1115
+)
+
+graph_obj
+```
+
+
+----
 
 ## Build graph from data frame
+
+>  Example data
+
+```{r}
+# Access built-in example datasets in ggNetView
+data("ppi_example")
+df = ppi_example$ppi
+head(df)
+
+node_annotation = ppi_example$annotation
+head(node_annotation)
+```
+
+> Build graph object
+
+```{r message=F}
+graph_obj_from_df <- build_graph_from_df(
+  df = df,
+  node_annotation = node_annotation,
+  directed = F,
+  module.method = "Fast_greedy",
+  top_modules = 15,
+  seed = 1115
+)
+
+graph_obj_from_df
+```
+
+
+```{r message=F}
+graph_obj_from_df2 <- build_graph_from_df(
+  df = df,
+  node_annotation = NULL,
+  directed = F,
+  module.method = "Fast_greedy",
+  top_modules = 15,
+  seed = 1115
+)
+
+graph_obj_from_df2
+```
+
+----
+
+## Build graph from adjacency matrix
+
+>  Example data
+
+```{r}
+
+```
+
+
+> Build graph object
+
+```{r}
+
+```
+
+
+----
+
+## Build graph from double matrix
+
+>  Example data
+
+```{r}
+
+```
+
+
+> Build graph object
+
+```{r}
+
+```
+
+
+
+----
+
+## Build graph from adjacency matrix with module Information
+
+>  Example data
+
+```{r}
+
+```
+
+
+> Build graph object
+
+```{r}
+
+```
+
+----
 
 
 ## Build graph from igraph
 
+>  Example data
+
+```{r}
+
+```
 
 
-## Build graph from double matrix
+> Build graph object
 
+```{r}
 
-
-## Build graph from adjacency matrix
-
-
-## Build graph from adjacency matrix with module Information
+```
 

@@ -1,0 +1,677 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{book}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage[]{natbib}
+\bibliographystyle{apalike}
+\usepackage{booktabs}
+\usepackage{amsthm}
+\makeatletter
+\def\thm@space@setup{%
+  \thm@preskip=8pt plus 2pt minus 4pt
+  \thm@postskip=\thm@preskip
+}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={ggNetView manual documentation},
+  pdfauthor={Yue Liu},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{ggNetView manual documentation}
+\author{Yue Liu}
+\date{2026-01-08}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\chapter{ggNetView manual documentation}\label{ggnetview-manual-documentation}
+
+\section{Introdution}\label{introdution}
+
+\textbf{Network analysis} has been widely applied in the \textbf{life sciences, microbiology, ecology, and agronomy} to quantify interactions among \textbf{genes, proteins, metabolites, microorganisms, and environmental factors}. These interactions collectively shape the functioning of biological and ecological systems. Despite its broad adoption, existing tools often face limitations in flexibility, customization, reproducibility, and the generation of publication-ready figures.
+
+To address these challenges, \textbf{ggNetView} was developed as an \textbf{R package} that integrates \textbf{ggplot2, ggraph, and tidygraph} within the \textbf{Grammar of Graphics framework}, enabling fully reproducible and highly customizable network visualizations. The package provides deterministic layout algorithms, comprehensive topological analyses, modular coloring schemes, hierarchical annotations, and consistent theming, ensuring standardized and interpretable graphical output.
+
+Although initially designed for applications in \textbf{soil science and microbial ecology}, \textbf{ggNetView} is broadly applicable to network analyses in \texttt{molecular\ biology}, including \textbf{WGCNA and protein--protein interaction (PPI) networks}. By lowering technical barriers in network construction and visualization, \textbf{ggNetView} enables researchers across disciplines to efficiently produce reproducible, publication-quality network figures.
+
+\section{Installation}\label{installation}
+
+\begin{quote}
+First, install the required dependencies
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# install.packages("BiocManager")}
+\NormalTok{BiocManager}\SpecialCharTok{::}\FunctionTok{install}\NormalTok{(}\StringTok{"WGCNA"}\NormalTok{)}
+
+\CommentTok{\# install.packages("remotes")}
+\NormalTok{remotes}\SpecialCharTok{::}\FunctionTok{install\_github}\NormalTok{(}\StringTok{"alserglab/mascarade"}\NormalTok{)}
+\NormalTok{remotes}\SpecialCharTok{::}\FunctionTok{install\_github}\NormalTok{(}\StringTok{"zdk123/SpiecEasi"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+and then install ggNetView.
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# install.packages("devtools")}
+\NormalTok{devtools}\SpecialCharTok{::}\FunctionTok{install\_github}\NormalTok{(}\StringTok{"Jiawang1209/ggNetView"}\NormalTok{)}
+
+\CommentTok{\# install.packages("pak")}
+\NormalTok{pak}\SpecialCharTok{::}\FunctionTok{pak}\NormalTok{(}\StringTok{"Jiawang1209/ggNetView"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Citation}\label{citation}
+
+\begin{quote}
+If you use ggNetView in your research, please cite:
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Yue Liu, Chao }\FunctionTok{Wang}\NormalTok{ (}\DecValTok{2025}\NormalTok{). ggNetView}\SpecialCharTok{:}\NormalTok{ An R package }\ControlFlowTok{for}\NormalTok{ complex biological and ecological network analysis and visualization. R package version }\DecValTok{0}\NormalTok{.}\DecValTok{1}\NormalTok{.}\FloatTok{0.} 
+\NormalTok{https}\SpecialCharTok{:}\ErrorTok{//}\NormalTok{github.com}\SpecialCharTok{/}\NormalTok{Jiawang1209}\SpecialCharTok{/}\NormalTok{ggNetView}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Source Code}\label{source-code}
+
+\begin{quote}
+The source code for ggNetView is available in the ggNetView repository.
+\end{quote}
+
+\url{https://github.com/Jiawang1209/ggNetView}
+
+\section{Contact}\label{contact}
+
+\begin{itemize}
+\tightlist
+\item
+  Email: \href{mailto:Jiawang1209@163.com}{\nolinkurl{Jiawang1209@163.com}}
+\end{itemize}
+
+\chapter{Build graph object}\label{build-graph-object}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Basic workflow of \textbf{ggNetView}：
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Build a \textbf{graph object}
+\item
+  Understand and manipulate the \textbf{graph object}
+\item
+  Visualize the network using \textbf{layout algorithms}
+\item
+  Retrieve \textbf{topology} of network
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\begin{quote}
+Load R Package
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(ggNetView)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Build graph from matrix}\label{build-graph-from-matrix}
+
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Access built{-}in example datasets in ggNetView}
+
+\CommentTok{\# Raw ASV or OTU table}
+\FunctionTok{data}\NormalTok{(}\StringTok{"otu\_tab"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(otu\_tab)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859   18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{otu\_tab[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        KO1  KO2  KO3  KO4  KO5
+## ASV_1 1113 1968  816 1372 1062
+## ASV_2 1922 1227 2355 2218 2885
+## ASV_3  568  460  899  902 1226
+## ASV_4 1433  400  535  759 1287
+## ASV_6  882  673  819  888 1475
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Rarefied ASV or OTU table}
+\FunctionTok{data}\NormalTok{(}\StringTok{"otu\_rare"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(otu\_rare)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859   18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{otu\_rare[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        KO1  KO2  KO3  KO4  KO5
+## ASV_1  992 1636  604 1084  806
+## ASV_2 1725 1018 1814 1743 2196
+## ASV_3  520  389  687  701  932
+## ASV_4 1280  328  425  580 1004
+## ASV_6  794  557  633  706 1142
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Relative abundance table of rarefied ASVs or OTUs}
+\FunctionTok{data}\NormalTok{(}\StringTok{"otu\_rare\_relative"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(otu\_rare\_relative)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859   18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{otu\_rare\_relative[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              KO1        KO2        KO3        KO4        KO5
+## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
+## ASV_2 0.05750000 0.03393333 0.06046667 0.05810000 0.07320000
+## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
+## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
+## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Taxonomic annotation table of ASVs or OTUs}
+\FunctionTok{data}\NormalTok{(}\StringTok{"tax\_tab"}\NormalTok{)}
+\NormalTok{tax\_tab[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 5
+##   OTUID  Kingdom  Phylum          Class          Order            
+##   <chr>  <chr>    <chr>           <chr>          <chr>            
+## 1 ASV_2  Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 2 ASV_3  Bacteria Verrucomicrobia Spartobacteria Unassigned       
+## 3 ASV_31 Bacteria Actinobacteria  Actinobacteria Actinomycetales  
+## 4 ASV_27 Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 5 ASV_9  Bacteria Unassigned      Unassigned     Unassigned
+\end{verbatim}
+
+\begin{quote}
+Build graph object
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_mat}\NormalTok{(}
+  \AttributeTok{mat =}\NormalTok{ otu\_rare\_relative,}
+  \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{, }\CommentTok{\#  based your input data}
+  \AttributeTok{r.threshold =} \FloatTok{0.7}\NormalTok{,}
+  \AttributeTok{p.threshold =} \FloatTok{0.05}\NormalTok{,}
+  \AttributeTok{method =} \StringTok{"WGCNA"}\NormalTok{,}
+  \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
+  \AttributeTok{proc =} \StringTok{"Bonferroni"}\NormalTok{,}
+  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{node\_annotation =}\NormalTok{ tax\_tab,}
+  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed =} \DecValTok{1115}
+\NormalTok{)}
+
+\NormalTok{graph\_obj}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 213 nodes and 844 edges
+## #
+## # An undirected simple graph with 29 components
+## #
+## # Node Data: 213 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_649 5          5           5           5              27     26.5 Bacter~
+##  2 ASV_705 5          5           5           5              27     26.5 Bacter~
+##  3 ASV_12~ 5          5           5           5              27     26.5 Bacter~
+##  4 ASV_13~ 5          5           5           5              27     26.5 Bacter~
+##  5 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  6 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  7 ASV_24~ 5          5           5           5              27     26.5 Bacter~
+##  8 ASV_25~ 5          5           5           5              27     26.4 Bacter~
+##  9 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## 10 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## # i 203 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 844 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1   194   195  0.959       0.959 Positive      
+## 2   185   208  0.954       0.954 Positive      
+## 3   185   213  0.957       0.957 Positive      
+## # i 841 more rows
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Build graph from data frame}\label{build-graph-from-data-frame}
+
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Access built{-}in example datasets in ggNetView}
+\FunctionTok{data}\NormalTok{(}\StringTok{"ppi\_example"}\NormalTok{)}
+\NormalTok{df }\OtherTok{=}\NormalTok{ ppi\_example}\SpecialCharTok{$}\NormalTok{ppi}
+\FunctionTok{head}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   from  to    weight
+## 1   A1 D40  9.306533
+## 2   A2 D39 11.783920
+## 3   A3 D38 23.005025
+## 4   A4 D37  7.412060
+## 5   A5 D36 18.778894
+## 6   A6 D35 16.592965
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{node\_annotation }\OtherTok{=}\NormalTok{ ppi\_example}\SpecialCharTok{$}\NormalTok{annotation}
+\FunctionTok{head}\NormalTok{(node\_annotation)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   node group
+## 1   A1     A
+## 2   A2     A
+## 3   A3     A
+## 4   A4     A
+## 5   A5     A
+## 6   A6     A
+\end{verbatim}
+
+\begin{quote}
+Build graph object
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj\_from\_df }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_df}\NormalTok{(}
+  \AttributeTok{df =}\NormalTok{ df,}
+  \AttributeTok{node\_annotation =}\NormalTok{ node\_annotation,}
+  \AttributeTok{directed =}\NormalTok{ F,}
+  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed =} \DecValTok{1115}
+\NormalTok{)}
+
+\NormalTok{graph\_obj\_from\_df}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 100 nodes and 50 edges
+## #
+## # An unrooted forest with 50 trees
+## #
+## # Node Data: 100 x 9 (active)
+##    name  group modularity modularity2 modularity3 Modularity Degree Segree
+##    <chr> <chr> <fct>      <fct>       <chr>       <fct>       <dbl>  <dbl>
+##  1 C13   C     1          1           1           1               1      1
+##  2 C28   C     1          1           1           1               1      1
+##  3 C2    C     10         10          10          10              1      1
+##  4 D9    D     10         10          10          10              1      1
+##  5 A3    A     11         11          11          11              1      1
+##  6 D38   D     11         11          11          11              1      1
+##  7 B12   B     12         12          12          12              1      1
+##  8 D19   D     12         12          12          12              1      1
+##  9 A1    A     13         13          13          13              1      1
+## 10 D40   D     13         13          13          13              1      1
+## # i 90 more rows
+## # i 1 more variable: Strength <dbl>
+## #
+## # Edge Data: 50 x 4
+##    from    to weight correlation
+##   <int> <int>  <dbl>       <dbl>
+## 1     9    10   45.2        45.2
+## 2    15    16   50.6        50.6
+## 3     5     6   37.8        37.8
+## # i 47 more rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj\_from\_df2 }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_df}\NormalTok{(}
+  \AttributeTok{df =}\NormalTok{ df,}
+  \AttributeTok{node\_annotation =} \ConstantTok{NULL}\NormalTok{,}
+  \AttributeTok{directed =}\NormalTok{ F,}
+  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed =} \DecValTok{1115}
+\NormalTok{)}
+
+\NormalTok{graph\_obj\_from\_df2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 100 nodes and 50 edges
+## #
+## # An unrooted forest with 50 trees
+## #
+## # Node Data: 100 x 8 (active)
+##    name  modularity modularity2 modularity3 Modularity Degree Segree Strength
+##    <chr> <fct>      <fct>       <chr>       <fct>       <dbl>  <dbl>    <dbl>
+##  1 C13   1          1           1           1               1      1     26.7
+##  2 C28   1          1           1           1               1      1     26.7
+##  3 C2    10         10          10          10              1      1     37.4
+##  4 D9    10         10          10          10              1      1     37.4
+##  5 A3    11         11          11          11              1      1     37.8
+##  6 D38   11         11          11          11              1      1     37.8
+##  7 B12   12         12          12          12              1      1     41.3
+##  8 D19   12         12          12          12              1      1     41.3
+##  9 A1    13         13          13          13              1      1     45.2
+## 10 D40   13         13          13          13              1      1     45.2
+## # i 90 more rows
+## #
+## # Edge Data: 50 x 4
+##    from    to weight correlation
+##   <int> <int>  <dbl>       <dbl>
+## 1     9    10   45.2        45.2
+## 2    15    16   50.6        50.6
+## 3     5     6   37.8        37.8
+## # i 47 more rows
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Build graph from adjacency matrix}\label{build-graph-from-adjacency-matrix}
+
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{quote}
+Build graph object
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Build graph from double matrix}\label{build-graph-from-double-matrix}
+
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{quote}
+Build graph object
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Build graph from adjacency matrix with module Information}\label{build-graph-from-adjacency-matrix-with-module-information}
+
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{quote}
+Build graph object
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Build graph from igraph}\label{build-graph-from-igraph}
+
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{quote}
+Build graph object
+\end{quote}
+
+\chapter{Random Matrix Theory (RMT)--based random network}\label{random-matrix-theory-rmtbased-random-network}
+
+\section{RMT}\label{rmt}
+
+\chapter{Get network information}\label{get-network-information}
+
+\section{Full-network information}\label{full-network-information}
+
+\section{Sub-network (modularity) information}\label{sub-network-modularity-information}
+
+\section{Sub-network (sample) information}\label{sub-network-sample-information}
+
+\chapter{Extract subgraph}\label{extract-subgraph}
+
+\section{Extract subgraph by module}\label{extract-subgraph-by-module}
+
+\section{Extract subgraph by sample}\label{extract-subgraph-by-sample}
+
+\chapter{Network layout}\label{network-layout}
+
+\section{Gephi layout}\label{gephi-layout}
+
+\section{Fruchterman--Reingold force-directed layout}\label{fruchtermanreingold-force-directed-layout}
+
+\section{Diamond layout}\label{diamond-layout}
+
+\section{Kk layout}\label{kk-layout}
+
+\section{Nicley layout}\label{nicley-layout}
+
+\section{Multrings layout}\label{multrings-layout}
+
+\section{Petal layout}\label{petal-layout}
+
+\section{Circle layout}\label{circle-layout}
+
+\section{Circle outline layout}\label{circle-outline-layout}
+
+\section{Diamond outline layout}\label{diamond-outline-layout}
+
+\section{Grid layout}\label{grid-layout}
+
+\section{Heart\_centered layout}\label{heart_centered-layout}
+
+\section{Lgl layout}\label{lgl-layout}
+
+\section{Randomly layout}\label{randomly-layout}
+
+\section{Rectangle layout}\label{rectangle-layout}
+
+\section{Rightiso layout}\label{rightiso-layout}
+
+\section{Square layout}\label{square-layout}
+
+\section{Square outline layout}\label{square-outline-layout}
+
+\section{Star layout}\label{star-layout}
+
+\section{Star\_concentric layout}\label{star_concentric-layout}
+
+\section{Stress layout}\label{stress-layout}
+
+\chapter{Network topology information}\label{network-topology-information}
+
+\section{Get network topology information}\label{get-network-topology-information}
+
+\section{Get network topology information with matrix}\label{get-network-topology-information-with-matrix}
+
+\section{Get network topology information by parallel}\label{get-network-topology-information-by-parallel}
+
+\section{Get network topology information with matrix by parallel}\label{get-network-topology-information-with-matrix-by-parallel}
+
+\chapter{Network comparison}\label{network-comparison}
+
+\section{Subgraph comparisopn}\label{subgraph-comparisopn}
+
+\section{Comparison of multi-sample networks}\label{comparison-of-multi-sample-networks}
+
+\chapter{Network \& Environment}\label{network-environment}
+
+\section{Network Environment}\label{network-environment-1}
+
+\chapter{Multi-omics network analysis}\label{multi-omics-network-analysis}
+
+\section{Multi-omics}\label{multi-omics}
+
+\bibliography{book.bib,packages.bib}
+
+\end{document}

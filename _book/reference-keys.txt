@@ -58,3 +58,5 @@ full-network-information
 sub-network-modularity-information
 sub-network-sample-information
 contact
+load-r-package-
+example-data

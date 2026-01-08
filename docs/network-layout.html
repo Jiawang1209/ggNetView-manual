@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 6 Network layout | ggNetView manual documentation</title>
+<meta name="author" content="Yue Liu">
+<meta name="description" content="6.1 Gephi layout   6.2 Fruchterman–Reingold force-directed layout   6.3 Diamond layout   6.4 Kk layout   6.5 Nicley layout   6.6 Multrings layout   6.7 Petal layout   6.8 Circle layout   6.9...">
+<meta name="generator" content="bookdown 0.45 with bs4_book()">
+<meta property="og:title" content="Chapter 6 Network layout | ggNetView manual documentation">
+<meta property="og:type" content="book">
+<meta property="og:description" content="6.1 Gephi layout   6.2 Fruchterman–Reingold force-directed layout   6.3 Diamond layout   6.4 Kk layout   6.5 Nicley layout   6.6 Multrings layout   6.7 Petal layout   6.8 Circle layout   6.9...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 6 Network layout | ggNetView manual documentation">
+<meta name="twitter:description" content="6.1 Gephi layout   6.2 Fruchterman–Reingold force-directed layout   6.3 Diamond layout   6.4 Kk layout   6.5 Nicley layout   6.6 Multrings layout   6.7 Petal layout   6.8 Circle layout   6.9...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">ggNetView manual documentation</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"><span class="header-section-number">1</span> ggNetView manual documentation</a></li>
+<li><a class="" href="build-graph-object.html"><span class="header-section-number">2</span> Build graph object</a></li>
+<li><a class="" href="random-matrix-theory-rmtbased-random-network.html"><span class="header-section-number">3</span> Random Matrix Theory (RMT)–based random network</a></li>
+<li><a class="" href="get-network-information.html"><span class="header-section-number">4</span> Get network information</a></li>
+<li><a class="" href="extract-subgraph.html"><span class="header-section-number">5</span> Extract subgraph</a></li>
+<li><a class="active" href="network-layout.html"><span class="header-section-number">6</span> Network layout</a></li>
+<li><a class="" href="network-topology-information.html"><span class="header-section-number">7</span> Network topology information</a></li>
+<li><a class="" href="network-comparison.html"><span class="header-section-number">8</span> Network comparison</a></li>
+<li><a class="" href="network-environment.html"><span class="header-section-number">9</span> Network &amp; Environment</a></li>
+<li><a class="" href="multi-omics-network-analysis.html"><span class="header-section-number">10</span> Multi-omics network analysis</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="network-layout" class="section level1" number="6">
+<h1>
+<span class="header-section-number">6</span> Network layout<a class="anchor" aria-label="anchor" href="#network-layout"><i class="fas fa-link"></i></a>
+</h1>
+<div id="gephi-layout" class="section level2" number="6.1">
+<h2>
+<span class="header-section-number">6.1</span> Gephi layout<a class="anchor" aria-label="anchor" href="#gephi-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="fruchtermanreingold-force-directed-layout" class="section level2" number="6.2">
+<h2>
+<span class="header-section-number">6.2</span> Fruchterman–Reingold force-directed layout<a class="anchor" aria-label="anchor" href="#fruchtermanreingold-force-directed-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="diamond-layout" class="section level2" number="6.3">
+<h2>
+<span class="header-section-number">6.3</span> Diamond layout<a class="anchor" aria-label="anchor" href="#diamond-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="kk-layout" class="section level2" number="6.4">
+<h2>
+<span class="header-section-number">6.4</span> Kk layout<a class="anchor" aria-label="anchor" href="#kk-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="nicley-layout" class="section level2" number="6.5">
+<h2>
+<span class="header-section-number">6.5</span> Nicley layout<a class="anchor" aria-label="anchor" href="#nicley-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="multrings-layout" class="section level2" number="6.6">
+<h2>
+<span class="header-section-number">6.6</span> Multrings layout<a class="anchor" aria-label="anchor" href="#multrings-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="petal-layout" class="section level2" number="6.7">
+<h2>
+<span class="header-section-number">6.7</span> Petal layout<a class="anchor" aria-label="anchor" href="#petal-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="circle-layout" class="section level2" number="6.8">
+<h2>
+<span class="header-section-number">6.8</span> Circle layout<a class="anchor" aria-label="anchor" href="#circle-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="circle-outline-layout" class="section level2" number="6.9">
+<h2>
+<span class="header-section-number">6.9</span> Circle outline layout<a class="anchor" aria-label="anchor" href="#circle-outline-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="diamond-outline-layout" class="section level2" number="6.10">
+<h2>
+<span class="header-section-number">6.10</span> Diamond outline layout<a class="anchor" aria-label="anchor" href="#diamond-outline-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="grid-layout" class="section level2" number="6.11">
+<h2>
+<span class="header-section-number">6.11</span> Grid layout<a class="anchor" aria-label="anchor" href="#grid-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="heart_centered-layout" class="section level2" number="6.12">
+<h2>
+<span class="header-section-number">6.12</span> Heart_centered layout<a class="anchor" aria-label="anchor" href="#heart_centered-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="lgl-layout" class="section level2" number="6.13">
+<h2>
+<span class="header-section-number">6.13</span> Lgl layout<a class="anchor" aria-label="anchor" href="#lgl-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="randomly-layout" class="section level2" number="6.14">
+<h2>
+<span class="header-section-number">6.14</span> Randomly layout<a class="anchor" aria-label="anchor" href="#randomly-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="rectangle-layout" class="section level2" number="6.15">
+<h2>
+<span class="header-section-number">6.15</span> Rectangle layout<a class="anchor" aria-label="anchor" href="#rectangle-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="rightiso-layout" class="section level2" number="6.16">
+<h2>
+<span class="header-section-number">6.16</span> Rightiso layout<a class="anchor" aria-label="anchor" href="#rightiso-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="square-layout" class="section level2" number="6.17">
+<h2>
+<span class="header-section-number">6.17</span> Square layout<a class="anchor" aria-label="anchor" href="#square-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="square-outline-layout" class="section level2" number="6.18">
+<h2>
+<span class="header-section-number">6.18</span> Square outline layout<a class="anchor" aria-label="anchor" href="#square-outline-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="star-layout" class="section level2" number="6.19">
+<h2>
+<span class="header-section-number">6.19</span> Star layout<a class="anchor" aria-label="anchor" href="#star-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="star_concentric-layout" class="section level2" number="6.20">
+<h2>
+<span class="header-section-number">6.20</span> Star_concentric layout<a class="anchor" aria-label="anchor" href="#star_concentric-layout"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="stress-layout" class="section level2" number="6.21">
+<h2>
+<span class="header-section-number">6.21</span> Stress layout<a class="anchor" aria-label="anchor" href="#stress-layout"><i class="fas fa-link"></i></a>
+</h2>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="extract-subgraph.html"><span class="header-section-number">5</span> Extract subgraph</a></div>
+<div class="next"><a href="network-topology-information.html"><span class="header-section-number">7</span> Network topology information</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#network-layout"><span class="header-section-number">6</span> Network layout</a></li>
+<li><a class="nav-link" href="#gephi-layout"><span class="header-section-number">6.1</span> Gephi layout</a></li>
+<li><a class="nav-link" href="#fruchtermanreingold-force-directed-layout"><span class="header-section-number">6.2</span> Fruchterman–Reingold force-directed layout</a></li>
+<li><a class="nav-link" href="#diamond-layout"><span class="header-section-number">6.3</span> Diamond layout</a></li>
+<li><a class="nav-link" href="#kk-layout"><span class="header-section-number">6.4</span> Kk layout</a></li>
+<li><a class="nav-link" href="#nicley-layout"><span class="header-section-number">6.5</span> Nicley layout</a></li>
+<li><a class="nav-link" href="#multrings-layout"><span class="header-section-number">6.6</span> Multrings layout</a></li>
+<li><a class="nav-link" href="#petal-layout"><span class="header-section-number">6.7</span> Petal layout</a></li>
+<li><a class="nav-link" href="#circle-layout"><span class="header-section-number">6.8</span> Circle layout</a></li>
+<li><a class="nav-link" href="#circle-outline-layout"><span class="header-section-number">6.9</span> Circle outline layout</a></li>
+<li><a class="nav-link" href="#diamond-outline-layout"><span class="header-section-number">6.10</span> Diamond outline layout</a></li>
+<li><a class="nav-link" href="#grid-layout"><span class="header-section-number">6.11</span> Grid layout</a></li>
+<li><a class="nav-link" href="#heart_centered-layout"><span class="header-section-number">6.12</span> Heart_centered layout</a></li>
+<li><a class="nav-link" href="#lgl-layout"><span class="header-section-number">6.13</span> Lgl layout</a></li>
+<li><a class="nav-link" href="#randomly-layout"><span class="header-section-number">6.14</span> Randomly layout</a></li>
+<li><a class="nav-link" href="#rectangle-layout"><span class="header-section-number">6.15</span> Rectangle layout</a></li>
+<li><a class="nav-link" href="#rightiso-layout"><span class="header-section-number">6.16</span> Rightiso layout</a></li>
+<li><a class="nav-link" href="#square-layout"><span class="header-section-number">6.17</span> Square layout</a></li>
+<li><a class="nav-link" href="#square-outline-layout"><span class="header-section-number">6.18</span> Square outline layout</a></li>
+<li><a class="nav-link" href="#star-layout"><span class="header-section-number">6.19</span> Star layout</a></li>
+<li><a class="nav-link" href="#star_concentric-layout"><span class="header-section-number">6.20</span> Star_concentric layout</a></li>
+<li><a class="nav-link" href="#stress-layout"><span class="header-section-number">6.21</span> Stress layout</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-01-08.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>
