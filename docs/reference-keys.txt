@@ -11,7 +11,10 @@ build-graph-from-data-frame-with-module
 build-graph-from-adjacency-matrix
 build-graph-from-double-matrix
 random-matrix-theory-rmtbased-random-network
-rmt
+random-matrix-theory-rmt
+example-data
+compute-rmt-threshold
+build-graph-from-matrix-based-on-rmt-threshold
 get-network-information
 full-network-information
 sub-network-modularity-information

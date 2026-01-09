@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 3 Random Matrix Theory (RMT)–based random network | ggNetView manual documentation</title>
 <meta name="author" content="Yue Liu">
-<meta name="description" content="3.1 RMT">
+<meta name="description" content="When a numerical matrix is used as input, it is necessary to filter and screen the resulting correlation matrix. Empirical thresholds are commonly adopted, usually between 0.6 to 0.85; however,...">
 <meta name="generator" content="bookdown 0.45 with bs4_book()">
 <meta property="og:title" content="Chapter 3 Random Matrix Theory (RMT)–based random network | ggNetView manual documentation">
 <meta property="og:type" content="book">
-<meta property="og:description" content="3.1 RMT">
+<meta property="og:description" content="When a numerical matrix is used as input, it is necessary to filter and screen the resulting correlation matrix. Empirical thresholds are commonly adopted, usually between 0.6 to 0.85; however,...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 3 Random Matrix Theory (RMT)–based random network | ggNetView manual documentation">
-<meta name="twitter:description" content="3.1 RMT">
+<meta name="twitter:description" content="When a numerical matrix is used as input, it is necessary to filter and screen the resulting correlation matrix. Empirical thresholds are commonly adopted, usually between 0.6 to 0.85; however,...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -63,10 +63,368 @@
 <h1>
 <span class="header-section-number">3</span> Random Matrix Theory (RMT)–based random network<a class="anchor" aria-label="anchor" href="#random-matrix-theory-rmtbased-random-network"><i class="fas fa-link"></i></a>
 </h1>
-<div id="rmt" class="section level2" number="3.1">
+<blockquote>
+<p>When a numerical matrix is used as input, it is necessary to filter and screen the resulting correlation matrix. Empirical thresholds are commonly adopted, usually between 0.6 to 0.85; however, these thresholds are largely subjective.</p>
+</blockquote>
+<blockquote>
+<p>Compared with empirical thresholding, random matrix theory (RMT) provides a data-driven and objective approach for determining correlation thresholds, effectively separating true biological signals from random noise and improving the robustness and comparability of ecological networks.</p>
+</blockquote>
+<div id="random-matrix-theory-rmt" class="section level2" number="3.1">
 <h2>
-<span class="header-section-number">3.1</span> RMT<a class="anchor" aria-label="anchor" href="#rmt"><i class="fas fa-link"></i></a>
+<span class="header-section-number">3.1</span> Random Matrix Theory (RMT)<a class="anchor" aria-label="anchor" href="#random-matrix-theory-rmt"><i class="fas fa-link"></i></a>
 </h2>
+<blockquote>
+<p>Load R Package</p>
+</blockquote>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Jiawang1209/ggNetView">ggNetView</a></span><span class="op">)</span></span></code></pre></div>
+<hr>
+</div>
+<div id="example-data" class="section level2" number="3.2">
+<h2>
+<span class="header-section-number">3.2</span> Example data<a class="anchor" aria-label="anchor" href="#example-data"><i class="fas fa-link"></i></a>
+</h2>
+<blockquote>
+<p>Example data</p>
+</blockquote>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Access built-in example datasets in ggNetView</span></span>
+<span></span>
+<span><span class="co"># Relative abundance table of rarefied ASVs or OTUs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"otu_rare_relative"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">otu_rare_relative</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] 2859   18</code></pre>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">otu_rare_relative</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
+<pre><code>##              KO1        KO2        KO3        KO4        KO5
+## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
+## ASV_2 0.05750000 0.03393333 0.06046667 0.05810000 0.07320000
+## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
+## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
+## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667</code></pre>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Taxonomic annotation table of ASVs or OTUs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"tax_tab"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">tax_tab</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] 2859    8</code></pre>
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tax_tab</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
+<pre><code>## # A tibble: 5 × 5
+##   OTUID  Kingdom  Phylum          Class          Order            
+##   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;            
+## 1 ASV_2  Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 2 ASV_3  Bacteria Verrucomicrobia Spartobacteria Unassigned       
+## 3 ASV_31 Bacteria Actinobacteria  Actinobacteria Actinomycetales  
+## 4 ASV_27 Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 5 ASV_9  Bacteria Unassigned      Unassigned     Unassigned</code></pre>
+</div>
+<div id="compute-rmt-threshold" class="section level2" number="3.3">
+<h2>
+<span class="header-section-number">3.3</span> Compute RMT threshold<a class="anchor" aria-label="anchor" href="#compute-rmt-threshold"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView_RMT.html">ggNetView_RMT</a></span><span class="op">(</span>mat <span class="op">=</span> <span class="va">otu_rare_relative</span>, </span>
+<span>                     transfrom.method <span class="op">=</span> <span class="st">"none"</span>, </span>
+<span>                     method <span class="op">=</span> <span class="st">"WGCNA"</span>, </span>
+<span>                     cor.method <span class="op">=</span> <span class="st">"pearson"</span>,</span>
+<span>                     unfold.method <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
+<span>                     bandwidth <span class="op">=</span> <span class="st">"nrd0"</span>,</span>
+<span>                     nr.fit.points <span class="op">=</span> <span class="fl">51</span>,</span>
+<span>                     discard.outliers <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                     discard.zeros <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                     min.mat.dim <span class="op">=</span> <span class="fl">40</span>,</span>
+<span>                     max.ev.spacing <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                     save_plots <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                     out_dir <span class="op">=</span> <span class="st">"RMT_plots"</span>,</span>
+<span>                     verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                     seed <span class="op">=</span> <span class="fl">1115</span></span>
+<span>                     <span class="op">)</span></span></code></pre></div>
+<pre><code>## [Info] Matrix dimension: 2859 x 2859</code></pre>
+<pre><code>## [Info] #non-zeros: 8173831 | Sparseness: 0.0000</code></pre>
+<pre><code>##   [Scan]   1/51 | threshold = 0</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   2/51 | threshold = 0.02</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   3/51 | threshold = 0.04</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   4/51 | threshold = 0.06</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   5/51 | threshold = 0.08</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   6/51 | threshold = 0.1</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   7/51 | threshold = 0.12</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   8/51 | threshold = 0.14</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   9/51 | threshold = 0.16</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  10/51 | threshold = 0.18</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  11/51 | threshold = 0.2</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  12/51 | threshold = 0.22</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  13/51 | threshold = 0.24</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  14/51 | threshold = 0.26</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  15/51 | threshold = 0.28</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  16/51 | threshold = 0.3</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  17/51 | threshold = 0.32</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  18/51 | threshold = 0.34</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  19/51 | threshold = 0.36</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  20/51 | threshold = 0.38</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  21/51 | threshold = 0.4</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  22/51 | threshold = 0.42</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  23/51 | threshold = 0.44</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  24/51 | threshold = 0.46</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  25/51 | threshold = 0.48</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  26/51 | threshold = 0.5</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  27/51 | threshold = 0.52</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  28/51 | threshold = 0.54</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  29/51 | threshold = 0.56</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  30/51 | threshold = 0.58</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  31/51 | threshold = 0.6</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  32/51 | threshold = 0.62</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  33/51 | threshold = 0.64</code></pre>
+<pre><code>##          Effective dimension: 2857</code></pre>
+<pre><code>##   [Scan]  34/51 | threshold = 0.66</code></pre>
+<pre><code>##          Effective dimension: 2855</code></pre>
+<pre><code>##   [Scan]  35/51 | threshold = 0.68</code></pre>
+<pre><code>##          Effective dimension: 2842</code></pre>
+<pre><code>##   [Scan]  36/51 | threshold = 0.7</code></pre>
+<pre><code>##          Effective dimension: 2800</code></pre>
+<pre><code>##   [Scan]  37/51 | threshold = 0.72</code></pre>
+<pre><code>##          Effective dimension: 2705</code></pre>
+<pre><code>##   [Scan]  38/51 | threshold = 0.74</code></pre>
+<pre><code>##          Effective dimension: 2546</code></pre>
+<pre><code>##   [Scan]  39/51 | threshold = 0.76</code></pre>
+<pre><code>##          Effective dimension: 2333</code></pre>
+<pre><code>##   [Scan]  40/51 | threshold = 0.78</code></pre>
+<pre><code>##          Effective dimension: 2049</code></pre>
+<pre><code>##   [Scan]  41/51 | threshold = 0.8</code></pre>
+<pre><code>##          Effective dimension: 1735</code></pre>
+<pre><code>##   [Scan]  42/51 | threshold = 0.82</code></pre>
+<pre><code>##          Effective dimension: 1396</code></pre>
+<pre><code>##   [Scan]  43/51 | threshold = 0.84</code></pre>
+<pre><code>##          Effective dimension: 1082</code></pre>
+<pre><code>##   [Scan]  44/51 | threshold = 0.86</code></pre>
+<pre><code>##          Effective dimension: 825</code></pre>
+<pre><code>##   [Scan]  45/51 | threshold = 0.88</code></pre>
+<pre><code>##          Effective dimension: 600</code></pre>
+<pre><code>##   [Scan]  46/51 | threshold = 0.9</code></pre>
+<pre><code>##          Effective dimension: 454</code></pre>
+<pre><code>##   [Scan]  47/51 | threshold = 0.92</code></pre>
+<pre><code>##          Effective dimension: 324</code></pre>
+<pre><code>##   [Scan]  48/51 | threshold = 0.94</code></pre>
+<pre><code>##          Effective dimension: 215</code></pre>
+<pre><code>##   [Scan]  49/51 | threshold = 0.96</code></pre>
+<pre><code>##          Effective dimension: 157</code></pre>
+<pre><code>##   [Scan]  50/51 | threshold = 0.98</code></pre>
+<pre><code>##          Effective dimension: 79</code></pre>
+<pre><code>##   [Scan]  51/51 | threshold = 1</code></pre>
+<pre><code>##          Effective dimension: 2</code></pre>
+<pre><code>##          Too small. Stop scanning.</code></pre>
+<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out</span><span class="op">$</span><span class="va">chosen_threshold</span></span></code></pre></div>
+<pre><code>## [1] 0.82</code></pre>
+<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView_RMT.html">ggNetView_RMT</a></span><span class="op">(</span>mat <span class="op">=</span> <span class="va">otu_rare_relative</span>, </span>
+<span>                     transfrom.method <span class="op">=</span> <span class="st">"none"</span>, </span>
+<span>                     method <span class="op">=</span> <span class="st">"cor"</span>, </span>
+<span>                     cor.method <span class="op">=</span> <span class="st">"pearson"</span>,</span>
+<span>                     unfold.method <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
+<span>                     bandwidth <span class="op">=</span> <span class="st">"nrd0"</span>,</span>
+<span>                     nr.fit.points <span class="op">=</span> <span class="fl">51</span>,</span>
+<span>                     discard.outliers <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                     discard.zeros <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                     min.mat.dim <span class="op">=</span> <span class="fl">40</span>,</span>
+<span>                     max.ev.spacing <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                     save_plots <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                     out_dir <span class="op">=</span> <span class="st">"RMT_plots"</span>,</span>
+<span>                     verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                     seed <span class="op">=</span> <span class="fl">1115</span></span>
+<span>                     <span class="op">)</span></span></code></pre></div>
+<pre><code>## [Info] Matrix dimension: 2859 x 2859</code></pre>
+<pre><code>## [Info] #non-zeros: 8173761 | Sparseness: 0.0000</code></pre>
+<pre><code>##   [Scan]   1/51 | threshold = 0</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   2/51 | threshold = 0.02</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   3/51 | threshold = 0.04</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   4/51 | threshold = 0.06</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   5/51 | threshold = 0.08</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   6/51 | threshold = 0.1</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   7/51 | threshold = 0.12</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   8/51 | threshold = 0.14</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]   9/51 | threshold = 0.16</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  10/51 | threshold = 0.18</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  11/51 | threshold = 0.2</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  12/51 | threshold = 0.22</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  13/51 | threshold = 0.24</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  14/51 | threshold = 0.26</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  15/51 | threshold = 0.28</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  16/51 | threshold = 0.3</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  17/51 | threshold = 0.32</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  18/51 | threshold = 0.34</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  19/51 | threshold = 0.36</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  20/51 | threshold = 0.38</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  21/51 | threshold = 0.4</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  22/51 | threshold = 0.42</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  23/51 | threshold = 0.44</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  24/51 | threshold = 0.46</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  25/51 | threshold = 0.48</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  26/51 | threshold = 0.5</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  27/51 | threshold = 0.52</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  28/51 | threshold = 0.54</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  29/51 | threshold = 0.56</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  30/51 | threshold = 0.58</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  31/51 | threshold = 0.6</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  32/51 | threshold = 0.62</code></pre>
+<pre><code>##          Effective dimension: 2859</code></pre>
+<pre><code>##   [Scan]  33/51 | threshold = 0.64</code></pre>
+<pre><code>##          Effective dimension: 2857</code></pre>
+<pre><code>##   [Scan]  34/51 | threshold = 0.66</code></pre>
+<pre><code>##          Effective dimension: 2855</code></pre>
+<pre><code>##   [Scan]  35/51 | threshold = 0.68</code></pre>
+<pre><code>##          Effective dimension: 2842</code></pre>
+<pre><code>##   [Scan]  36/51 | threshold = 0.7</code></pre>
+<pre><code>##          Effective dimension: 2800</code></pre>
+<pre><code>##   [Scan]  37/51 | threshold = 0.72</code></pre>
+<pre><code>##          Effective dimension: 2705</code></pre>
+<pre><code>##   [Scan]  38/51 | threshold = 0.74</code></pre>
+<pre><code>##          Effective dimension: 2546</code></pre>
+<pre><code>##   [Scan]  39/51 | threshold = 0.76</code></pre>
+<pre><code>##          Effective dimension: 2333</code></pre>
+<pre><code>##   [Scan]  40/51 | threshold = 0.78</code></pre>
+<pre><code>##          Effective dimension: 2049</code></pre>
+<pre><code>##   [Scan]  41/51 | threshold = 0.8</code></pre>
+<pre><code>##          Effective dimension: 1735</code></pre>
+<pre><code>##   [Scan]  42/51 | threshold = 0.82</code></pre>
+<pre><code>##          Effective dimension: 1396</code></pre>
+<pre><code>##   [Scan]  43/51 | threshold = 0.84</code></pre>
+<pre><code>##          Effective dimension: 1082</code></pre>
+<pre><code>##   [Scan]  44/51 | threshold = 0.86</code></pre>
+<pre><code>##          Effective dimension: 825</code></pre>
+<pre><code>##   [Scan]  45/51 | threshold = 0.88</code></pre>
+<pre><code>##          Effective dimension: 600</code></pre>
+<pre><code>##   [Scan]  46/51 | threshold = 0.9</code></pre>
+<pre><code>##          Effective dimension: 454</code></pre>
+<pre><code>##   [Scan]  47/51 | threshold = 0.92</code></pre>
+<pre><code>##          Effective dimension: 324</code></pre>
+<pre><code>##   [Scan]  48/51 | threshold = 0.94</code></pre>
+<pre><code>##          Effective dimension: 215</code></pre>
+<pre><code>##   [Scan]  49/51 | threshold = 0.96</code></pre>
+<pre><code>##          Effective dimension: 157</code></pre>
+<pre><code>##   [Scan]  50/51 | threshold = 0.98</code></pre>
+<pre><code>##          Effective dimension: 79</code></pre>
+<pre><code>##   [Scan]  51/51 | threshold = 1</code></pre>
+<pre><code>##          Effective dimension: 10</code></pre>
+<pre><code>##          Too small. Stop scanning.</code></pre>
+<div class="sourceCode" id="cb286"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out2</span><span class="op">$</span><span class="va">chosen_threshold</span></span></code></pre></div>
+<pre><code>## [1] 0.82</code></pre>
+</div>
+<div id="build-graph-from-matrix-based-on-rmt-threshold" class="section level2" number="3.4">
+<h2>
+<span class="header-section-number">3.4</span> Build graph from matrix based on RMT-threshold<a class="anchor" aria-label="anchor" href="#build-graph-from-matrix-based-on-rmt-threshold"><i class="fas fa-link"></i></a>
+</h2>
+<blockquote>
+<p>Build graph object</p>
+</blockquote>
+<div class="sourceCode" id="cb288"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/build_graph_from_mat.html">build_graph_from_mat</a></span><span class="op">(</span></span>
+<span>  mat <span class="op">=</span> <span class="va">otu_rare_relative</span>,</span>
+<span>  transfrom.method <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#  based your input data</span></span>
+<span>  r.threshold <span class="op">=</span> <span class="va">out</span><span class="op">$</span><span class="va">chosen_threshold</span>,</span>
+<span>  p.threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"WGCNA"</span>,</span>
+<span>  cor.method <span class="op">=</span> <span class="st">"pearson"</span>,</span>
+<span>  proc <span class="op">=</span> <span class="st">"Bonferroni"</span>,</span>
+<span>  module.method <span class="op">=</span> <span class="st">"Fast_greedy"</span>,</span>
+<span>  node_annotation <span class="op">=</span> <span class="va">tax_tab</span>,</span>
+<span>  top_modules <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1115</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">graph_obj</span></span></code></pre></div>
+<pre><code>## # A tbl_graph: 213 nodes and 844 edges
+## #
+## # An undirected simple graph with 29 components
+## #
+## # Node Data: 213 × 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    &lt;chr&gt;   &lt;fct&gt;      &lt;ord&gt;       &lt;chr&gt;       &lt;ord&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
+##  1 ASV_649 5          5           5           5              27     26.5 Bacter…
+##  2 ASV_705 5          5           5           5              27     26.5 Bacter…
+##  3 ASV_12… 5          5           5           5              27     26.5 Bacter…
+##  4 ASV_13… 5          5           5           5              27     26.5 Bacter…
+##  5 ASV_14… 5          5           5           5              27     26.5 Bacter…
+##  6 ASV_14… 5          5           5           5              27     26.5 Bacter…
+##  7 ASV_24… 5          5           5           5              27     26.5 Bacter…
+##  8 ASV_25… 5          5           5           5              27     26.4 Bacter…
+##  9 ASV_28… 5          5           5           5              27     26.5 Bacter…
+## 10 ASV_28… 5          5           5           5              27     26.5 Bacter…
+## # ℹ 203 more rows
+## # ℹ 6 more variables: Phylum &lt;chr&gt;, Class &lt;chr&gt;, Order &lt;chr&gt;, Family &lt;chr&gt;,
+## #   Genus &lt;chr&gt;, Species &lt;chr&gt;
+## #
+## # Edge Data: 844 × 5
+##    from    to weight correlation corr_direction
+##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;         
+## 1   194   195  0.959       0.959 Positive      
+## 2   185   208  0.954       0.954 Positive      
+## 3   185   213  0.957       0.957 Positive      
+## # ℹ 841 more rows</code></pre>
 
 </div>
 </div>
@@ -77,7 +435,10 @@
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#random-matrix-theory-rmtbased-random-network"><span class="header-section-number">3</span> Random Matrix Theory (RMT)–based random network</a></li>
-<li><a class="nav-link" href="#rmt"><span class="header-section-number">3.1</span> RMT</a></li>
+<li><a class="nav-link" href="#random-matrix-theory-rmt"><span class="header-section-number">3.1</span> Random Matrix Theory (RMT)</a></li>
+<li><a class="nav-link" href="#example-data"><span class="header-section-number">3.2</span> Example data</a></li>
+<li><a class="nav-link" href="#compute-rmt-threshold"><span class="header-section-number">3.3</span> Compute RMT threshold</a></li>
+<li><a class="nav-link" href="#build-graph-from-matrix-based-on-rmt-threshold"><span class="header-section-number">3.4</span> Build graph from matrix based on RMT-threshold</a></li>
 </ul>
 
       <div class="book-extra">
@@ -94,7 +455,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-01-08.</p>
+    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-01-09.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

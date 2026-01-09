@@ -125,7 +125,7 @@
 
 \title{ggNetView manual documentation}
 \author{Yue Liu}
-\date{2026-01-08}
+\date{2026-01-09}
 
 \begin{document}
 \maketitle
@@ -331,6 +331,16 @@ Example data
 \begin{Highlighting}[]
 \CommentTok{\# Taxonomic annotation table of ASVs or OTUs}
 \FunctionTok{data}\NormalTok{(}\StringTok{"tax\_tab"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(tax\_tab)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859    8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{tax\_tab[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
 \end{Highlighting}
 \end{Shaded}
@@ -888,9 +898,1072 @@ Build graph object
 
 \chapter{Random Matrix Theory (RMT)--based random network}\label{random-matrix-theory-rmtbased-random-network}
 
-\section{RMT}\label{rmt}
+\begin{quote}
+When a numerical matrix is used as input, it is necessary to filter and screen the resulting correlation matrix. Empirical thresholds are commonly adopted, usually between 0.6 to 0.85; however, these thresholds are largely subjective.
+\end{quote}
+
+\begin{quote}
+Compared with empirical thresholding, random matrix theory (RMT) provides a data-driven and objective approach for determining correlation thresholds, effectively separating true biological signals from random noise and improving the robustness and comparability of ecological networks.
+\end{quote}
+
+\section{Random Matrix Theory (RMT)}\label{random-matrix-theory-rmt}
+
+\begin{quote}
+Load R Package
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(ggNetView)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Example data}\label{example-data}
+
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Access built{-}in example datasets in ggNetView}
+
+\CommentTok{\# Relative abundance table of rarefied ASVs or OTUs}
+\FunctionTok{data}\NormalTok{(}\StringTok{"otu\_rare\_relative"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(otu\_rare\_relative)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859   18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{otu\_rare\_relative[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              KO1        KO2        KO3        KO4        KO5
+## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
+## ASV_2 0.05750000 0.03393333 0.06046667 0.05810000 0.07320000
+## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
+## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
+## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Taxonomic annotation table of ASVs or OTUs}
+\FunctionTok{data}\NormalTok{(}\StringTok{"tax\_tab"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(tax\_tab)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859    8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tax\_tab[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 5
+##   OTUID  Kingdom  Phylum          Class          Order            
+##   <chr>  <chr>    <chr>           <chr>          <chr>            
+## 1 ASV_2  Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 2 ASV_3  Bacteria Verrucomicrobia Spartobacteria Unassigned       
+## 3 ASV_31 Bacteria Actinobacteria  Actinobacteria Actinomycetales  
+## 4 ASV_27 Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 5 ASV_9  Bacteria Unassigned      Unassigned     Unassigned
+\end{verbatim}
+
+\section{Compute RMT threshold}\label{compute-rmt-threshold}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{out }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView\_RMT}\NormalTok{(}\AttributeTok{mat =}\NormalTok{ otu\_rare\_relative, }
+                     \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{, }
+                     \AttributeTok{method =} \StringTok{"WGCNA"}\NormalTok{, }
+                     \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
+                     \AttributeTok{unfold.method =} \StringTok{"gaussian"}\NormalTok{,}
+                     \AttributeTok{bandwidth =} \StringTok{"nrd0"}\NormalTok{,}
+                     \AttributeTok{nr.fit.points =} \DecValTok{51}\NormalTok{,}
+                     \AttributeTok{discard.outliers =} \ConstantTok{TRUE}\NormalTok{,}
+                     \AttributeTok{discard.zeros =} \ConstantTok{TRUE}\NormalTok{,}
+                     \AttributeTok{min.mat.dim =} \DecValTok{40}\NormalTok{,}
+                     \AttributeTok{max.ev.spacing =} \DecValTok{3}\NormalTok{,}
+                     \AttributeTok{save\_plots =} \ConstantTok{FALSE}\NormalTok{,}
+                     \AttributeTok{out\_dir =} \StringTok{"RMT\_plots"}\NormalTok{,}
+                     \AttributeTok{verbose =} \ConstantTok{TRUE}\NormalTok{,}
+                     \AttributeTok{seed =} \DecValTok{1115}
+\NormalTok{                     )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [Info] Matrix dimension: 2859 x 2859
+\end{verbatim}
+
+\begin{verbatim}
+## [Info] #non-zeros: 8173831 | Sparseness: 0.0000
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   1/51 | threshold = 0
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   2/51 | threshold = 0.02
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   3/51 | threshold = 0.04
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   4/51 | threshold = 0.06
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   5/51 | threshold = 0.08
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   6/51 | threshold = 0.1
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   7/51 | threshold = 0.12
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   8/51 | threshold = 0.14
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   9/51 | threshold = 0.16
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  10/51 | threshold = 0.18
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  11/51 | threshold = 0.2
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  12/51 | threshold = 0.22
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  13/51 | threshold = 0.24
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  14/51 | threshold = 0.26
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  15/51 | threshold = 0.28
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  16/51 | threshold = 0.3
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  17/51 | threshold = 0.32
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  18/51 | threshold = 0.34
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  19/51 | threshold = 0.36
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  20/51 | threshold = 0.38
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  21/51 | threshold = 0.4
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  22/51 | threshold = 0.42
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  23/51 | threshold = 0.44
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  24/51 | threshold = 0.46
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  25/51 | threshold = 0.48
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  26/51 | threshold = 0.5
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  27/51 | threshold = 0.52
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  28/51 | threshold = 0.54
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  29/51 | threshold = 0.56
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  30/51 | threshold = 0.58
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  31/51 | threshold = 0.6
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  32/51 | threshold = 0.62
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  33/51 | threshold = 0.64
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2857
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  34/51 | threshold = 0.66
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2855
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  35/51 | threshold = 0.68
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2842
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  36/51 | threshold = 0.7
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2800
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  37/51 | threshold = 0.72
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2705
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  38/51 | threshold = 0.74
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2546
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  39/51 | threshold = 0.76
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2333
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  40/51 | threshold = 0.78
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2049
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  41/51 | threshold = 0.8
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 1735
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  42/51 | threshold = 0.82
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 1396
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  43/51 | threshold = 0.84
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 1082
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  44/51 | threshold = 0.86
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 825
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  45/51 | threshold = 0.88
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 600
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  46/51 | threshold = 0.9
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 454
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  47/51 | threshold = 0.92
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 324
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  48/51 | threshold = 0.94
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 215
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  49/51 | threshold = 0.96
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 157
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  50/51 | threshold = 0.98
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 79
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  51/51 | threshold = 1
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2
+\end{verbatim}
+
+\begin{verbatim}
+##          Too small. Stop scanning.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{out}\SpecialCharTok{$}\NormalTok{chosen\_threshold}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.82
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{out2 }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView\_RMT}\NormalTok{(}\AttributeTok{mat =}\NormalTok{ otu\_rare\_relative, }
+                     \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{, }
+                     \AttributeTok{method =} \StringTok{"cor"}\NormalTok{, }
+                     \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
+                     \AttributeTok{unfold.method =} \StringTok{"gaussian"}\NormalTok{,}
+                     \AttributeTok{bandwidth =} \StringTok{"nrd0"}\NormalTok{,}
+                     \AttributeTok{nr.fit.points =} \DecValTok{51}\NormalTok{,}
+                     \AttributeTok{discard.outliers =} \ConstantTok{TRUE}\NormalTok{,}
+                     \AttributeTok{discard.zeros =} \ConstantTok{TRUE}\NormalTok{,}
+                     \AttributeTok{min.mat.dim =} \DecValTok{40}\NormalTok{,}
+                     \AttributeTok{max.ev.spacing =} \DecValTok{3}\NormalTok{,}
+                     \AttributeTok{save\_plots =} \ConstantTok{FALSE}\NormalTok{,}
+                     \AttributeTok{out\_dir =} \StringTok{"RMT\_plots"}\NormalTok{,}
+                     \AttributeTok{verbose =} \ConstantTok{TRUE}\NormalTok{,}
+                     \AttributeTok{seed =} \DecValTok{1115}
+\NormalTok{                     )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [Info] Matrix dimension: 2859 x 2859
+\end{verbatim}
+
+\begin{verbatim}
+## [Info] #non-zeros: 8173761 | Sparseness: 0.0000
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   1/51 | threshold = 0
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   2/51 | threshold = 0.02
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   3/51 | threshold = 0.04
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   4/51 | threshold = 0.06
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   5/51 | threshold = 0.08
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   6/51 | threshold = 0.1
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   7/51 | threshold = 0.12
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   8/51 | threshold = 0.14
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]   9/51 | threshold = 0.16
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  10/51 | threshold = 0.18
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  11/51 | threshold = 0.2
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  12/51 | threshold = 0.22
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  13/51 | threshold = 0.24
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  14/51 | threshold = 0.26
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  15/51 | threshold = 0.28
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  16/51 | threshold = 0.3
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  17/51 | threshold = 0.32
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  18/51 | threshold = 0.34
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  19/51 | threshold = 0.36
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  20/51 | threshold = 0.38
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  21/51 | threshold = 0.4
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  22/51 | threshold = 0.42
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  23/51 | threshold = 0.44
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  24/51 | threshold = 0.46
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  25/51 | threshold = 0.48
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  26/51 | threshold = 0.5
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  27/51 | threshold = 0.52
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  28/51 | threshold = 0.54
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  29/51 | threshold = 0.56
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  30/51 | threshold = 0.58
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  31/51 | threshold = 0.6
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  32/51 | threshold = 0.62
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2859
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  33/51 | threshold = 0.64
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2857
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  34/51 | threshold = 0.66
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2855
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  35/51 | threshold = 0.68
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2842
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  36/51 | threshold = 0.7
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2800
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  37/51 | threshold = 0.72
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2705
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  38/51 | threshold = 0.74
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2546
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  39/51 | threshold = 0.76
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2333
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  40/51 | threshold = 0.78
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 2049
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  41/51 | threshold = 0.8
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 1735
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  42/51 | threshold = 0.82
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 1396
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  43/51 | threshold = 0.84
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 1082
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  44/51 | threshold = 0.86
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 825
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  45/51 | threshold = 0.88
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 600
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  46/51 | threshold = 0.9
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 454
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  47/51 | threshold = 0.92
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 324
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  48/51 | threshold = 0.94
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 215
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  49/51 | threshold = 0.96
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 157
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  50/51 | threshold = 0.98
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 79
+\end{verbatim}
+
+\begin{verbatim}
+##   [Scan]  51/51 | threshold = 1
+\end{verbatim}
+
+\begin{verbatim}
+##          Effective dimension: 10
+\end{verbatim}
+
+\begin{verbatim}
+##          Too small. Stop scanning.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{out2}\SpecialCharTok{$}\NormalTok{chosen\_threshold}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.82
+\end{verbatim}
+
+\section{Build graph from matrix based on RMT-threshold}\label{build-graph-from-matrix-based-on-rmt-threshold}
+
+\begin{quote}
+Build graph object
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_mat}\NormalTok{(}
+  \AttributeTok{mat =}\NormalTok{ otu\_rare\_relative,}
+  \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{, }\CommentTok{\#  based your input data}
+  \AttributeTok{r.threshold =}\NormalTok{ out}\SpecialCharTok{$}\NormalTok{chosen\_threshold,}
+  \AttributeTok{p.threshold =} \FloatTok{0.05}\NormalTok{,}
+  \AttributeTok{method =} \StringTok{"WGCNA"}\NormalTok{,}
+  \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
+  \AttributeTok{proc =} \StringTok{"Bonferroni"}\NormalTok{,}
+  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{node\_annotation =}\NormalTok{ tax\_tab,}
+  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed =} \DecValTok{1115}
+\NormalTok{)}
+
+\NormalTok{graph\_obj}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 213 nodes and 844 edges
+## #
+## # An undirected simple graph with 29 components
+## #
+## # Node Data: 213 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_649 5          5           5           5              27     26.5 Bacter~
+##  2 ASV_705 5          5           5           5              27     26.5 Bacter~
+##  3 ASV_12~ 5          5           5           5              27     26.5 Bacter~
+##  4 ASV_13~ 5          5           5           5              27     26.5 Bacter~
+##  5 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  6 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  7 ASV_24~ 5          5           5           5              27     26.5 Bacter~
+##  8 ASV_25~ 5          5           5           5              27     26.4 Bacter~
+##  9 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## 10 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## # i 203 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 844 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1   194   195  0.959       0.959 Positive      
+## 2   185   208  0.954       0.954 Positive      
+## 3   185   213  0.957       0.957 Positive      
+## # i 841 more rows
+\end{verbatim}
 
 \chapter{Get network information}\label{get-network-information}
+
+\begin{quote}
+Once the graph object is constructed, basic network information can be retrieved, and subnetworks can be extracted.
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\begin{quote}
+Load R Package
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(ggNetView)}
+\end{Highlighting}
+\end{Shaded}
 
 \section{Full-network information}\label{full-network-information}
 

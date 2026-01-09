@@ -1,5 +1,17 @@
 # Get network information
 
+> Once the graph object is constructed, basic network information can be retrieved, and subnetworks can be extracted.
+
+---
+
+> Load R Package
+
+
+```{r warning=F, message=F}
+library(tidyverse)
+library(ggNetView)
+```
+
 ## Full-network information
 
 
