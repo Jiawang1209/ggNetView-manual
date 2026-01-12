@@ -125,7 +125,7 @@
 
 \title{ggNetView manual documentation}
 \author{Yue Liu}
-\date{2026-01-09}
+\date{2026-01-12}
 
 \begin{document}
 \maketitle
@@ -202,6 +202,10 @@ The source code for ggNetView is available in the ggNetView repository.
 \tightlist
 \item
   Email: \href{mailto:Jiawang1209@163.com}{\nolinkurl{Jiawang1209@163.com}}
+\item
+  Github: \url{https://github.com/Jiawang1209/ggNetView}
+\item
+  ggNetView-manual: \url{https://jiawang1209.github.io/ggNetView-manual/}
 \end{itemize}
 
 \chapter{Build graph object}\label{build-graph-object}
@@ -995,7 +999,7 @@ Example data
                      \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
                      \AttributeTok{unfold.method =} \StringTok{"gaussian"}\NormalTok{,}
                      \AttributeTok{bandwidth =} \StringTok{"nrd0"}\NormalTok{,}
-                     \AttributeTok{nr.fit.points =} \DecValTok{51}\NormalTok{,}
+                     \AttributeTok{nr.fit.points =} \DecValTok{20}\NormalTok{,}
                      \AttributeTok{discard.outliers =} \ConstantTok{TRUE}\NormalTok{,}
                      \AttributeTok{discard.zeros =} \ConstantTok{TRUE}\NormalTok{,}
                      \AttributeTok{min.mat.dim =} \DecValTok{40}\NormalTok{,}
@@ -1446,7 +1450,7 @@ Example data
                      \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
                      \AttributeTok{unfold.method =} \StringTok{"gaussian"}\NormalTok{,}
                      \AttributeTok{bandwidth =} \StringTok{"nrd0"}\NormalTok{,}
-                     \AttributeTok{nr.fit.points =} \DecValTok{51}\NormalTok{,}
+                     \AttributeTok{nr.fit.points =} \DecValTok{20}\NormalTok{,}
                      \AttributeTok{discard.outliers =} \ConstantTok{TRUE}\NormalTok{,}
                      \AttributeTok{discard.zeros =} \ConstantTok{TRUE}\NormalTok{,}
                      \AttributeTok{min.mat.dim =} \DecValTok{40}\NormalTok{,}
@@ -1965,61 +1969,2477 @@ Load R Package
 \end{Highlighting}
 \end{Shaded}
 
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Access built{-}in example datasets in ggNetView}
+
+\CommentTok{\# Relative abundance table of rarefied ASVs or OTUs}
+\FunctionTok{data}\NormalTok{(}\StringTok{"otu\_rare\_relative"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(otu\_rare\_relative)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859   18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{otu\_rare\_relative[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              KO1        KO2        KO3        KO4        KO5
+## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
+## ASV_2 0.05750000 0.03393333 0.06046667 0.05810000 0.07320000
+## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
+## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
+## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Taxonomic annotation table of ASVs or OTUs}
+\FunctionTok{data}\NormalTok{(}\StringTok{"tax\_tab"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(tax\_tab)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859    8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tax\_tab[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 5
+##   OTUID  Kingdom  Phylum          Class          Order            
+##   <chr>  <chr>    <chr>           <chr>          <chr>            
+## 1 ASV_2  Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 2 ASV_3  Bacteria Verrucomicrobia Spartobacteria Unassigned       
+## 3 ASV_31 Bacteria Actinobacteria  Actinobacteria Actinomycetales  
+## 4 ASV_27 Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 5 ASV_9  Bacteria Unassigned      Unassigned     Unassigned
+\end{verbatim}
+
+\begin{quote}
+Build graph object
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_mat}\NormalTok{(}
+  \AttributeTok{mat =}\NormalTok{ otu\_rare\_relative,}
+  \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{, }\CommentTok{\#  based your input data}
+  \AttributeTok{r.threshold =} \FloatTok{0.7}\NormalTok{,}
+  \AttributeTok{p.threshold =} \FloatTok{0.05}\NormalTok{,}
+  \AttributeTok{method =} \StringTok{"WGCNA"}\NormalTok{,}
+  \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
+  \AttributeTok{proc =} \StringTok{"Bonferroni"}\NormalTok{,}
+  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{node\_annotation =}\NormalTok{ tax\_tab,}
+  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed =} \DecValTok{1115}
+\NormalTok{)}
+
+\NormalTok{graph\_obj}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 213 nodes and 844 edges
+## #
+## # An undirected simple graph with 29 components
+## #
+## # Node Data: 213 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_649 5          5           5           5              27     26.5 Bacter~
+##  2 ASV_705 5          5           5           5              27     26.5 Bacter~
+##  3 ASV_12~ 5          5           5           5              27     26.5 Bacter~
+##  4 ASV_13~ 5          5           5           5              27     26.5 Bacter~
+##  5 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  6 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  7 ASV_24~ 5          5           5           5              27     26.5 Bacter~
+##  8 ASV_25~ 5          5           5           5              27     26.4 Bacter~
+##  9 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## 10 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## # i 203 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 844 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1   194   195  0.959       0.959 Positive      
+## 2   185   208  0.954       0.954 Positive      
+## 3   185   213  0.957       0.957 Positive      
+## # i 841 more rows
+\end{verbatim}
+
 \section{Full-network information}\label{full-network-information}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj\_info }\OtherTok{\textless{}{-}} \FunctionTok{get\_info\_from\_graph}\NormalTok{(}\AttributeTok{graph\_obj =}\NormalTok{ graph\_obj)}
+
+\CommentTok{\# return a list }
+\FunctionTok{class}\NormalTok{(graph\_obj\_info)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "list"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{names}\NormalTok{(graph\_obj\_info)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "node_info" "edge_info"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj\_info}\SpecialCharTok{$}\NormalTok{node\_info}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 213 x 11
+##    name     Modularity Degree Strength Kingdom  Phylum  Class Order Family Genus
+##    <chr>    <ord>       <dbl>    <dbl> <chr>    <chr>   <chr> <chr> <chr>  <chr>
+##  1 ASV_649  5              27     26.5 Bacteria Proteo~ Alph~ Rhiz~ Unass~ Unas~
+##  2 ASV_705  5              27     26.5 Bacteria Actino~ Acti~ Acti~ Cellu~ Cell~
+##  3 ASV_1234 5              27     26.5 Bacteria Gemmat~ Gemm~ Gemm~ Gemma~ Gemm~
+##  4 ASV_1373 5              27     26.5 Bacteria Actino~ Acti~ Soli~ Solir~ Soli~
+##  5 ASV_1479 5              27     26.5 Bacteria Verruc~ Spar~ Unas~ Unass~ Spar~
+##  6 ASV_1481 5              27     26.5 Bacteria Proteo~ Gamm~ Unas~ Unass~ Unas~
+##  7 ASV_2453 5              27     26.5 Bacteria Bacter~ Sphi~ Sphi~ Chiti~ Unas~
+##  8 ASV_2562 5              27     26.4 Bacteria Bacter~ Sphi~ Sphi~ Chiti~ Unas~
+##  9 ASV_2848 5              27     26.5 Bacteria Planct~ Plan~ Plan~ Planc~ Unas~
+## 10 ASV_2844 5              27     26.5 Bacteria Proteo~ Unas~ Unas~ Unass~ Unas~
+## # i 203 more rows
+## # i 1 more variable: Species <chr>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj\_info}\SpecialCharTok{$}\NormalTok{edge\_info}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 844 x 5
+##    from    to       weight correlation corr_direction
+##    <chr>   <chr>     <dbl>       <dbl> <chr>         
+##  1 ASV_6   ASV_39    0.959       0.959 Positive      
+##  2 ASV_20  ASV_1852  0.954       0.954 Positive      
+##  3 ASV_20  ASV_2911  0.957       0.957 Positive      
+##  4 ASV_172 ASV_43    0.969       0.969 Positive      
+##  5 ASV_614 ASV_65    0.943       0.943 Positive      
+##  6 ASV_69  ASV_173   0.995       0.995 Positive      
+##  7 ASV_69  ASV_206   0.994       0.994 Positive      
+##  8 ASV_69  ASV_744   0.976       0.976 Positive      
+##  9 ASV_945 ASV_69    0.985       0.985 Positive      
+## 10 ASV_69  ASV_1418  0.975       0.975 Positive      
+## # i 834 more rows
+\end{verbatim}
+
 \section{Sub-network (modularity) information}\label{sub-network-modularity-information}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{subgraph\_info }\OtherTok{\textless{}{-}} \FunctionTok{get\_subgraph}\NormalTok{(}\AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+                              \AttributeTok{select\_module =} \ConstantTok{NULL}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Module Number
+## 1       5     31
+## 2       2     24
+## 3       8     22
+## 4      21     15
+## 5       1     13
+## 6       3     11
+## 7       4     11
+## 8       6     11
+## 9      25      8
+## 10      7      6
+## 11     12      5
+## 12     22      5
+## 13     10      4
+## 14     11      4
+## 15     15      4
+## 16 Others     39
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# return a list }
+\FunctionTok{class}\NormalTok{(subgraph\_info)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "list"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{names}\NormalTok{(subgraph\_info)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "sub_graph_all"    "stat_module"      "sub_graph_select"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{subgraph\_info}\SpecialCharTok{$}\NormalTok{stat\_module}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Module Number
+## 1       5     31
+## 2       2     24
+## 3       8     22
+## 4      21     15
+## 5       1     13
+## 6       3     11
+## 7       4     11
+## 8       6     11
+## 9      25      8
+## 10      7      6
+## 11     12      5
+## 12     22      5
+## 13     10      4
+## 14     11      4
+## 15     15      4
+## 16 Others     39
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{subgraph\_info}\SpecialCharTok{$}\NormalTok{sub\_graph\_all}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $`5`
+## # A tbl_graph: 31 nodes and 330 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 31 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_649 5          5           5           5              27     26.5 Bacter~
+##  2 ASV_705 5          5           5           5              27     26.5 Bacter~
+##  3 ASV_12~ 5          5           5           5              27     26.5 Bacter~
+##  4 ASV_13~ 5          5           5           5              27     26.5 Bacter~
+##  5 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  6 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  7 ASV_24~ 5          5           5           5              27     26.5 Bacter~
+##  8 ASV_25~ 5          5           5           5              27     26.4 Bacter~
+##  9 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## 10 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## # i 21 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 330 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.996       0.996 Positive      
+## 2     1     3  0.997       0.997 Positive      
+## 3     2     3  0.994       0.994 Positive      
+## # i 327 more rows
+## 
+## $`2`
+## # A tbl_graph: 24 nodes and 121 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 24 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_671 2          2           2           2              18     17.5 Bacter~
+##  2 ASV_18~ 2          2           2           2              17     16.6 Bacter~
+##  3 ASV_29~ 2          2           2           2              17     16.6 Bacter~
+##  4 ASV_568 2          2           2           2              16     15.6 Bacter~
+##  5 ASV_10~ 2          2           2           2              16     15.6 Bacter~
+##  6 ASV_11~ 2          2           2           2              16     15.6 Bacter~
+##  7 ASV_24~ 2          2           2           2              15     14.5 Bacter~
+##  8 ASV_28~ 2          2           2           2              14     13.5 Bacter~
+##  9 ASV_15~ 2          2           2           2              13     12.6 Bacter~
+## 10 ASV_24~ 2          2           2           2              13     12.5 Bacter~
+## # i 14 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 121 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.991       0.991 Positive      
+## 2     1     3  0.992       0.992 Positive      
+## 3     2     3  0.996       0.996 Positive      
+## # i 118 more rows
+## 
+## $`8`
+## # A tbl_graph: 22 nodes and 131 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 22 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_802 8          8           8           8              18     17.5 Bacter~
+##  2 ASV_723 8          8           8           8              18     17.5 Bacter~
+##  3 ASV_11~ 8          8           8           8              18     17.6 Bacter~
+##  4 ASV_29~ 8          8           8           8              18     17.6 Bacter~
+##  5 ASV_927 8          8           8           8              16     15.6 Bacter~
+##  6 ASV_13~ 8          8           8           8              16     15.5 Bacter~
+##  7 ASV_29~ 8          8           8           8              16     15.5 Bacter~
+##  8 ASV_10~ 8          8           8           8              15     14.4 Bacter~
+##  9 ASV_13~ 8          8           8           8              15     14.6 Bacter~
+## 10 ASV_14~ 8          8           8           8              15     14.7 Bacter~
+## # i 12 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 131 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.990       0.990 Positive      
+## 2     1     3  0.993       0.993 Positive      
+## 3     2     3  0.997       0.997 Positive      
+## # i 128 more rows
+## 
+## $`21`
+## # A tbl_graph: 15 nodes and 42 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 15 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_25~ 21         21          21          21             13    12.5  Bacter~
+##  2 ASV_27~ 21         21          21          21             12    11.6  Bacter~
+##  3 ASV_879 21         21          21          21              8     7.67 Bacter~
+##  4 ASV_10~ 21         21          21          21              6     5.76 Bacter~
+##  5 ASV_16~ 21         21          21          21              6     5.70 Bacter~
+##  6 ASV_511 21         21          21          21              5     4.80 Bacter~
+##  7 ASV_578 21         21          21          21              5     4.76 Bacter~
+##  8 ASV_917 21         21          21          21              5     4.80 Bacter~
+##  9 ASV_18~ 21         21          21          21              5     4.81 Bacter~
+## 10 ASV_70  21         21          21          21              4     3.82 Bacter~
+## 11 ASV_13~ 21         21          21          21              4     3.86 Bacter~
+## 12 ASV_839 21         21          21          21              3     2.85 Bacter~
+## 13 ASV_20~ 21         21          21          21              3     2.86 Bacter~
+## 14 ASV_21~ 21         21          21          21              3     2.86 Bacter~
+## 15 ASV_88  21         21          21          21              2     1.90 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 42 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.986       0.986 Positive      
+## 2     1     3  0.973       0.973 Positive      
+## 3     2     3  0.976       0.976 Positive      
+## # i 39 more rows
+## 
+## $`1`
+## # A tbl_graph: 13 nodes and 43 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 13 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_19~ 1          1           1           1               9    8.86  Bacter~
+##  2 ASV_15~ 1          1           1           1               9    8.86  Bacter~
+##  3 ASV_24~ 1          1           1           1               9    8.87  Bacter~
+##  4 ASV_20~ 1          1           1           1               9    8.79  Bacter~
+##  5 ASV_20~ 1          1           1           1               9    8.87  Bacter~
+##  6 ASV_26~ 1          1           1           1               9    8.87  Unassi~
+##  7 ASV_968 1          1           1           1               8    7.88  Bacter~
+##  8 ASV_27~ 1          1           1           1               8    7.73  Bacter~
+##  9 ASV_161 1          1           1           1               7    6.80  Bacter~
+## 10 ASV_25~ 1          1           1           1               5    4.72  Bacter~
+## 11 ASV_534 1          1           1           1               2    1.90  Bacter~
+## 12 ASV_26~ 1          1           1           1               1    0.944 Bacter~
+## 13 ASV_29~ 1          1           1           1               1    0.963 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 43 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.998       0.998 Positive      
+## 2     1     3  0.999       0.999 Positive      
+## 3     2     3  1.000       1.000 Positive      
+## # i 40 more rows
+## 
+## $`3`
+## # A tbl_graph: 11 nodes and 38 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 11 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_945 3          3           3           3               9    8.71  Bacter~
+##  2 ASV_19~ 3          3           3           3               9    8.72  Bacter~
+##  3 ASV_69  3          3           3           3               8    7.85  Bacter~
+##  4 ASV_173 3          3           3           3               8    7.87  Bacter~
+##  5 ASV_206 3          3           3           3               8    7.83  Bacter~
+##  6 ASV_744 3          3           3           3               8    7.71  Bacter~
+##  7 ASV_14~ 3          3           3           3               8    7.71  Bacter~
+##  8 ASV_23~ 3          3           3           3               8    7.67  Bacter~
+##  9 ASV_22~ 3          3           3           3               8    7.70  Bacter~
+## 10 ASV_218 3          3           3           3               1    0.955 Bacter~
+## 11 ASV_14~ 3          3           3           3               1    0.944 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 38 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.982       0.982 Positive      
+## 2     1     3  0.985       0.985 Positive      
+## 3     2     3  0.986       0.986 Positive      
+## # i 35 more rows
+## 
+## $`4`
+## # A tbl_graph: 11 nodes and 33 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 11 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_459 4          4           4           4               8    7.87  Bacter~
+##  2 ASV_533 4          4           4           4               8    7.85  Bacter~
+##  3 ASV_10~ 4          4           4           4               8    7.87  Bacter~
+##  4 ASV_13~ 4          4           4           4               8    7.81  Bacter~
+##  5 ASV_23~ 4          4           4           4               8    7.87  Bacter~
+##  6 ASV_24~ 4          4           4           4               7    6.88  Bacter~
+##  7 ASV_22~ 4          4           4           4               7    6.81  Bacter~
+##  8 ASV_29~ 4          4           4           4               6    5.77  Bacter~
+##  9 ASV_29~ 4          4           4           4               4    3.79  Bacter~
+## 10 ASV_746 4          4           4           4               1    0.945 Bacter~
+## 11 ASV_19~ 4          4           4           4               1    0.953 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 33 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.997       0.997 Positive      
+## 2     1     3  1.000       1.000 Positive      
+## 3     2     3  0.998       0.998 Positive      
+## # i 30 more rows
+## 
+## $`6`
+## # A tbl_graph: 11 nodes and 24 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 11 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_116 6          6           6           6               8    7.67  Bacter~
+##  2 ASV_661 6          6           6           6               8    7.71  Bacter~
+##  3 ASV_25~ 6          6           6           6               6    5.79  Bacter~
+##  4 ASV_975 6          6           6           6               5    4.78  Bacter~
+##  5 ASV_10~ 6          6           6           6               5    4.77  Bacter~
+##  6 ASV_20~ 6          6           6           6               5    4.79  Bacter~
+##  7 ASV_27~ 6          6           6           6               4    3.84  Bacter~
+##  8 ASV_94  6          6           6           6               3    2.84  Bacter~
+##  9 ASV_20~ 6          6           6           6               2    1.92  Bacter~
+## 10 ASV_442 6          6           6           6               1    0.946 Bacter~
+## 11 ASV_408 6          6           6           6               1    0.959 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 24 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.974       0.974 Positive      
+## 2     1     3  0.966       0.966 Positive      
+## 3     2     3  0.979       0.979 Positive      
+## # i 21 more rows
+## 
+## $`25`
+## # A tbl_graph: 8 nodes and 22 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 8 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_1505 25         25          25          25              7     6.66 Bacter~
+## 2 ASV_415  25         25          25          25              6     5.78 Bacter~
+## 3 ASV_517  25         25          25          25              6     5.84 Bacter~
+## 4 ASV_842  25         25          25          25              6     5.80 Bacter~
+## 5 ASV_1719 25         25          25          25              6     5.85 Bacter~
+## 6 ASV_2286 25         25          25          25              6     5.81 Bacter~
+## 7 ASV_2637 25         25          25          25              5     4.78 Bacter~
+## 8 ASV_1474 25         25          25          25              2     1.90 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 22 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.947       0.947 Positive      
+## 2     1     3  0.951       0.951 Positive      
+## 3     2     3  0.970       0.970 Positive      
+## # i 19 more rows
+## 
+## $`7`
+## # A tbl_graph: 6 nodes and 5 edges
+## #
+## # An unrooted tree
+## #
+## # Node Data: 6 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_1896 7          7           7           7               3    2.87  Bacter~
+## 2 ASV_454  7          7           7           7               2    1.89  Bacter~
+## 3 ASV_1090 7          7           7           7               2    1.89  Bacter~
+## 4 ASV_231  7          7           7           7               1    0.968 Bacter~
+## 5 ASV_1800 7          7           7           7               1    0.943 Bacter~
+## 6 ASV_2038 7          7           7           7               1    0.956 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 5 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.945       0.945 Positive      
+## 2     2     3  0.944       0.944 Positive      
+## 3     1     4  0.968       0.968 Positive      
+## # i 2 more rows
+## 
+## $`12`
+## # A tbl_graph: 5 nodes and 5 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 5 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_1148 12         12          12          12              4    3.85  Bacter~
+## 2 ASV_1104 12         12          12          12              2    1.92  Bacter~
+## 3 ASV_1854 12         12          12          12              2    1.95  Bacter~
+## 4 ASV_115  12         12          12          12              1    0.955 Bacter~
+## 5 ASV_2484 12         12          12          12              1    0.948 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 5 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.959       0.959 Positive      
+## 2     1     3  0.990       0.990 Positive      
+## 3     2     3  0.957       0.957 Positive      
+## # i 2 more rows
+## 
+## $`22`
+## # A tbl_graph: 5 nodes and 7 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 5 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_1931 22         22          22          22              4    3.88  Bacter~
+## 2 ASV_1320 22         22          22          22              3    2.89  Bacter~
+## 3 ASV_1906 22         22          22          22              3    2.91  Bacter~
+## 4 ASV_2704 22         22          22          22              3    2.91  Bacter~
+## 5 ASV_1495 22         22          22          22              1    0.970 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 7 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.971       0.971 Positive      
+## 2     1     3  0.969       0.969 Positive      
+## 3     2     3  0.959       0.959 Positive      
+## # i 4 more rows
+## 
+## $`10`
+## # A tbl_graph: 4 nodes and 3 edges
+## #
+## # An unrooted tree
+## #
+## # Node Data: 4 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_2059 10         10          10          10              2    1.89  Bacter~
+## 2 ASV_1965 10         10          10          10              2    1.91  Bacter~
+## 3 ASV_544  10         10          10          10              1    0.964 Bacter~
+## 4 ASV_1607 10         10          10          10              1    0.946 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 3 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.943       0.943 Positive      
+## 2     2     3  0.964       0.964 Positive      
+## 3     1     4  0.946       0.946 Positive      
+## 
+## $`11`
+## # A tbl_graph: 4 nodes and 3 edges
+## #
+## # An unrooted tree
+## #
+## # Node Data: 4 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_614  11         11          11          11              2    1.91  Bacter~
+## 2 ASV_2916 11         11          11          11              2    1.93  Bacter~
+## 3 ASV_65   11         11          11          11              1    0.943 Archaea
+## 4 ASV_2168 11         11          11          11              1    0.965 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 3 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.966       0.966 Positive      
+## 2     1     3  0.943       0.943 Positive      
+## 3     2     4  0.965       0.965 Positive      
+## 
+## $`15`
+## # A tbl_graph: 4 nodes and 3 edges
+## #
+## # An unrooted tree
+## #
+## # Node Data: 4 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_172  15         15          15          15              2    1.92  Bacter~
+## 2 ASV_246  15         15          15          15              2    1.91  Bacter~
+## 3 ASV_43   15         15          15          15              1    0.969 Bacter~
+## 4 ASV_2211 15         15          15          15              1    0.955 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 3 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.952       0.952 Positive      
+## 2     1     3  0.969       0.969 Positive      
+## 3     2     4  0.955       0.955 Positive      
+## 
+## $Others
+## # A tbl_graph: 39 nodes and 34 edges
+## #
+## # An undirected simple graph with 14 components
+## #
+## # Node Data: 39 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_316 28         Others      Others      Others          3     2.89 Bacter~
+##  2 ASV_610 28         Others      Others      Others          3     2.94 Bacter~
+##  3 ASV_11~ 29         Others      Others      Others          3     2.94 Bacter~
+##  4 ASV_18~ 29         Others      Others      Others          3     2.95 Bacter~
+##  5 ASV_11~ 27         Others      Others      Others          3     2.91 Bacter~
+##  6 ASV_18~ 28         Others      Others      Others          3     2.91 Bacter~
+##  7 ASV_20~ 29         Others      Others      Others          3     2.89 Bacter~
+##  8 ASV_24~ 27         Others      Others      Others          3     2.89 Bacter~
+##  9 ASV_27~ 29         Others      Others      Others          3     2.95 Bacter~
+## 10 ASV_28~ 28         Others      Others      Others          3     2.90 Bacter~
+## # i 29 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 34 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.971       0.971 Positive      
+## 2     3     4  0.987       0.987 Positive      
+## 3     1     6  0.958       0.958 Positive      
+## # i 31 more rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{subgraph\_info}\SpecialCharTok{$}\NormalTok{sub\_graph\_select}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
 
 \section{Sub-network (sample) information}\label{sub-network-sample-information}
 
 \chapter{Extract subgraph}\label{extract-subgraph}
 
+\begin{quote}
+Load R Package
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(ggNetView)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Access built{-}in example datasets in ggNetView}
+
+\CommentTok{\# Relative abundance table of rarefied ASVs or OTUs}
+\FunctionTok{data}\NormalTok{(}\StringTok{"otu\_rare\_relative"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(otu\_rare\_relative)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859   18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{otu\_rare\_relative[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              KO1        KO2        KO3        KO4        KO5
+## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
+## ASV_2 0.05750000 0.03393333 0.06046667 0.05810000 0.07320000
+## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
+## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
+## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Taxonomic annotation table of ASVs or OTUs}
+\FunctionTok{data}\NormalTok{(}\StringTok{"tax\_tab"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(tax\_tab)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859    8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tax\_tab[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 5
+##   OTUID  Kingdom  Phylum          Class          Order            
+##   <chr>  <chr>    <chr>           <chr>          <chr>            
+## 1 ASV_2  Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 2 ASV_3  Bacteria Verrucomicrobia Spartobacteria Unassigned       
+## 3 ASV_31 Bacteria Actinobacteria  Actinobacteria Actinomycetales  
+## 4 ASV_27 Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 5 ASV_9  Bacteria Unassigned      Unassigned     Unassigned
+\end{verbatim}
+
+\begin{quote}
+Build graph object
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_mat}\NormalTok{(}
+  \AttributeTok{mat =}\NormalTok{ otu\_rare\_relative,}
+  \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{, }\CommentTok{\#  based your input data}
+  \AttributeTok{r.threshold =} \FloatTok{0.7}\NormalTok{,}
+  \AttributeTok{p.threshold =} \FloatTok{0.05}\NormalTok{,}
+  \AttributeTok{method =} \StringTok{"WGCNA"}\NormalTok{,}
+  \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
+  \AttributeTok{proc =} \StringTok{"Bonferroni"}\NormalTok{,}
+  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{node\_annotation =}\NormalTok{ tax\_tab,}
+  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed =} \DecValTok{1115}
+\NormalTok{)}
+
+\NormalTok{graph\_obj}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 213 nodes and 844 edges
+## #
+## # An undirected simple graph with 29 components
+## #
+## # Node Data: 213 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_649 5          5           5           5              27     26.5 Bacter~
+##  2 ASV_705 5          5           5           5              27     26.5 Bacter~
+##  3 ASV_12~ 5          5           5           5              27     26.5 Bacter~
+##  4 ASV_13~ 5          5           5           5              27     26.5 Bacter~
+##  5 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  6 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  7 ASV_24~ 5          5           5           5              27     26.5 Bacter~
+##  8 ASV_25~ 5          5           5           5              27     26.4 Bacter~
+##  9 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## 10 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## # i 203 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 844 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1   194   195  0.959       0.959 Positive      
+## 2   185   208  0.954       0.954 Positive      
+## 3   185   213  0.957       0.957 Positive      
+## # i 841 more rows
+\end{verbatim}
+
 \section{Extract subgraph by module}\label{extract-subgraph-by-module}
+
+\subsection{select subgraph by modularity}\label{select-subgraph-by-modularity}
+
+\begin{quote}
+Select one modularity
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{module5\_subgraph\_info }\OtherTok{\textless{}{-}} \FunctionTok{get\_subgraph}\NormalTok{(}\AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+                                      \AttributeTok{select\_module =} \StringTok{"5"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Module Number
+## 1       5     31
+## 2       2     24
+## 3       8     22
+## 4      21     15
+## 5       1     13
+## 6       3     11
+## 7       4     11
+## 8       6     11
+## 9      25      8
+## 10      7      6
+## 11     12      5
+## 12     22      5
+## 13     10      4
+## 14     11      4
+## 15     15      4
+## 16 Others     39
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{class}\NormalTok{(module5\_subgraph\_info)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "list"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{names}\NormalTok{(module5\_subgraph\_info)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "sub_graph_all"    "stat_module"      "sub_graph_select"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{module5\_subgraph\_info}\SpecialCharTok{$}\NormalTok{stat\_module}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Module Number
+## 1       5     31
+## 2       2     24
+## 3       8     22
+## 4      21     15
+## 5       1     13
+## 6       3     11
+## 7       4     11
+## 8       6     11
+## 9      25      8
+## 10      7      6
+## 11     12      5
+## 12     22      5
+## 13     10      4
+## 14     11      4
+## 15     15      4
+## 16 Others     39
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{module5\_subgraph\_info}\SpecialCharTok{$}\NormalTok{sub\_graph\_all}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $`5`
+## # A tbl_graph: 31 nodes and 330 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 31 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_649 5          5           5           5              27     26.5 Bacter~
+##  2 ASV_705 5          5           5           5              27     26.5 Bacter~
+##  3 ASV_12~ 5          5           5           5              27     26.5 Bacter~
+##  4 ASV_13~ 5          5           5           5              27     26.5 Bacter~
+##  5 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  6 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  7 ASV_24~ 5          5           5           5              27     26.5 Bacter~
+##  8 ASV_25~ 5          5           5           5              27     26.4 Bacter~
+##  9 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## 10 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## # i 21 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 330 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.996       0.996 Positive      
+## 2     1     3  0.997       0.997 Positive      
+## 3     2     3  0.994       0.994 Positive      
+## # i 327 more rows
+## 
+## $`2`
+## # A tbl_graph: 24 nodes and 121 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 24 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_671 2          2           2           2              18     17.5 Bacter~
+##  2 ASV_18~ 2          2           2           2              17     16.6 Bacter~
+##  3 ASV_29~ 2          2           2           2              17     16.6 Bacter~
+##  4 ASV_568 2          2           2           2              16     15.6 Bacter~
+##  5 ASV_10~ 2          2           2           2              16     15.6 Bacter~
+##  6 ASV_11~ 2          2           2           2              16     15.6 Bacter~
+##  7 ASV_24~ 2          2           2           2              15     14.5 Bacter~
+##  8 ASV_28~ 2          2           2           2              14     13.5 Bacter~
+##  9 ASV_15~ 2          2           2           2              13     12.6 Bacter~
+## 10 ASV_24~ 2          2           2           2              13     12.5 Bacter~
+## # i 14 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 121 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.991       0.991 Positive      
+## 2     1     3  0.992       0.992 Positive      
+## 3     2     3  0.996       0.996 Positive      
+## # i 118 more rows
+## 
+## $`8`
+## # A tbl_graph: 22 nodes and 131 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 22 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_802 8          8           8           8              18     17.5 Bacter~
+##  2 ASV_723 8          8           8           8              18     17.5 Bacter~
+##  3 ASV_11~ 8          8           8           8              18     17.6 Bacter~
+##  4 ASV_29~ 8          8           8           8              18     17.6 Bacter~
+##  5 ASV_927 8          8           8           8              16     15.6 Bacter~
+##  6 ASV_13~ 8          8           8           8              16     15.5 Bacter~
+##  7 ASV_29~ 8          8           8           8              16     15.5 Bacter~
+##  8 ASV_10~ 8          8           8           8              15     14.4 Bacter~
+##  9 ASV_13~ 8          8           8           8              15     14.6 Bacter~
+## 10 ASV_14~ 8          8           8           8              15     14.7 Bacter~
+## # i 12 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 131 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.990       0.990 Positive      
+## 2     1     3  0.993       0.993 Positive      
+## 3     2     3  0.997       0.997 Positive      
+## # i 128 more rows
+## 
+## $`21`
+## # A tbl_graph: 15 nodes and 42 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 15 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_25~ 21         21          21          21             13    12.5  Bacter~
+##  2 ASV_27~ 21         21          21          21             12    11.6  Bacter~
+##  3 ASV_879 21         21          21          21              8     7.67 Bacter~
+##  4 ASV_10~ 21         21          21          21              6     5.76 Bacter~
+##  5 ASV_16~ 21         21          21          21              6     5.70 Bacter~
+##  6 ASV_511 21         21          21          21              5     4.80 Bacter~
+##  7 ASV_578 21         21          21          21              5     4.76 Bacter~
+##  8 ASV_917 21         21          21          21              5     4.80 Bacter~
+##  9 ASV_18~ 21         21          21          21              5     4.81 Bacter~
+## 10 ASV_70  21         21          21          21              4     3.82 Bacter~
+## 11 ASV_13~ 21         21          21          21              4     3.86 Bacter~
+## 12 ASV_839 21         21          21          21              3     2.85 Bacter~
+## 13 ASV_20~ 21         21          21          21              3     2.86 Bacter~
+## 14 ASV_21~ 21         21          21          21              3     2.86 Bacter~
+## 15 ASV_88  21         21          21          21              2     1.90 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 42 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.986       0.986 Positive      
+## 2     1     3  0.973       0.973 Positive      
+## 3     2     3  0.976       0.976 Positive      
+## # i 39 more rows
+## 
+## $`1`
+## # A tbl_graph: 13 nodes and 43 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 13 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_19~ 1          1           1           1               9    8.86  Bacter~
+##  2 ASV_15~ 1          1           1           1               9    8.86  Bacter~
+##  3 ASV_24~ 1          1           1           1               9    8.87  Bacter~
+##  4 ASV_20~ 1          1           1           1               9    8.79  Bacter~
+##  5 ASV_20~ 1          1           1           1               9    8.87  Bacter~
+##  6 ASV_26~ 1          1           1           1               9    8.87  Unassi~
+##  7 ASV_968 1          1           1           1               8    7.88  Bacter~
+##  8 ASV_27~ 1          1           1           1               8    7.73  Bacter~
+##  9 ASV_161 1          1           1           1               7    6.80  Bacter~
+## 10 ASV_25~ 1          1           1           1               5    4.72  Bacter~
+## 11 ASV_534 1          1           1           1               2    1.90  Bacter~
+## 12 ASV_26~ 1          1           1           1               1    0.944 Bacter~
+## 13 ASV_29~ 1          1           1           1               1    0.963 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 43 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.998       0.998 Positive      
+## 2     1     3  0.999       0.999 Positive      
+## 3     2     3  1.000       1.000 Positive      
+## # i 40 more rows
+## 
+## $`3`
+## # A tbl_graph: 11 nodes and 38 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 11 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_945 3          3           3           3               9    8.71  Bacter~
+##  2 ASV_19~ 3          3           3           3               9    8.72  Bacter~
+##  3 ASV_69  3          3           3           3               8    7.85  Bacter~
+##  4 ASV_173 3          3           3           3               8    7.87  Bacter~
+##  5 ASV_206 3          3           3           3               8    7.83  Bacter~
+##  6 ASV_744 3          3           3           3               8    7.71  Bacter~
+##  7 ASV_14~ 3          3           3           3               8    7.71  Bacter~
+##  8 ASV_23~ 3          3           3           3               8    7.67  Bacter~
+##  9 ASV_22~ 3          3           3           3               8    7.70  Bacter~
+## 10 ASV_218 3          3           3           3               1    0.955 Bacter~
+## 11 ASV_14~ 3          3           3           3               1    0.944 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 38 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.982       0.982 Positive      
+## 2     1     3  0.985       0.985 Positive      
+## 3     2     3  0.986       0.986 Positive      
+## # i 35 more rows
+## 
+## $`4`
+## # A tbl_graph: 11 nodes and 33 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 11 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_459 4          4           4           4               8    7.87  Bacter~
+##  2 ASV_533 4          4           4           4               8    7.85  Bacter~
+##  3 ASV_10~ 4          4           4           4               8    7.87  Bacter~
+##  4 ASV_13~ 4          4           4           4               8    7.81  Bacter~
+##  5 ASV_23~ 4          4           4           4               8    7.87  Bacter~
+##  6 ASV_24~ 4          4           4           4               7    6.88  Bacter~
+##  7 ASV_22~ 4          4           4           4               7    6.81  Bacter~
+##  8 ASV_29~ 4          4           4           4               6    5.77  Bacter~
+##  9 ASV_29~ 4          4           4           4               4    3.79  Bacter~
+## 10 ASV_746 4          4           4           4               1    0.945 Bacter~
+## 11 ASV_19~ 4          4           4           4               1    0.953 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 33 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.997       0.997 Positive      
+## 2     1     3  1.000       1.000 Positive      
+## 3     2     3  0.998       0.998 Positive      
+## # i 30 more rows
+## 
+## $`6`
+## # A tbl_graph: 11 nodes and 24 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 11 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_116 6          6           6           6               8    7.67  Bacter~
+##  2 ASV_661 6          6           6           6               8    7.71  Bacter~
+##  3 ASV_25~ 6          6           6           6               6    5.79  Bacter~
+##  4 ASV_975 6          6           6           6               5    4.78  Bacter~
+##  5 ASV_10~ 6          6           6           6               5    4.77  Bacter~
+##  6 ASV_20~ 6          6           6           6               5    4.79  Bacter~
+##  7 ASV_27~ 6          6           6           6               4    3.84  Bacter~
+##  8 ASV_94  6          6           6           6               3    2.84  Bacter~
+##  9 ASV_20~ 6          6           6           6               2    1.92  Bacter~
+## 10 ASV_442 6          6           6           6               1    0.946 Bacter~
+## 11 ASV_408 6          6           6           6               1    0.959 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 24 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.974       0.974 Positive      
+## 2     1     3  0.966       0.966 Positive      
+## 3     2     3  0.979       0.979 Positive      
+## # i 21 more rows
+## 
+## $`25`
+## # A tbl_graph: 8 nodes and 22 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 8 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_1505 25         25          25          25              7     6.66 Bacter~
+## 2 ASV_415  25         25          25          25              6     5.78 Bacter~
+## 3 ASV_517  25         25          25          25              6     5.84 Bacter~
+## 4 ASV_842  25         25          25          25              6     5.80 Bacter~
+## 5 ASV_1719 25         25          25          25              6     5.85 Bacter~
+## 6 ASV_2286 25         25          25          25              6     5.81 Bacter~
+## 7 ASV_2637 25         25          25          25              5     4.78 Bacter~
+## 8 ASV_1474 25         25          25          25              2     1.90 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 22 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.947       0.947 Positive      
+## 2     1     3  0.951       0.951 Positive      
+## 3     2     3  0.970       0.970 Positive      
+## # i 19 more rows
+## 
+## $`7`
+## # A tbl_graph: 6 nodes and 5 edges
+## #
+## # An unrooted tree
+## #
+## # Node Data: 6 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_1896 7          7           7           7               3    2.87  Bacter~
+## 2 ASV_454  7          7           7           7               2    1.89  Bacter~
+## 3 ASV_1090 7          7           7           7               2    1.89  Bacter~
+## 4 ASV_231  7          7           7           7               1    0.968 Bacter~
+## 5 ASV_1800 7          7           7           7               1    0.943 Bacter~
+## 6 ASV_2038 7          7           7           7               1    0.956 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 5 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.945       0.945 Positive      
+## 2     2     3  0.944       0.944 Positive      
+## 3     1     4  0.968       0.968 Positive      
+## # i 2 more rows
+## 
+## $`12`
+## # A tbl_graph: 5 nodes and 5 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 5 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_1148 12         12          12          12              4    3.85  Bacter~
+## 2 ASV_1104 12         12          12          12              2    1.92  Bacter~
+## 3 ASV_1854 12         12          12          12              2    1.95  Bacter~
+## 4 ASV_115  12         12          12          12              1    0.955 Bacter~
+## 5 ASV_2484 12         12          12          12              1    0.948 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 5 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.959       0.959 Positive      
+## 2     1     3  0.990       0.990 Positive      
+## 3     2     3  0.957       0.957 Positive      
+## # i 2 more rows
+## 
+## $`22`
+## # A tbl_graph: 5 nodes and 7 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 5 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_1931 22         22          22          22              4    3.88  Bacter~
+## 2 ASV_1320 22         22          22          22              3    2.89  Bacter~
+## 3 ASV_1906 22         22          22          22              3    2.91  Bacter~
+## 4 ASV_2704 22         22          22          22              3    2.91  Bacter~
+## 5 ASV_1495 22         22          22          22              1    0.970 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 7 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.971       0.971 Positive      
+## 2     1     3  0.969       0.969 Positive      
+## 3     2     3  0.959       0.959 Positive      
+## # i 4 more rows
+## 
+## $`10`
+## # A tbl_graph: 4 nodes and 3 edges
+## #
+## # An unrooted tree
+## #
+## # Node Data: 4 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_2059 10         10          10          10              2    1.89  Bacter~
+## 2 ASV_1965 10         10          10          10              2    1.91  Bacter~
+## 3 ASV_544  10         10          10          10              1    0.964 Bacter~
+## 4 ASV_1607 10         10          10          10              1    0.946 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 3 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.943       0.943 Positive      
+## 2     2     3  0.964       0.964 Positive      
+## 3     1     4  0.946       0.946 Positive      
+## 
+## $`11`
+## # A tbl_graph: 4 nodes and 3 edges
+## #
+## # An unrooted tree
+## #
+## # Node Data: 4 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_614  11         11          11          11              2    1.91  Bacter~
+## 2 ASV_2916 11         11          11          11              2    1.93  Bacter~
+## 3 ASV_65   11         11          11          11              1    0.943 Archaea
+## 4 ASV_2168 11         11          11          11              1    0.965 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 3 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.966       0.966 Positive      
+## 2     1     3  0.943       0.943 Positive      
+## 3     2     4  0.965       0.965 Positive      
+## 
+## $`15`
+## # A tbl_graph: 4 nodes and 3 edges
+## #
+## # An unrooted tree
+## #
+## # Node Data: 4 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_172  15         15          15          15              2    1.92  Bacter~
+## 2 ASV_246  15         15          15          15              2    1.91  Bacter~
+## 3 ASV_43   15         15          15          15              1    0.969 Bacter~
+## 4 ASV_2211 15         15          15          15              1    0.955 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 3 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.952       0.952 Positive      
+## 2     1     3  0.969       0.969 Positive      
+## 3     2     4  0.955       0.955 Positive      
+## 
+## $Others
+## # A tbl_graph: 39 nodes and 34 edges
+## #
+## # An undirected simple graph with 14 components
+## #
+## # Node Data: 39 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_316 28         Others      Others      Others          3     2.89 Bacter~
+##  2 ASV_610 28         Others      Others      Others          3     2.94 Bacter~
+##  3 ASV_11~ 29         Others      Others      Others          3     2.94 Bacter~
+##  4 ASV_18~ 29         Others      Others      Others          3     2.95 Bacter~
+##  5 ASV_11~ 27         Others      Others      Others          3     2.91 Bacter~
+##  6 ASV_18~ 28         Others      Others      Others          3     2.91 Bacter~
+##  7 ASV_20~ 29         Others      Others      Others          3     2.89 Bacter~
+##  8 ASV_24~ 27         Others      Others      Others          3     2.89 Bacter~
+##  9 ASV_27~ 29         Others      Others      Others          3     2.95 Bacter~
+## 10 ASV_28~ 28         Others      Others      Others          3     2.90 Bacter~
+## # i 29 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 34 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.971       0.971 Positive      
+## 2     3     4  0.987       0.987 Positive      
+## 3     1     6  0.958       0.958 Positive      
+## # i 31 more rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{module5\_subgraph\_info}\SpecialCharTok{$}\NormalTok{sub\_graph\_select}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 31 nodes and 330 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 31 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_649 5          5           5           5              27     26.5 Bacter~
+##  2 ASV_705 5          5           5           5              27     26.5 Bacter~
+##  3 ASV_12~ 5          5           5           5              27     26.5 Bacter~
+##  4 ASV_13~ 5          5           5           5              27     26.5 Bacter~
+##  5 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  6 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  7 ASV_24~ 5          5           5           5              27     26.5 Bacter~
+##  8 ASV_25~ 5          5           5           5              27     26.4 Bacter~
+##  9 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## 10 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## # i 21 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 330 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1    29    30  0.949       0.949 Positive      
+## 2    21    29  0.952       0.952 Positive      
+## 3    25    29  0.965       0.965 Positive      
+## # i 327 more rows
+\end{verbatim}
+
+\begin{quote}
+Select multi-modularity
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{module5\_2\_8\_subgraph\_info }\OtherTok{\textless{}{-}} \FunctionTok{get\_subgraph}\NormalTok{(}\AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+                                      \AttributeTok{select\_module =} \FunctionTok{c}\NormalTok{(}\StringTok{"5"}\NormalTok{,}\StringTok{"2"}\NormalTok{,}\StringTok{"8"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Module Number
+## 1       5     31
+## 2       2     24
+## 3       8     22
+## 4      21     15
+## 5       1     13
+## 6       3     11
+## 7       4     11
+## 8       6     11
+## 9      25      8
+## 10      7      6
+## 11     12      5
+## 12     22      5
+## 13     10      4
+## 14     11      4
+## 15     15      4
+## 16 Others     39
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{class}\NormalTok{(module5\_2\_8\_subgraph\_info)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "list"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{names}\NormalTok{(module5\_2\_8\_subgraph\_info)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "sub_graph_all"    "stat_module"      "sub_graph_select"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{module5\_2\_8\_subgraph\_info}\SpecialCharTok{$}\NormalTok{stat\_module}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Module Number
+## 1       5     31
+## 2       2     24
+## 3       8     22
+## 4      21     15
+## 5       1     13
+## 6       3     11
+## 7       4     11
+## 8       6     11
+## 9      25      8
+## 10      7      6
+## 11     12      5
+## 12     22      5
+## 13     10      4
+## 14     11      4
+## 15     15      4
+## 16 Others     39
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{module5\_2\_8\_subgraph\_info}\SpecialCharTok{$}\NormalTok{sub\_graph\_all}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $`5`
+## # A tbl_graph: 31 nodes and 330 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 31 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_649 5          5           5           5              27     26.5 Bacter~
+##  2 ASV_705 5          5           5           5              27     26.5 Bacter~
+##  3 ASV_12~ 5          5           5           5              27     26.5 Bacter~
+##  4 ASV_13~ 5          5           5           5              27     26.5 Bacter~
+##  5 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  6 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  7 ASV_24~ 5          5           5           5              27     26.5 Bacter~
+##  8 ASV_25~ 5          5           5           5              27     26.4 Bacter~
+##  9 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## 10 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## # i 21 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 330 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.996       0.996 Positive      
+## 2     1     3  0.997       0.997 Positive      
+## 3     2     3  0.994       0.994 Positive      
+## # i 327 more rows
+## 
+## $`2`
+## # A tbl_graph: 24 nodes and 121 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 24 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_671 2          2           2           2              18     17.5 Bacter~
+##  2 ASV_18~ 2          2           2           2              17     16.6 Bacter~
+##  3 ASV_29~ 2          2           2           2              17     16.6 Bacter~
+##  4 ASV_568 2          2           2           2              16     15.6 Bacter~
+##  5 ASV_10~ 2          2           2           2              16     15.6 Bacter~
+##  6 ASV_11~ 2          2           2           2              16     15.6 Bacter~
+##  7 ASV_24~ 2          2           2           2              15     14.5 Bacter~
+##  8 ASV_28~ 2          2           2           2              14     13.5 Bacter~
+##  9 ASV_15~ 2          2           2           2              13     12.6 Bacter~
+## 10 ASV_24~ 2          2           2           2              13     12.5 Bacter~
+## # i 14 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 121 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.991       0.991 Positive      
+## 2     1     3  0.992       0.992 Positive      
+## 3     2     3  0.996       0.996 Positive      
+## # i 118 more rows
+## 
+## $`8`
+## # A tbl_graph: 22 nodes and 131 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 22 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_802 8          8           8           8              18     17.5 Bacter~
+##  2 ASV_723 8          8           8           8              18     17.5 Bacter~
+##  3 ASV_11~ 8          8           8           8              18     17.6 Bacter~
+##  4 ASV_29~ 8          8           8           8              18     17.6 Bacter~
+##  5 ASV_927 8          8           8           8              16     15.6 Bacter~
+##  6 ASV_13~ 8          8           8           8              16     15.5 Bacter~
+##  7 ASV_29~ 8          8           8           8              16     15.5 Bacter~
+##  8 ASV_10~ 8          8           8           8              15     14.4 Bacter~
+##  9 ASV_13~ 8          8           8           8              15     14.6 Bacter~
+## 10 ASV_14~ 8          8           8           8              15     14.7 Bacter~
+## # i 12 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 131 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.990       0.990 Positive      
+## 2     1     3  0.993       0.993 Positive      
+## 3     2     3  0.997       0.997 Positive      
+## # i 128 more rows
+## 
+## $`21`
+## # A tbl_graph: 15 nodes and 42 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 15 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_25~ 21         21          21          21             13    12.5  Bacter~
+##  2 ASV_27~ 21         21          21          21             12    11.6  Bacter~
+##  3 ASV_879 21         21          21          21              8     7.67 Bacter~
+##  4 ASV_10~ 21         21          21          21              6     5.76 Bacter~
+##  5 ASV_16~ 21         21          21          21              6     5.70 Bacter~
+##  6 ASV_511 21         21          21          21              5     4.80 Bacter~
+##  7 ASV_578 21         21          21          21              5     4.76 Bacter~
+##  8 ASV_917 21         21          21          21              5     4.80 Bacter~
+##  9 ASV_18~ 21         21          21          21              5     4.81 Bacter~
+## 10 ASV_70  21         21          21          21              4     3.82 Bacter~
+## 11 ASV_13~ 21         21          21          21              4     3.86 Bacter~
+## 12 ASV_839 21         21          21          21              3     2.85 Bacter~
+## 13 ASV_20~ 21         21          21          21              3     2.86 Bacter~
+## 14 ASV_21~ 21         21          21          21              3     2.86 Bacter~
+## 15 ASV_88  21         21          21          21              2     1.90 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 42 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.986       0.986 Positive      
+## 2     1     3  0.973       0.973 Positive      
+## 3     2     3  0.976       0.976 Positive      
+## # i 39 more rows
+## 
+## $`1`
+## # A tbl_graph: 13 nodes and 43 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 13 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_19~ 1          1           1           1               9    8.86  Bacter~
+##  2 ASV_15~ 1          1           1           1               9    8.86  Bacter~
+##  3 ASV_24~ 1          1           1           1               9    8.87  Bacter~
+##  4 ASV_20~ 1          1           1           1               9    8.79  Bacter~
+##  5 ASV_20~ 1          1           1           1               9    8.87  Bacter~
+##  6 ASV_26~ 1          1           1           1               9    8.87  Unassi~
+##  7 ASV_968 1          1           1           1               8    7.88  Bacter~
+##  8 ASV_27~ 1          1           1           1               8    7.73  Bacter~
+##  9 ASV_161 1          1           1           1               7    6.80  Bacter~
+## 10 ASV_25~ 1          1           1           1               5    4.72  Bacter~
+## 11 ASV_534 1          1           1           1               2    1.90  Bacter~
+## 12 ASV_26~ 1          1           1           1               1    0.944 Bacter~
+## 13 ASV_29~ 1          1           1           1               1    0.963 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 43 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.998       0.998 Positive      
+## 2     1     3  0.999       0.999 Positive      
+## 3     2     3  1.000       1.000 Positive      
+## # i 40 more rows
+## 
+## $`3`
+## # A tbl_graph: 11 nodes and 38 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 11 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_945 3          3           3           3               9    8.71  Bacter~
+##  2 ASV_19~ 3          3           3           3               9    8.72  Bacter~
+##  3 ASV_69  3          3           3           3               8    7.85  Bacter~
+##  4 ASV_173 3          3           3           3               8    7.87  Bacter~
+##  5 ASV_206 3          3           3           3               8    7.83  Bacter~
+##  6 ASV_744 3          3           3           3               8    7.71  Bacter~
+##  7 ASV_14~ 3          3           3           3               8    7.71  Bacter~
+##  8 ASV_23~ 3          3           3           3               8    7.67  Bacter~
+##  9 ASV_22~ 3          3           3           3               8    7.70  Bacter~
+## 10 ASV_218 3          3           3           3               1    0.955 Bacter~
+## 11 ASV_14~ 3          3           3           3               1    0.944 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 38 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.982       0.982 Positive      
+## 2     1     3  0.985       0.985 Positive      
+## 3     2     3  0.986       0.986 Positive      
+## # i 35 more rows
+## 
+## $`4`
+## # A tbl_graph: 11 nodes and 33 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 11 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_459 4          4           4           4               8    7.87  Bacter~
+##  2 ASV_533 4          4           4           4               8    7.85  Bacter~
+##  3 ASV_10~ 4          4           4           4               8    7.87  Bacter~
+##  4 ASV_13~ 4          4           4           4               8    7.81  Bacter~
+##  5 ASV_23~ 4          4           4           4               8    7.87  Bacter~
+##  6 ASV_24~ 4          4           4           4               7    6.88  Bacter~
+##  7 ASV_22~ 4          4           4           4               7    6.81  Bacter~
+##  8 ASV_29~ 4          4           4           4               6    5.77  Bacter~
+##  9 ASV_29~ 4          4           4           4               4    3.79  Bacter~
+## 10 ASV_746 4          4           4           4               1    0.945 Bacter~
+## 11 ASV_19~ 4          4           4           4               1    0.953 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 33 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.997       0.997 Positive      
+## 2     1     3  1.000       1.000 Positive      
+## 3     2     3  0.998       0.998 Positive      
+## # i 30 more rows
+## 
+## $`6`
+## # A tbl_graph: 11 nodes and 24 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 11 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_116 6          6           6           6               8    7.67  Bacter~
+##  2 ASV_661 6          6           6           6               8    7.71  Bacter~
+##  3 ASV_25~ 6          6           6           6               6    5.79  Bacter~
+##  4 ASV_975 6          6           6           6               5    4.78  Bacter~
+##  5 ASV_10~ 6          6           6           6               5    4.77  Bacter~
+##  6 ASV_20~ 6          6           6           6               5    4.79  Bacter~
+##  7 ASV_27~ 6          6           6           6               4    3.84  Bacter~
+##  8 ASV_94  6          6           6           6               3    2.84  Bacter~
+##  9 ASV_20~ 6          6           6           6               2    1.92  Bacter~
+## 10 ASV_442 6          6           6           6               1    0.946 Bacter~
+## 11 ASV_408 6          6           6           6               1    0.959 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 24 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.974       0.974 Positive      
+## 2     1     3  0.966       0.966 Positive      
+## 3     2     3  0.979       0.979 Positive      
+## # i 21 more rows
+## 
+## $`25`
+## # A tbl_graph: 8 nodes and 22 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 8 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_1505 25         25          25          25              7     6.66 Bacter~
+## 2 ASV_415  25         25          25          25              6     5.78 Bacter~
+## 3 ASV_517  25         25          25          25              6     5.84 Bacter~
+## 4 ASV_842  25         25          25          25              6     5.80 Bacter~
+## 5 ASV_1719 25         25          25          25              6     5.85 Bacter~
+## 6 ASV_2286 25         25          25          25              6     5.81 Bacter~
+## 7 ASV_2637 25         25          25          25              5     4.78 Bacter~
+## 8 ASV_1474 25         25          25          25              2     1.90 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 22 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.947       0.947 Positive      
+## 2     1     3  0.951       0.951 Positive      
+## 3     2     3  0.970       0.970 Positive      
+## # i 19 more rows
+## 
+## $`7`
+## # A tbl_graph: 6 nodes and 5 edges
+## #
+## # An unrooted tree
+## #
+## # Node Data: 6 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_1896 7          7           7           7               3    2.87  Bacter~
+## 2 ASV_454  7          7           7           7               2    1.89  Bacter~
+## 3 ASV_1090 7          7           7           7               2    1.89  Bacter~
+## 4 ASV_231  7          7           7           7               1    0.968 Bacter~
+## 5 ASV_1800 7          7           7           7               1    0.943 Bacter~
+## 6 ASV_2038 7          7           7           7               1    0.956 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 5 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.945       0.945 Positive      
+## 2     2     3  0.944       0.944 Positive      
+## 3     1     4  0.968       0.968 Positive      
+## # i 2 more rows
+## 
+## $`12`
+## # A tbl_graph: 5 nodes and 5 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 5 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_1148 12         12          12          12              4    3.85  Bacter~
+## 2 ASV_1104 12         12          12          12              2    1.92  Bacter~
+## 3 ASV_1854 12         12          12          12              2    1.95  Bacter~
+## 4 ASV_115  12         12          12          12              1    0.955 Bacter~
+## 5 ASV_2484 12         12          12          12              1    0.948 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 5 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.959       0.959 Positive      
+## 2     1     3  0.990       0.990 Positive      
+## 3     2     3  0.957       0.957 Positive      
+## # i 2 more rows
+## 
+## $`22`
+## # A tbl_graph: 5 nodes and 7 edges
+## #
+## # An undirected simple graph with 1 component
+## #
+## # Node Data: 5 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_1931 22         22          22          22              4    3.88  Bacter~
+## 2 ASV_1320 22         22          22          22              3    2.89  Bacter~
+## 3 ASV_1906 22         22          22          22              3    2.91  Bacter~
+## 4 ASV_2704 22         22          22          22              3    2.91  Bacter~
+## 5 ASV_1495 22         22          22          22              1    0.970 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 7 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.971       0.971 Positive      
+## 2     1     3  0.969       0.969 Positive      
+## 3     2     3  0.959       0.959 Positive      
+## # i 4 more rows
+## 
+## $`10`
+## # A tbl_graph: 4 nodes and 3 edges
+## #
+## # An unrooted tree
+## #
+## # Node Data: 4 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_2059 10         10          10          10              2    1.89  Bacter~
+## 2 ASV_1965 10         10          10          10              2    1.91  Bacter~
+## 3 ASV_544  10         10          10          10              1    0.964 Bacter~
+## 4 ASV_1607 10         10          10          10              1    0.946 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 3 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.943       0.943 Positive      
+## 2     2     3  0.964       0.964 Positive      
+## 3     1     4  0.946       0.946 Positive      
+## 
+## $`11`
+## # A tbl_graph: 4 nodes and 3 edges
+## #
+## # An unrooted tree
+## #
+## # Node Data: 4 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_614  11         11          11          11              2    1.91  Bacter~
+## 2 ASV_2916 11         11          11          11              2    1.93  Bacter~
+## 3 ASV_65   11         11          11          11              1    0.943 Archaea
+## 4 ASV_2168 11         11          11          11              1    0.965 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 3 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.966       0.966 Positive      
+## 2     1     3  0.943       0.943 Positive      
+## 3     2     4  0.965       0.965 Positive      
+## 
+## $`15`
+## # A tbl_graph: 4 nodes and 3 edges
+## #
+## # An unrooted tree
+## #
+## # Node Data: 4 x 14 (active)
+##   name     modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##   <chr>    <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+## 1 ASV_172  15         15          15          15              2    1.92  Bacter~
+## 2 ASV_246  15         15          15          15              2    1.91  Bacter~
+## 3 ASV_43   15         15          15          15              1    0.969 Bacter~
+## 4 ASV_2211 15         15          15          15              1    0.955 Bacter~
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 3 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.952       0.952 Positive      
+## 2     1     3  0.969       0.969 Positive      
+## 3     2     4  0.955       0.955 Positive      
+## 
+## $Others
+## # A tbl_graph: 39 nodes and 34 edges
+## #
+## # An undirected simple graph with 14 components
+## #
+## # Node Data: 39 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_316 28         Others      Others      Others          3     2.89 Bacter~
+##  2 ASV_610 28         Others      Others      Others          3     2.94 Bacter~
+##  3 ASV_11~ 29         Others      Others      Others          3     2.94 Bacter~
+##  4 ASV_18~ 29         Others      Others      Others          3     2.95 Bacter~
+##  5 ASV_11~ 27         Others      Others      Others          3     2.91 Bacter~
+##  6 ASV_18~ 28         Others      Others      Others          3     2.91 Bacter~
+##  7 ASV_20~ 29         Others      Others      Others          3     2.89 Bacter~
+##  8 ASV_24~ 27         Others      Others      Others          3     2.89 Bacter~
+##  9 ASV_27~ 29         Others      Others      Others          3     2.95 Bacter~
+## 10 ASV_28~ 28         Others      Others      Others          3     2.90 Bacter~
+## # i 29 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 34 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.971       0.971 Positive      
+## 2     3     4  0.987       0.987 Positive      
+## 3     1     6  0.958       0.958 Positive      
+## # i 31 more rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{module5\_2\_8\_subgraph\_info}\SpecialCharTok{$}\NormalTok{sub\_graph\_select}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 77 nodes and 582 edges
+## #
+## # An undirected simple graph with 3 components
+## #
+## # Node Data: 77 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_649 5          5           5           5              27     26.5 Bacter~
+##  2 ASV_705 5          5           5           5              27     26.5 Bacter~
+##  3 ASV_12~ 5          5           5           5              27     26.5 Bacter~
+##  4 ASV_13~ 5          5           5           5              27     26.5 Bacter~
+##  5 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  6 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  7 ASV_24~ 5          5           5           5              27     26.5 Bacter~
+##  8 ASV_25~ 5          5           5           5              27     26.4 Bacter~
+##  9 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## 10 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## # i 67 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 582 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1    56    74  0.952       0.952 Positive      
+## 2    57    74  0.954       0.954 Positive      
+## 3    58    74  0.947       0.947 Positive      
+## # i 579 more rows
+\end{verbatim}
 
 \section{Extract subgraph by sample}\label{extract-subgraph-by-sample}
 
 \chapter{Network layout}\label{network-layout}
 
+\begin{quote}
+Load R Package
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(ggNetView)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Access built{-}in example datasets in ggNetView}
+
+\CommentTok{\# Relative abundance table of rarefied ASVs or OTUs}
+\FunctionTok{data}\NormalTok{(}\StringTok{"otu\_rare\_relative"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(otu\_rare\_relative)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859   18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{otu\_rare\_relative[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              KO1        KO2        KO3        KO4        KO5
+## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
+## ASV_2 0.05750000 0.03393333 0.06046667 0.05810000 0.07320000
+## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
+## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
+## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Taxonomic annotation table of ASVs or OTUs}
+\FunctionTok{data}\NormalTok{(}\StringTok{"tax\_tab"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(tax\_tab)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859    8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tax\_tab[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 5
+##   OTUID  Kingdom  Phylum          Class          Order            
+##   <chr>  <chr>    <chr>           <chr>          <chr>            
+## 1 ASV_2  Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 2 ASV_3  Bacteria Verrucomicrobia Spartobacteria Unassigned       
+## 3 ASV_31 Bacteria Actinobacteria  Actinobacteria Actinomycetales  
+## 4 ASV_27 Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 5 ASV_9  Bacteria Unassigned      Unassigned     Unassigned
+\end{verbatim}
+
+\begin{quote}
+Build graph object
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_mat}\NormalTok{(}
+  \AttributeTok{mat =}\NormalTok{ otu\_rare\_relative,}
+  \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{, }\CommentTok{\#  based your input data}
+  \AttributeTok{r.threshold =} \FloatTok{0.7}\NormalTok{,}
+  \AttributeTok{p.threshold =} \FloatTok{0.05}\NormalTok{,}
+  \AttributeTok{method =} \StringTok{"WGCNA"}\NormalTok{,}
+  \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
+  \AttributeTok{proc =} \StringTok{"BH"}\NormalTok{,}
+  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{node\_annotation =}\NormalTok{ tax\_tab,}
+  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed =} \DecValTok{1115}
+\NormalTok{)}
+
+\NormalTok{graph\_obj}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 2049 nodes and 9602 edges
+## #
+## # An undirected simple graph with 100 components
+## #
+## # Node Data: 2,049 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_916 1          1           1           1              58     50.5 Bacter~
+##  2 ASV_777 1          1           1           1              58     48.7 Bacter~
+##  3 ASV_606 1          1           1           1              55     45.8 Bacter~
+##  4 ASV_740 1          1           1           1              54     47.2 Bacter~
+##  5 ASV_14~ 1          1           1           1              54     44.5 Bacter~
+##  6 ASV_23~ 1          1           1           1              54     47.4 Bacter~
+##  7 ASV_15~ 1          1           1           1              52     45.3 Bacter~
+##  8 ASV_24~ 1          1           1           1              52     43.0 Bacter~
+##  9 ASV_19~ 1          1           1           1              52     43.0 Bacter~
+## 10 ASV_568 1          1           1           1              51     45.1 Bacter~
+## # i 2,039 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 9,602 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1  1771  1825  0.793       0.793 Positive      
+## 2   594   597  0.895       0.895 Positive      
+## 3   588   597  0.864       0.864 Positive      
+## # i 9,599 more rows
+\end{verbatim}
+
 \section{Gephi layout}\label{gephi-layout}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"gephi"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"random"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-37-1} \end{center}
 
 \section{Fruchterman--Reingold force-directed layout}\label{fruchtermanreingold-force-directed-layout}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"fr2"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"random"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-38-1} \end{center}
+
 \section{Diamond layout}\label{diamond-layout}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"diamond"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-39-1} \end{center}
 
 \section{Kk layout}\label{kk-layout}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"kk"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-40-1} \end{center}
+
 \section{Nicley layout}\label{nicley-layout}
 
-\section{Multrings layout}\label{multrings-layout}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"nicely"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-41-1} \end{center}
 
 \section{Petal layout}\label{petal-layout}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"petal"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-42-1} \end{center}
+
 \section{Circle layout}\label{circle-layout}
 
-\section{Circle outline layout}\label{circle-outline-layout}
+\section{Petal layout}\label{petal-layout-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"circle"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-43-1} \end{center}
 
 \section{Diamond outline layout}\label{diamond-outline-layout}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"diamond\_outline"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-44-1} \end{center}
+
 \section{Grid layout}\label{grid-layout}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"grid"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-45-1} \end{center}
 
 \section{Heart\_centered layout}\label{heart_centered-layout}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"heart\_centered"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-46-1} \end{center}
+
 \section{Lgl layout}\label{lgl-layout}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"lgl"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in alg_fun(graph): At vendor/cigraph/src/layout/large_graph.c:179 : LGL
+## layout does not support disconnected graphs yet.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-47-1} \end{center}
 
 \section{Randomly layout}\label{randomly-layout}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"randomly"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-48-1} \end{center}
+
 \section{Rectangle layout}\label{rectangle-layout}
 
-\section{Rightiso layout}\label{rightiso-layout}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"rectangle"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-49-1} \end{center}
 
 \section{Square layout}\label{square-layout}
 
-\section{Square outline layout}\label{square-outline-layout}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"square"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-50-1} \end{center}
 
 \section{Star layout}\label{star-layout}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"star"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-51-1} \end{center}
+
 \section{Star\_concentric layout}\label{star_concentric-layout}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"star\_concentric"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-52-1} \end{center}
+
 \section{Stress layout}\label{stress-layout}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView}\NormalTok{(}
+  \AttributeTok{graph\_obj =}\NormalTok{ graph\_obj,}
+  \AttributeTok{layout =} \StringTok{"stress"}\NormalTok{,}
+  \AttributeTok{center =}\NormalTok{ F,}
+  \AttributeTok{shrink =} \FloatTok{0.8}\NormalTok{,}
+  \AttributeTok{layout.module =} \StringTok{"adjacent"}\NormalTok{,}
+  \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{fill.by =} \StringTok{"Modularity"}
+\NormalTok{)}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-53-1} \end{center}
 
 \chapter{Network topology information}\label{network-topology-information}
 

@@ -1,8 +1,97 @@
 # Extract subgraph
 
+> Load R Package
+
+
+```{r warning=F, message=F}
+library(tidyverse)
+library(ggNetView)
+```
+
+
+>  Example data
+
+```{r}
+# Access built-in example datasets in ggNetView
+
+# Relative abundance table of rarefied ASVs or OTUs
+data("otu_rare_relative")
+dim(otu_rare_relative)
+otu_rare_relative[1:5, 1:5]
+
+# Taxonomic annotation table of ASVs or OTUs
+data("tax_tab")
+dim(tax_tab)
+tax_tab[1:5, 1:5]
+```
+
+> Build graph object
+
+```{r message=F}
+graph_obj <- build_graph_from_mat(
+  mat = otu_rare_relative,
+  transfrom.method = "none", #  based your input data
+  r.threshold = 0.7,
+  p.threshold = 0.05,
+  method = "WGCNA",
+  cor.method = "pearson",
+  proc = "Bonferroni",
+  module.method = "Fast_greedy",
+  node_annotation = tax_tab,
+  top_modules = 15,
+  seed = 1115
+)
+
+graph_obj
+```
+
 
 ## Extract subgraph by module
 
+### select subgraph by modularity
+
+> Select one modularity
+
+```{r}
+module5_subgraph_info <- get_subgraph(graph_obj = graph_obj,
+                                      select_module = "5")
+
+class(module5_subgraph_info)
+
+names(module5_subgraph_info)
+```
+
+
+
+```{r}
+module5_subgraph_info$stat_module
+
+module5_subgraph_info$sub_graph_all
+
+module5_subgraph_info$sub_graph_select
+```
+
+
+> Select multi-modularity
+
+```{r}
+module5_2_8_subgraph_info <- get_subgraph(graph_obj = graph_obj,
+                                      select_module = c("5","2","8"))
+
+class(module5_2_8_subgraph_info)
+
+names(module5_2_8_subgraph_info)
+```
+
+
+
+```{r}
+module5_2_8_subgraph_info$stat_module
+
+module5_2_8_subgraph_info$sub_graph_all
+
+module5_2_8_subgraph_info$sub_graph_select
+```
 
 
 ## Extract subgraph by sample

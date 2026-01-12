@@ -73,6 +73,8 @@ https://github.com/Jiawang1209/ggNetView
 ## Contact
 
 - Email: Jiawang1209@163.com
+- Github: https://github.com/Jiawang1209/ggNetView
+- ggNetView-manual: https://jiawang1209.github.io/ggNetView-manual/
 
 
 

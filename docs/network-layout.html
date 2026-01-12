@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 6 Network layout | ggNetView manual documentation</title>
 <meta name="author" content="Yue Liu">
-<meta name="description" content="6.1 Gephi layout   6.2 Fruchterman–Reingold force-directed layout   6.3 Diamond layout   6.4 Kk layout   6.5 Nicley layout   6.6 Multrings layout   6.7 Petal layout   6.8 Circle layout   6.9...">
+<meta name="description" content='Load R Package library(tidyverse) library(ggNetView) Example data # Access built-in example datasets in ggNetView # Relative abundance table of rarefied ASVs or OTUs data("otu_rare_relative")...'>
 <meta name="generator" content="bookdown 0.45 with bs4_book()">
 <meta property="og:title" content="Chapter 6 Network layout | ggNetView manual documentation">
 <meta property="og:type" content="book">
-<meta property="og:description" content="6.1 Gephi layout   6.2 Fruchterman–Reingold force-directed layout   6.3 Diamond layout   6.4 Kk layout   6.5 Nicley layout   6.6 Multrings layout   6.7 Petal layout   6.8 Circle layout   6.9...">
+<meta property="og:description" content='Load R Package library(tidyverse) library(ggNetView) Example data # Access built-in example datasets in ggNetView # Relative abundance table of rarefied ASVs or OTUs data("otu_rare_relative")...'>
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 6 Network layout | ggNetView manual documentation">
-<meta name="twitter:description" content="6.1 Gephi layout   6.2 Fruchterman–Reingold force-directed layout   6.3 Diamond layout   6.4 Kk layout   6.5 Nicley layout   6.6 Multrings layout   6.7 Petal layout   6.8 Circle layout   6.9...">
+<meta name="twitter:description" content='Load R Package library(tidyverse) library(ggNetView) Example data # Access built-in example datasets in ggNetView # Relative abundance table of rarefied ASVs or OTUs data("otu_rare_relative")...'>
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -63,110 +63,404 @@
 <h1>
 <span class="header-section-number">6</span> Network layout<a class="anchor" aria-label="anchor" href="#network-layout"><i class="fas fa-link"></i></a>
 </h1>
+<blockquote>
+<p>Load R Package</p>
+</blockquote>
+<div class="sourceCode" id="cb356"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Jiawang1209/ggNetView">ggNetView</a></span><span class="op">)</span></span></code></pre></div>
+<blockquote>
+<p>Example data</p>
+</blockquote>
+<div class="sourceCode" id="cb357"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Access built-in example datasets in ggNetView</span></span>
+<span></span>
+<span><span class="co"># Relative abundance table of rarefied ASVs or OTUs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"otu_rare_relative"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">otu_rare_relative</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] 2859   18</code></pre>
+<div class="sourceCode" id="cb359"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">otu_rare_relative</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
+<pre><code>##              KO1        KO2        KO3        KO4        KO5
+## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
+## ASV_2 0.05750000 0.03393333 0.06046667 0.05810000 0.07320000
+## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
+## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
+## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667</code></pre>
+<div class="sourceCode" id="cb361"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Taxonomic annotation table of ASVs or OTUs</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"tax_tab"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">tax_tab</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] 2859    8</code></pre>
+<div class="sourceCode" id="cb363"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tax_tab</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
+<pre><code>## # A tibble: 5 × 5
+##   OTUID  Kingdom  Phylum          Class          Order            
+##   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;            
+## 1 ASV_2  Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 2 ASV_3  Bacteria Verrucomicrobia Spartobacteria Unassigned       
+## 3 ASV_31 Bacteria Actinobacteria  Actinobacteria Actinomycetales  
+## 4 ASV_27 Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 5 ASV_9  Bacteria Unassigned      Unassigned     Unassigned</code></pre>
+<blockquote>
+<p>Build graph object</p>
+</blockquote>
+<div class="sourceCode" id="cb365"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/build_graph_from_mat.html">build_graph_from_mat</a></span><span class="op">(</span></span>
+<span>  mat <span class="op">=</span> <span class="va">otu_rare_relative</span>,</span>
+<span>  transfrom.method <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#  based your input data</span></span>
+<span>  r.threshold <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>  p.threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"WGCNA"</span>,</span>
+<span>  cor.method <span class="op">=</span> <span class="st">"pearson"</span>,</span>
+<span>  proc <span class="op">=</span> <span class="st">"BH"</span>,</span>
+<span>  module.method <span class="op">=</span> <span class="st">"Fast_greedy"</span>,</span>
+<span>  node_annotation <span class="op">=</span> <span class="va">tax_tab</span>,</span>
+<span>  top_modules <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1115</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">graph_obj</span></span></code></pre></div>
+<pre><code>## # A tbl_graph: 2049 nodes and 9602 edges
+## #
+## # An undirected simple graph with 100 components
+## #
+## # Node Data: 2,049 × 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    &lt;chr&gt;   &lt;fct&gt;      &lt;ord&gt;       &lt;chr&gt;       &lt;ord&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
+##  1 ASV_916 1          1           1           1              58     50.5 Bacter…
+##  2 ASV_777 1          1           1           1              58     48.7 Bacter…
+##  3 ASV_606 1          1           1           1              55     45.8 Bacter…
+##  4 ASV_740 1          1           1           1              54     47.2 Bacter…
+##  5 ASV_14… 1          1           1           1              54     44.5 Bacter…
+##  6 ASV_23… 1          1           1           1              54     47.4 Bacter…
+##  7 ASV_15… 1          1           1           1              52     45.3 Bacter…
+##  8 ASV_24… 1          1           1           1              52     43.0 Bacter…
+##  9 ASV_19… 1          1           1           1              52     43.0 Bacter…
+## 10 ASV_568 1          1           1           1              51     45.1 Bacter…
+## # ℹ 2,039 more rows
+## # ℹ 6 more variables: Phylum &lt;chr&gt;, Class &lt;chr&gt;, Order &lt;chr&gt;, Family &lt;chr&gt;,
+## #   Genus &lt;chr&gt;, Species &lt;chr&gt;
+## #
+## # Edge Data: 9,602 × 5
+##    from    to weight correlation corr_direction
+##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;         
+## 1  1771  1825  0.793       0.793 Positive      
+## 2   594   597  0.895       0.895 Positive      
+## 3   588   597  0.864       0.864 Positive      
+## # ℹ 9,599 more rows</code></pre>
 <div id="gephi-layout" class="section level2" number="6.1">
 <h2>
 <span class="header-section-number">6.1</span> Gephi layout<a class="anchor" aria-label="anchor" href="#gephi-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb367"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"gephi"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"random"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-37-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
 <div id="fruchtermanreingold-force-directed-layout" class="section level2" number="6.2">
 <h2>
 <span class="header-section-number">6.2</span> Fruchterman–Reingold force-directed layout<a class="anchor" aria-label="anchor" href="#fruchtermanreingold-force-directed-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb368"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"fr2"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"random"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-38-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
 <div id="diamond-layout" class="section level2" number="6.3">
 <h2>
 <span class="header-section-number">6.3</span> Diamond layout<a class="anchor" aria-label="anchor" href="#diamond-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb369"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"diamond"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-39-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
 <div id="kk-layout" class="section level2" number="6.4">
 <h2>
 <span class="header-section-number">6.4</span> Kk layout<a class="anchor" aria-label="anchor" href="#kk-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb370"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"kk"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-40-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
 <div id="nicley-layout" class="section level2" number="6.5">
 <h2>
 <span class="header-section-number">6.5</span> Nicley layout<a class="anchor" aria-label="anchor" href="#nicley-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb371"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"nicely"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-41-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
-<div id="multrings-layout" class="section level2" number="6.6">
+<div id="petal-layout" class="section level2" number="6.6">
 <h2>
-<span class="header-section-number">6.6</span> Multrings layout<a class="anchor" aria-label="anchor" href="#multrings-layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.6</span> Petal layout<a class="anchor" aria-label="anchor" href="#petal-layout"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb372"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"petal"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-42-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
+</div>
+<div id="circle-layout" class="section level2" number="6.7">
+<h2>
+<span class="header-section-number">6.7</span> Circle layout<a class="anchor" aria-label="anchor" href="#circle-layout"><i class="fas fa-link"></i></a>
 </h2>
 </div>
-<div id="petal-layout" class="section level2" number="6.7">
+<div id="petal-layout-1" class="section level2" number="6.8">
 <h2>
-<span class="header-section-number">6.7</span> Petal layout<a class="anchor" aria-label="anchor" href="#petal-layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.8</span> Petal layout<a class="anchor" aria-label="anchor" href="#petal-layout-1"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb373"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"circle"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-43-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
-<div id="circle-layout" class="section level2" number="6.8">
+<div id="diamond-outline-layout" class="section level2" number="6.9">
 <h2>
-<span class="header-section-number">6.8</span> Circle layout<a class="anchor" aria-label="anchor" href="#circle-layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.9</span> Diamond outline layout<a class="anchor" aria-label="anchor" href="#diamond-outline-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb374"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"diamond_outline"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-44-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
-<div id="circle-outline-layout" class="section level2" number="6.9">
+<div id="grid-layout" class="section level2" number="6.10">
 <h2>
-<span class="header-section-number">6.9</span> Circle outline layout<a class="anchor" aria-label="anchor" href="#circle-outline-layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.10</span> Grid layout<a class="anchor" aria-label="anchor" href="#grid-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb375"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"grid"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-45-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
-<div id="diamond-outline-layout" class="section level2" number="6.10">
+<div id="heart_centered-layout" class="section level2" number="6.11">
 <h2>
-<span class="header-section-number">6.10</span> Diamond outline layout<a class="anchor" aria-label="anchor" href="#diamond-outline-layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.11</span> Heart_centered layout<a class="anchor" aria-label="anchor" href="#heart_centered-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb376"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"heart_centered"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-46-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
-<div id="grid-layout" class="section level2" number="6.11">
+<div id="lgl-layout" class="section level2" number="6.12">
 <h2>
-<span class="header-section-number">6.11</span> Grid layout<a class="anchor" aria-label="anchor" href="#grid-layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.12</span> Lgl layout<a class="anchor" aria-label="anchor" href="#lgl-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb377"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"lgl"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code>## Warning in alg_fun(graph): At vendor/cigraph/src/layout/large_graph.c:179 : LGL
+## layout does not support disconnected graphs yet.</code></pre>
+<div class="sourceCode" id="cb379"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-47-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
-<div id="heart_centered-layout" class="section level2" number="6.12">
+<div id="randomly-layout" class="section level2" number="6.13">
 <h2>
-<span class="header-section-number">6.12</span> Heart_centered layout<a class="anchor" aria-label="anchor" href="#heart_centered-layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.13</span> Randomly layout<a class="anchor" aria-label="anchor" href="#randomly-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb380"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"randomly"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-48-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
-<div id="lgl-layout" class="section level2" number="6.13">
+<div id="rectangle-layout" class="section level2" number="6.14">
 <h2>
-<span class="header-section-number">6.13</span> Lgl layout<a class="anchor" aria-label="anchor" href="#lgl-layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.14</span> Rectangle layout<a class="anchor" aria-label="anchor" href="#rectangle-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb381"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"rectangle"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-49-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
-<div id="randomly-layout" class="section level2" number="6.14">
+<div id="square-layout" class="section level2" number="6.15">
 <h2>
-<span class="header-section-number">6.14</span> Randomly layout<a class="anchor" aria-label="anchor" href="#randomly-layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.15</span> Square layout<a class="anchor" aria-label="anchor" href="#square-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb382"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"square"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-50-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
-<div id="rectangle-layout" class="section level2" number="6.15">
+<div id="star-layout" class="section level2" number="6.16">
 <h2>
-<span class="header-section-number">6.15</span> Rectangle layout<a class="anchor" aria-label="anchor" href="#rectangle-layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.16</span> Star layout<a class="anchor" aria-label="anchor" href="#star-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb383"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"star"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-51-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
-<div id="rightiso-layout" class="section level2" number="6.16">
+<div id="star_concentric-layout" class="section level2" number="6.17">
 <h2>
-<span class="header-section-number">6.16</span> Rightiso layout<a class="anchor" aria-label="anchor" href="#rightiso-layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.17</span> Star_concentric layout<a class="anchor" aria-label="anchor" href="#star_concentric-layout"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb384"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"star_concentric"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-52-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
-<div id="square-layout" class="section level2" number="6.17">
+<div id="stress-layout" class="section level2" number="6.18">
 <h2>
-<span class="header-section-number">6.17</span> Square layout<a class="anchor" aria-label="anchor" href="#square-layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.18</span> Stress layout<a class="anchor" aria-label="anchor" href="#stress-layout"><i class="fas fa-link"></i></a>
 </h2>
-</div>
-<div id="square-outline-layout" class="section level2" number="6.18">
-<h2>
-<span class="header-section-number">6.18</span> Square outline layout<a class="anchor" aria-label="anchor" href="#square-outline-layout"><i class="fas fa-link"></i></a>
-</h2>
-</div>
-<div id="star-layout" class="section level2" number="6.19">
-<h2>
-<span class="header-section-number">6.19</span> Star layout<a class="anchor" aria-label="anchor" href="#star-layout"><i class="fas fa-link"></i></a>
-</h2>
-</div>
-<div id="star_concentric-layout" class="section level2" number="6.20">
-<h2>
-<span class="header-section-number">6.20</span> Star_concentric layout<a class="anchor" aria-label="anchor" href="#star_concentric-layout"><i class="fas fa-link"></i></a>
-</h2>
-</div>
-<div id="stress-layout" class="section level2" number="6.21">
-<h2>
-<span class="header-section-number">6.21</span> Stress layout<a class="anchor" aria-label="anchor" href="#stress-layout"><i class="fas fa-link"></i></a>
-</h2>
+<div class="sourceCode" id="cb385"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"stress"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-53-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 
 </div>
 </div>
@@ -182,22 +476,19 @@
 <li><a class="nav-link" href="#diamond-layout"><span class="header-section-number">6.3</span> Diamond layout</a></li>
 <li><a class="nav-link" href="#kk-layout"><span class="header-section-number">6.4</span> Kk layout</a></li>
 <li><a class="nav-link" href="#nicley-layout"><span class="header-section-number">6.5</span> Nicley layout</a></li>
-<li><a class="nav-link" href="#multrings-layout"><span class="header-section-number">6.6</span> Multrings layout</a></li>
-<li><a class="nav-link" href="#petal-layout"><span class="header-section-number">6.7</span> Petal layout</a></li>
-<li><a class="nav-link" href="#circle-layout"><span class="header-section-number">6.8</span> Circle layout</a></li>
-<li><a class="nav-link" href="#circle-outline-layout"><span class="header-section-number">6.9</span> Circle outline layout</a></li>
-<li><a class="nav-link" href="#diamond-outline-layout"><span class="header-section-number">6.10</span> Diamond outline layout</a></li>
-<li><a class="nav-link" href="#grid-layout"><span class="header-section-number">6.11</span> Grid layout</a></li>
-<li><a class="nav-link" href="#heart_centered-layout"><span class="header-section-number">6.12</span> Heart_centered layout</a></li>
-<li><a class="nav-link" href="#lgl-layout"><span class="header-section-number">6.13</span> Lgl layout</a></li>
-<li><a class="nav-link" href="#randomly-layout"><span class="header-section-number">6.14</span> Randomly layout</a></li>
-<li><a class="nav-link" href="#rectangle-layout"><span class="header-section-number">6.15</span> Rectangle layout</a></li>
-<li><a class="nav-link" href="#rightiso-layout"><span class="header-section-number">6.16</span> Rightiso layout</a></li>
-<li><a class="nav-link" href="#square-layout"><span class="header-section-number">6.17</span> Square layout</a></li>
-<li><a class="nav-link" href="#square-outline-layout"><span class="header-section-number">6.18</span> Square outline layout</a></li>
-<li><a class="nav-link" href="#star-layout"><span class="header-section-number">6.19</span> Star layout</a></li>
-<li><a class="nav-link" href="#star_concentric-layout"><span class="header-section-number">6.20</span> Star_concentric layout</a></li>
-<li><a class="nav-link" href="#stress-layout"><span class="header-section-number">6.21</span> Stress layout</a></li>
+<li><a class="nav-link" href="#petal-layout"><span class="header-section-number">6.6</span> Petal layout</a></li>
+<li><a class="nav-link" href="#circle-layout"><span class="header-section-number">6.7</span> Circle layout</a></li>
+<li><a class="nav-link" href="#petal-layout-1"><span class="header-section-number">6.8</span> Petal layout</a></li>
+<li><a class="nav-link" href="#diamond-outline-layout"><span class="header-section-number">6.9</span> Diamond outline layout</a></li>
+<li><a class="nav-link" href="#grid-layout"><span class="header-section-number">6.10</span> Grid layout</a></li>
+<li><a class="nav-link" href="#heart_centered-layout"><span class="header-section-number">6.11</span> Heart_centered layout</a></li>
+<li><a class="nav-link" href="#lgl-layout"><span class="header-section-number">6.12</span> Lgl layout</a></li>
+<li><a class="nav-link" href="#randomly-layout"><span class="header-section-number">6.13</span> Randomly layout</a></li>
+<li><a class="nav-link" href="#rectangle-layout"><span class="header-section-number">6.14</span> Rectangle layout</a></li>
+<li><a class="nav-link" href="#square-layout"><span class="header-section-number">6.15</span> Square layout</a></li>
+<li><a class="nav-link" href="#star-layout"><span class="header-section-number">6.16</span> Star layout</a></li>
+<li><a class="nav-link" href="#star_concentric-layout"><span class="header-section-number">6.17</span> Star_concentric layout</a></li>
+<li><a class="nav-link" href="#stress-layout"><span class="header-section-number">6.18</span> Stress layout</a></li>
 </ul>
 
       <div class="book-extra">
@@ -214,7 +505,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-01-09.</p>
+    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-01-12.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

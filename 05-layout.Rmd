@@ -1,71 +1,347 @@
 # Network layout
 
+> Load R Package
+
+
+```{r warning=F, message=F}
+library(tidyverse)
+library(ggNetView)
+```
+
+
+>  Example data
+
+```{r}
+# Access built-in example datasets in ggNetView
+
+# Relative abundance table of rarefied ASVs or OTUs
+data("otu_rare_relative")
+dim(otu_rare_relative)
+otu_rare_relative[1:5, 1:5]
+
+# Taxonomic annotation table of ASVs or OTUs
+data("tax_tab")
+dim(tax_tab)
+tax_tab[1:5, 1:5]
+```
+
+> Build graph object
+
+```{r message=F}
+graph_obj <- build_graph_from_mat(
+  mat = otu_rare_relative,
+  transfrom.method = "none", #  based your input data
+  r.threshold = 0.7,
+  p.threshold = 0.05,
+  method = "WGCNA",
+  cor.method = "pearson",
+  proc = "BH",
+  module.method = "Fast_greedy",
+  node_annotation = tax_tab,
+  top_modules = 15,
+  seed = 1115
+)
+
+graph_obj
+```
 
 
 ## Gephi layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "gephi",
+  center = F,
+  shrink = 0.8,
+  layout.module = "random",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
+
+
 
 ## Fruchterman–Reingold force-directed layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "fr2",
+  center = F,
+  shrink = 0.8,
+  layout.module = "random",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
 
 
 ## Diamond layout
+
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "diamond",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
 
 
 
 ## Kk layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "kk",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
+
 
 ## Nicley layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "nicely",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
 
-## Multrings layout
+p
+```
+
 
 
 ## Petal layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "petal",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
+
 
 ## Circle layout
 
+## Petal layout
 
-## Circle outline layout
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "circle",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
+
+
 
 
 ## Diamond outline layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "diamond_outline",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
+
 ## Grid layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "grid",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
 
 ## Heart_centered layout
+
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "heart_centered",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
 
 
 ## Lgl layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "lgl",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
 
 ## Randomly layout
+
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "randomly",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
 
 
 ## Rectangle layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "rectangle",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
 
-## Rightiso layout
+p
+```
+
+
+
+
 
 
 ## Square layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "square",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
 
-## Square outline layout
+p
+```
+
 
 
 ## Star layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "star",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
+
 
 ## Star_concentric layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "star_concentric",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
 
 
 ## Stress layout
 
+```{r fig.align='center', fig.width=10, fig.height=10}
+p <- ggNetView(
+  graph_obj = graph_obj,
+  layout = "stress",
+  center = F,
+  shrink = 0.8,
+  layout.module = "adjacent",
+  group.by = "Modularity",
+  fill.by = "Modularity"
+)
+
+p
+```
 
 
 
