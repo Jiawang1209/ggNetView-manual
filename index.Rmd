@@ -30,27 +30,39 @@ Although initially designed for applications in **soil science and microbial eco
 
 ## Installation
 
-> First, install the required dependencies
+> Step1: install CRAN dependencies
 
 ```{r eval=FALSE}
-# install.packages("BiocManager")
-BiocManager::install("WGCNA")
+cran_pkgs <- c(
+  "boot", "dplyr", "FNN", "future", "future.apply",
+  "ggforce", "ggnewscale", "ggplot2", "ggraph", "ggrepel",
+  "Hmisc", "huge", "igraph", "magrittr", "MASS",
+  "Matrix", "patchwork", "progressr", "psych", "purrr",
+  "qgraph", "Rcpp", "RcppArmadillo", "readr", "rlang",
+  "scales", "scatterpie", "stringr", "tibble", "tidygraph",
+  "tidyr", "vegan", "VGAM", "WGCNA"
+)
 
-# install.packages("remotes")
-remotes::install_github("alserglab/mascarade")
-remotes::install_github("zdk123/SpiecEasi")
+new_pkgs <- cran_pkgs[!cran_pkgs %in% installed.packages()[, "Package"]]
+if (length(new_pkgs)) install.packages(new_pkgs)
 ```
 
-> and then install ggNetView.
+> Step2: (optional) install suggested packages
+
+These packages are not required for the core functionality, but enable additional features (e.g. dynamic tree cut, node influence, vignettes, tests):
+
+```{r eval=FALSE}
+install.packages(c("dynamicTreeCut", "influential",
+                   "knitr", "rmarkdown",
+                   "RobustRankAggreg", "testthat"))
+```
+
+> Step3: install ggNetView from GitHub
 
 ```{r eval=FALSE}
 # install.packages("devtools")
 devtools::install_github("Jiawang1209/ggNetView")
-
-# install.packages("pak")
-pak::pak("Jiawang1209/ggNetView")
 ```
-
 
 
 ## Citation
@@ -68,7 +80,6 @@ https://github.com/Jiawang1209/ggNetView
 > The source code for ggNetView is available in the ggNetView repository.
 
 <https://github.com/Jiawang1209/ggNetView>
-
 
 ## Contact
 
