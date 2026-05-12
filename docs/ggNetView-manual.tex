@@ -125,7 +125,7 @@
 
 \title{ggNetView manual documentation}
 \author{Yue Liu}
-\date{2026-01-12}
+\date{2026-05-13}
 
 \begin{document}
 \maketitle
@@ -147,31 +147,48 @@ Although initially designed for applications in \textbf{soil science and microbi
 \section{Installation}\label{installation}
 
 \begin{quote}
-First, install the required dependencies
+Step1: install CRAN dependencies
 \end{quote}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# install.packages("BiocManager")}
-\NormalTok{BiocManager}\SpecialCharTok{::}\FunctionTok{install}\NormalTok{(}\StringTok{"WGCNA"}\NormalTok{)}
+\NormalTok{cran\_pkgs }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
+  \StringTok{"boot"}\NormalTok{, }\StringTok{"dplyr"}\NormalTok{, }\StringTok{"FNN"}\NormalTok{, }\StringTok{"future"}\NormalTok{, }\StringTok{"future.apply"}\NormalTok{,}
+  \StringTok{"ggforce"}\NormalTok{, }\StringTok{"ggnewscale"}\NormalTok{, }\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"ggraph"}\NormalTok{, }\StringTok{"ggrepel"}\NormalTok{,}
+  \StringTok{"Hmisc"}\NormalTok{, }\StringTok{"huge"}\NormalTok{, }\StringTok{"igraph"}\NormalTok{, }\StringTok{"magrittr"}\NormalTok{, }\StringTok{"MASS"}\NormalTok{,}
+  \StringTok{"Matrix"}\NormalTok{, }\StringTok{"patchwork"}\NormalTok{, }\StringTok{"progressr"}\NormalTok{, }\StringTok{"psych"}\NormalTok{, }\StringTok{"purrr"}\NormalTok{,}
+  \StringTok{"qgraph"}\NormalTok{, }\StringTok{"Rcpp"}\NormalTok{, }\StringTok{"RcppArmadillo"}\NormalTok{, }\StringTok{"readr"}\NormalTok{, }\StringTok{"rlang"}\NormalTok{,}
+  \StringTok{"scales"}\NormalTok{, }\StringTok{"scatterpie"}\NormalTok{, }\StringTok{"stringr"}\NormalTok{, }\StringTok{"tibble"}\NormalTok{, }\StringTok{"tidygraph"}\NormalTok{,}
+  \StringTok{"tidyr"}\NormalTok{, }\StringTok{"vegan"}\NormalTok{, }\StringTok{"VGAM"}\NormalTok{, }\StringTok{"WGCNA"}
+\NormalTok{)}
 
-\CommentTok{\# install.packages("remotes")}
-\NormalTok{remotes}\SpecialCharTok{::}\FunctionTok{install\_github}\NormalTok{(}\StringTok{"alserglab/mascarade"}\NormalTok{)}
-\NormalTok{remotes}\SpecialCharTok{::}\FunctionTok{install\_github}\NormalTok{(}\StringTok{"zdk123/SpiecEasi"}\NormalTok{)}
+\NormalTok{new\_pkgs }\OtherTok{\textless{}{-}}\NormalTok{ cran\_pkgs[}\SpecialCharTok{!}\NormalTok{cran\_pkgs }\SpecialCharTok{\%in\%} \FunctionTok{installed.packages}\NormalTok{()[, }\StringTok{"Package"}\NormalTok{]]}
+\ControlFlowTok{if}\NormalTok{ (}\FunctionTok{length}\NormalTok{(new\_pkgs)) }\FunctionTok{install.packages}\NormalTok{(new\_pkgs)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{quote}
-and then install ggNetView.
+Step2: (optional) install suggested packages
+\end{quote}
+
+These packages are not required for the core functionality, but enable additional features (e.g.~dynamic tree cut, node influence, vignettes, tests):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"dynamicTreeCut"}\NormalTok{, }\StringTok{"influential"}\NormalTok{,}
+                   \StringTok{"knitr"}\NormalTok{, }\StringTok{"rmarkdown"}\NormalTok{,}
+                   \StringTok{"RobustRankAggreg"}\NormalTok{, }\StringTok{"testthat"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+Step3: install ggNetView from GitHub
 \end{quote}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# install.packages("devtools")}
 \NormalTok{devtools}\SpecialCharTok{::}\FunctionTok{install\_github}\NormalTok{(}\StringTok{"Jiawang1209/ggNetView"}\NormalTok{)}
-
-\CommentTok{\# install.packages("pak")}
-\NormalTok{pak}\SpecialCharTok{::}\FunctionTok{pak}\NormalTok{(}\StringTok{"Jiawang1209/ggNetView"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -237,6 +254,7 @@ Load R Package
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(tidyverse)}
 \FunctionTok{library}\NormalTok{(ggNetView)}
+\FunctionTok{library}\NormalTok{(igraph)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -252,7 +270,7 @@ Example data
 \begin{Highlighting}[]
 \CommentTok{\# Access built{-}in example datasets in ggNetView}
 
-\CommentTok{\# Raw ASV or OTU table}
+\CommentTok{\# Raw ASV/OTU abundance table (rows = ASVs/OTUs, cols = samples)}
 \FunctionTok{data}\NormalTok{(}\StringTok{"otu\_tab"}\NormalTok{)}
 \FunctionTok{dim}\NormalTok{(otu\_tab)}
 \end{Highlighting}
@@ -279,7 +297,7 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Rarefied ASV or OTU table}
+\CommentTok{\# Rarefied ASV/OTU table (sequencing depth normalised by rarefaction)}
 \FunctionTok{data}\NormalTok{(}\StringTok{"otu\_rare"}\NormalTok{)}
 \FunctionTok{dim}\NormalTok{(otu\_rare)}
 \end{Highlighting}
@@ -306,7 +324,7 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Relative abundance table of rarefied ASVs or OTUs}
+\CommentTok{\# Rarefied + converted to relative abundance — most common downstream input}
 \FunctionTok{data}\NormalTok{(}\StringTok{"otu\_rare\_relative"}\NormalTok{)}
 \FunctionTok{dim}\NormalTok{(otu\_rare\_relative)}
 \end{Highlighting}
@@ -333,7 +351,8 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Taxonomic annotation table of ASVs or OTUs}
+\CommentTok{\# Taxonomic annotation for the ASVs/OTUs above.}
+\CommentTok{\# First column must be the ASV/OTU ID (matching rownames of the abundance tables).}
 \FunctionTok{data}\NormalTok{(}\StringTok{"tax\_tab"}\NormalTok{)}
 \FunctionTok{dim}\NormalTok{(tax\_tab)}
 \end{Highlighting}
@@ -366,20 +385,25 @@ Build graph object
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Build a co{-}occurrence network directly from an abundance matrix.}
+\CommentTok{\# Internally: (1) optional transform {-}\textgreater{} (2) correlation {-}\textgreater{} (3) p{-}value adjustment}
+\CommentTok{\# {-}\textgreater{} (4) edge filtering {-}\textgreater{} (5) community detection {-}\textgreater{} (6) attach taxonomy.}
 \NormalTok{graph\_obj }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_mat}\NormalTok{(}
-  \AttributeTok{mat =}\NormalTok{ otu\_rare\_relative,}
-  \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{, }\CommentTok{\#  based your input data}
-  \AttributeTok{r.threshold =} \FloatTok{0.7}\NormalTok{,}
-  \AttributeTok{p.threshold =} \FloatTok{0.05}\NormalTok{,}
-  \AttributeTok{method =} \StringTok{"WGCNA"}\NormalTok{,}
-  \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
-  \AttributeTok{proc =} \StringTok{"Bonferroni"}\NormalTok{,}
-  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
-  \AttributeTok{node\_annotation =}\NormalTok{ tax\_tab,}
-  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
-  \AttributeTok{seed =} \DecValTok{1115}
+  \AttributeTok{mat              =}\NormalTok{ otu\_rare\_relative,  }\CommentTok{\# variables x samples numeric matrix}
+  \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{,             }\CommentTok{\# input is already relative abundance}
+  \AttributeTok{r.threshold      =} \FloatTok{0.7}\NormalTok{,                }\CommentTok{\# |r| cutoff (subjective; consider ggNetView\_RMT)}
+  \AttributeTok{p.threshold      =} \FloatTok{0.05}\NormalTok{,               }\CommentTok{\# adjusted p{-}value cutoff}
+  \AttributeTok{method           =} \StringTok{"WGCNA"}\NormalTok{,            }\CommentTok{\# correlation backend: WGCNA::corAndPvalue}
+  \AttributeTok{cor.method       =} \StringTok{"pearson"}\NormalTok{,          }\CommentTok{\# Pearson correlation}
+  \AttributeTok{proc             =} \StringTok{"bonferroni"}\NormalTok{,       }\CommentTok{\# multiple{-}testing correction}
+  \AttributeTok{module.method    =} \StringTok{"Fast\_greedy"}\NormalTok{,      }\CommentTok{\# community detection algorithm}
+  \AttributeTok{node\_annotation  =}\NormalTok{ tax\_tab,            }\CommentTok{\# taxonomy joined onto each node by name}
+  \AttributeTok{top\_modules      =} \DecValTok{15}\NormalTok{,                 }\CommentTok{\# keep top{-}15 modules; rest {-}\textgreater{} "Others"}
+  \AttributeTok{seed             =} \DecValTok{1115}                \CommentTok{\# reproducibility}
 \NormalTok{)}
 
+\CommentTok{\# Inspect node/edge counts and the columns now available on nodes:}
+\CommentTok{\#   modularity, modularity2, modularity3, Modularity, Degree, Strength + taxonomy}
 \NormalTok{graph\_obj}
 \end{Highlighting}
 \end{Shaded}
@@ -425,8 +449,10 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Access built{-}in example datasets in ggNetView}
+\CommentTok{\# Edge{-}list style example data (protein{-}protein interactions).}
 \FunctionTok{data}\NormalTok{(}\StringTok{"ppi\_example"}\NormalTok{)}
+
+\CommentTok{\# \textasciigrave{}df\textasciigrave{}: edge list — typically 3 columns: node1 | node2 | weight (optional)}
 \NormalTok{df }\OtherTok{=}\NormalTok{ ppi\_example}\SpecialCharTok{$}\NormalTok{ppi}
 \FunctionTok{head}\NormalTok{(df)}
 \end{Highlighting}
@@ -444,6 +470,7 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# \textasciigrave{}node\_annotation\textasciigrave{}: per{-}node metadata; first column = node ID}
 \NormalTok{node\_annotation }\OtherTok{=}\NormalTok{ ppi\_example}\SpecialCharTok{$}\NormalTok{annotation}
 \FunctionTok{head}\NormalTok{(node\_annotation)}
 \end{Highlighting}
@@ -465,13 +492,15 @@ Build graph object
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Build a tbl\_graph from an edge{-}list data.frame (no correlation step needed —}
+\CommentTok{\# edges are taken as{-}is from \textasciigrave{}df\textasciigrave{}). Community detection still runs on the result.}
 \NormalTok{graph\_obj\_from\_df }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_df}\NormalTok{(}
-  \AttributeTok{df =}\NormalTok{ df,}
-  \AttributeTok{node\_annotation =}\NormalTok{ node\_annotation,}
-  \AttributeTok{directed =}\NormalTok{ F,}
-  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
-  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
-  \AttributeTok{seed =} \DecValTok{1115}
+  \AttributeTok{df              =}\NormalTok{ df,                }\CommentTok{\# edge list}
+  \AttributeTok{node\_annotation =}\NormalTok{ node\_annotation,   }\CommentTok{\# per{-}node metadata (joined by name)}
+  \AttributeTok{directed        =}\NormalTok{ F,                 }\CommentTok{\# undirected network}
+  \AttributeTok{module.method   =} \StringTok{"Fast\_greedy"}\NormalTok{,     }\CommentTok{\# community detection}
+  \AttributeTok{top\_modules     =} \DecValTok{15}\NormalTok{,                }\CommentTok{\# keep top{-}15 modules; rest {-}\textgreater{} "Others"}
+  \AttributeTok{seed            =} \DecValTok{1115}
 \NormalTok{)}
 
 \NormalTok{graph\_obj\_from\_df}
@@ -510,13 +539,15 @@ Build graph object
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Same as above, but without any node annotation table.}
+\CommentTok{\# Useful when you only have an edge list and no extra metadata to attach.}
 \NormalTok{graph\_obj\_from\_df2 }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_df}\NormalTok{(}
-  \AttributeTok{df =}\NormalTok{ df,}
-  \AttributeTok{node\_annotation =} \ConstantTok{NULL}\NormalTok{,}
-  \AttributeTok{directed =}\NormalTok{ F,}
-  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
-  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
-  \AttributeTok{seed =} \DecValTok{1115}
+  \AttributeTok{df              =}\NormalTok{ df,}
+  \AttributeTok{node\_annotation =} \ConstantTok{NULL}\NormalTok{,              }\CommentTok{\# skip the annotation join entirely}
+  \AttributeTok{directed        =}\NormalTok{ F,}
+  \AttributeTok{module.method   =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{top\_modules     =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed            =} \DecValTok{1115}
 \NormalTok{)}
 
 \NormalTok{graph\_obj\_from\_df2}
@@ -562,8 +593,10 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Access built{-}in example datasets in ggNetView}
+\CommentTok{\# Like ppi\_example, but \textasciigrave{}annotation\textasciigrave{} already contains a \textasciigrave{}Modularity\textasciigrave{} column}
+\CommentTok{\# (i.e. module assignments computed elsewhere — we will NOT recompute them).}
 \FunctionTok{data}\NormalTok{(}\StringTok{"ppi\_module"}\NormalTok{)}
+
 \NormalTok{df }\OtherTok{=}\NormalTok{ ppi\_module}\SpecialCharTok{$}\NormalTok{ppi}
 \FunctionTok{head}\NormalTok{(df)}
 \end{Highlighting}
@@ -582,7 +615,7 @@ Example data
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{node\_annotation }\OtherTok{=}\NormalTok{ ppi\_module}\SpecialCharTok{$}\NormalTok{annotation}
-\FunctionTok{head}\NormalTok{(node\_annotation)}
+\FunctionTok{head}\NormalTok{(node\_annotation)   }\CommentTok{\# note: must contain a \textasciigrave{}Modularity\textasciigrave{} column}
 \end{Highlighting}
 \end{Shaded}
 
@@ -602,12 +635,16 @@ Build graph object
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# When you already have pre{-}computed module assignments and want to keep them}
+\CommentTok{\# (e.g. from a previous WGCNA run, expert curation, biological prior),}
+\CommentTok{\# use the \textasciigrave{}\_module\textasciigrave{} variant — it skips internal community detection and uses}
+\CommentTok{\# the Modularity column from \textasciigrave{}node\_annotation\textasciigrave{} directly.}
 \NormalTok{graph\_obj\_from\_module }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_module}\NormalTok{(}
-  \AttributeTok{df =}\NormalTok{ df,}
-  \AttributeTok{node\_annotation =}\NormalTok{ node\_annotation,}
-  \AttributeTok{directed =}\NormalTok{ F,}
-  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
-  \AttributeTok{seed =} \DecValTok{1115}
+  \AttributeTok{df              =}\NormalTok{ df,}
+  \AttributeTok{node\_annotation =}\NormalTok{ node\_annotation,   }\CommentTok{\# MUST contain \textasciigrave{}Modularity\textasciigrave{} column}
+  \AttributeTok{directed        =}\NormalTok{ F,}
+  \AttributeTok{top\_modules     =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed            =} \DecValTok{1115}
 \NormalTok{)}
 
 \NormalTok{graph\_obj\_from\_module}
@@ -653,6 +690,8 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Square adjacency matrix (already{-}filtered weights for every node pair).}
+\CommentTok{\# Useful when the network was built externally (NetCoMi, FlashWeave, ...).}
 \FunctionTok{data}\NormalTok{(}\StringTok{"adjacency\_matrix\_example"}\NormalTok{)}
 \FunctionTok{dim}\NormalTok{(adjacency\_matrix\_example)}
 \end{Highlighting}
@@ -679,6 +718,7 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Reuse the same taxonomy table as node annotation.}
 \FunctionTok{data}\NormalTok{(}\StringTok{"tax\_tab"}\NormalTok{)}
 \FunctionTok{dim}\NormalTok{(tax\_tab)}
 \end{Highlighting}
@@ -711,12 +751,15 @@ Build graph object
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Build a tbl\_graph from a precomputed adjacency matrix.}
+\CommentTok{\# Community detection is run internally (Fast\_greedy here) because we have}
+\CommentTok{\# weights but no module assignments yet.}
 \NormalTok{graph\_obj\_adj }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_adj\_mat}\NormalTok{(}
   \AttributeTok{adjacency\_matrix =}\NormalTok{ adjacency\_matrix\_example,}
-  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
-  \AttributeTok{node\_annotation =}\NormalTok{ tax\_tab,}
-  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
-  \AttributeTok{seed =} \DecValTok{1115}
+  \AttributeTok{module.method    =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{node\_annotation  =}\NormalTok{ tax\_tab,}
+  \AttributeTok{top\_modules      =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed             =} \DecValTok{1115}
 \NormalTok{)}
 
 \NormalTok{graph\_obj\_adj}
@@ -756,6 +799,75 @@ Build graph object
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
+\section{Build graph from adjacency matrix with module information}\label{build-graph-from-adjacency-matrix-with-module-information}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Add a pre{-}existing module assignment to the annotation table.}
+\CommentTok{\# Here we just (for demonstration) treat the Kingdom column as the module label;}
+\CommentTok{\# in real use, this should be your actual module assignments.}
+\NormalTok{tax\_tab\_module }\OtherTok{\textless{}{-}}\NormalTok{ tax\_tab }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{Modularity =}\NormalTok{ Kingdom)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# \textasciigrave{}\_module\textasciigrave{} variant for adjacency input: REQUIRES \textasciigrave{}node\_annotation\textasciigrave{} to contain}
+\CommentTok{\# a \textasciigrave{}Modularity\textasciigrave{} column. Skips community detection and uses your provided}
+\CommentTok{\# module assignments directly.}
+\NormalTok{graph\_obj\_adj\_module }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_adj\_mat\_module}\NormalTok{(}
+  \AttributeTok{adjacency\_matrix =}\NormalTok{ adjacency\_matrix\_example,}
+  \AttributeTok{node\_annotation  =}\NormalTok{ tax\_tab\_module,   }\CommentTok{\# MUST contain \textasciigrave{}Modularity\textasciigrave{} column}
+  \AttributeTok{top\_modules      =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed             =} \DecValTok{1115}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The max module in network is 3 we use the 3  modules for next analysis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{graph\_obj\_adj\_module}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 2049 nodes and 9602 edges
+## #
+## # An undirected simple graph with 100 components
+## #
+## # Node Data: 2,049 x 14 (active)
+##    name   Kingdom Phylum Class Order Family Genus Species Modularity modularity2
+##    <chr>  <chr>   <chr>  <chr> <chr> <chr>  <chr> <chr>   <ord>      <ord>      
+##  1 ASV_9~ Bacter~ Prote~ Gamm~ Unas~ Unass~ Unas~ Unassi~ Bacteria   Bacteria   
+##  2 ASV_7~ Bacter~ Acido~ Acid~ Unas~ Unass~ Gp6   Unassi~ Bacteria   Bacteria   
+##  3 ASV_6~ Bacter~ Actin~ Acti~ Acti~ Nocar~ Marm~ Unassi~ Bacteria   Bacteria   
+##  4 ASV_3~ Bacter~ Prote~ Beta~ Unas~ Unass~ Unas~ Unassi~ Bacteria   Bacteria   
+##  5 ASV_7~ Bacter~ Acido~ Acid~ Unas~ Unass~ Gp16  Unassi~ Bacteria   Bacteria   
+##  6 ASV_1~ Bacter~ Actin~ Acti~ Unas~ Unass~ Unas~ Unassi~ Bacteria   Bacteria   
+##  7 ASV_2~ Bacter~ Prote~ Alph~ Rhiz~ Hypho~ Rhod~ Unassi~ Bacteria   Bacteria   
+##  8 ASV_25 Bacter~ Verru~ Spar~ Unas~ Unass~ Spar~ Unassi~ Bacteria   Bacteria   
+##  9 ASV_7~ Bacter~ Actin~ Acti~ Acti~ Cellu~ Cell~ Cellul~ Bacteria   Bacteria   
+## 10 ASV_1~ Bacter~ Acido~ Acid~ Unas~ Unass~ Gp3   Unassi~ Bacteria   Bacteria   
+## # i 2,039 more rows
+## # i 4 more variables: modularity3 <chr>, Degree <dbl>, Segree <dbl>,
+## #   Strength <dbl>
+## #
+## # Edge Data: 9,602 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1  1211  1492  0.793       0.793 Positive      
+## 2   323  2013  0.895       0.895 Positive      
+## 3   267  2013  0.864       0.864 Positive      
+## # i 9,599 more rows
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 \section{Build graph from double matrix}\label{build-graph-from-double-matrix}
 
 \begin{quote}
@@ -764,6 +876,10 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Two abundance matrices on the SAME samples but DIFFERENT feature sets,}
+\CommentTok{\# typically used for cross{-}kingdom networks (e.g. bacteria \textless{}{-}\textgreater{} fungi).}
+
+\CommentTok{\# Bacterial ASV table}
 \FunctionTok{data}\NormalTok{(}\StringTok{"BASV\_tab"}\NormalTok{)}
 \FunctionTok{dim}\NormalTok{(BASV\_tab)}
 \end{Highlighting}
@@ -790,6 +906,7 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Fungal ASV table}
 \FunctionTok{data}\NormalTok{(}\StringTok{"FASV\_tab"}\NormalTok{)}
 \FunctionTok{dim}\NormalTok{(FASV\_tab)}
 \end{Highlighting}
@@ -816,6 +933,7 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Combined node annotation table covering BOTH feature sets above.}
 \FunctionTok{data}\NormalTok{(}\StringTok{"double\_mat\_node\_df"}\NormalTok{)}
 \FunctionTok{dim}\NormalTok{(double\_mat\_node\_df)}
 \end{Highlighting}
@@ -847,13 +965,17 @@ Build graph object
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Cross{-}domain bipartite{-}style network:}
+\CommentTok{\# correlations are computed BETWEEN features in mat1 and features in mat2}
+\CommentTok{\# (no within{-}mat1 / within{-}mat2 edges), then thresholded, modularised, joined}
+\CommentTok{\# with node annotation.}
 \NormalTok{graph\_obj\_double\_mat }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_double\_mat}\NormalTok{(}
-  \AttributeTok{mat1 =}\NormalTok{ BASV\_tab,}
-  \AttributeTok{mat2 =}\NormalTok{ FASV\_tab,}
-   \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{mat1            =}\NormalTok{ BASV\_tab,          }\CommentTok{\# set A (e.g. bacteria)}
+  \AttributeTok{mat2            =}\NormalTok{ FASV\_tab,          }\CommentTok{\# set B (e.g. fungi)}
+  \AttributeTok{module.method   =} \StringTok{"Fast\_greedy"}\NormalTok{,}
   \AttributeTok{node\_annotation =}\NormalTok{ double\_mat\_node\_df,}
-  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
-  \AttributeTok{seed =} \DecValTok{1115}
+  \AttributeTok{top\_modules     =} \DecValTok{15}\NormalTok{,}
+  \AttributeTok{seed            =} \DecValTok{1115}
 \NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -889,13 +1011,251 @@ Build graph object
 ## # i 90 more rows
 ## # i 1 more variable: Strength <dbl>
 ## #
-## # Edge Data: 2,500 x 4
-##    from    to weight correlation
-##   <int> <int>  <dbl>       <dbl>
-## 1    15    57  0.338      -0.338
-## 2    57    90  0.648       0.648
-## 3    16    57  0.162       0.162
+## # Edge Data: 2,500 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1    15    57  0.338      -0.338 Negative      
+## 2    57    90  0.648       0.648 Positive      
+## 3    16    57  0.162       0.162 Positive      
 ## # i 2,497 more rows
+\end{verbatim}
+
+\section{Build graph from igraph object}\label{build-graph-from-igraph-object}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load the PPI example dataset (edge list + node annotation).}
+\FunctionTok{data}\NormalTok{(}\StringTok{"ppi\_example"}\NormalTok{)}
+
+\CommentTok{\# First build a native igraph object directly from the edge list.}
+\CommentTok{\# This is what users typically already have when they come from an igraph workflow.}
+\NormalTok{igraph\_object }\OtherTok{\textless{}{-}}\NormalTok{ igraph}\SpecialCharTok{::}\FunctionTok{graph\_from\_data\_frame}\NormalTok{(}
+  \AttributeTok{d        =}\NormalTok{ ppi\_example}\SpecialCharTok{$}\NormalTok{ppi,          }\CommentTok{\# edge list}
+  \AttributeTok{vertices =}\NormalTok{ ppi\_example}\SpecialCharTok{$}\NormalTok{annotation,   }\CommentTok{\# vertex metadata}
+  \AttributeTok{directed =} \ConstantTok{FALSE}
+\NormalTok{)}
+
+\NormalTok{igraph\_object}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## IGRAPH 4da318a UNW- 100 200 -- 
+## + attr: name (v/c), group (v/c), weight (e/n)
+## + edges from 4da318a (vertex names):
+##  [1] A1 --D40 A2 --D39 A3 --D38 A4 --D37 A5 --D36 A6 --D35 A7 --D34 A8 --D33
+##  [9] A9 --D32 A10--D31 B1 --D30 B2 --D29 B3 --D28 B4 --D27 B5 --D26 B6 --D25
+## [17] B7 --D24 B8 --D23 B9 --D22 B10--D21 B11--D20 B12--D19 B13--D18 B14--D17
+## [25] B15--D16 B16--D15 B17--D14 B18--D13 B19--D12 B20--D11 C1 --D10 C2 --D9 
+## [33] C3 --D8  C4 --D7  C5 --D6  C6 --D5  C7 --D4  C8 --D3  C9 --D2  C10--D1 
+## [41] C11--C30 C12--C29 C13--C28 C14--C27 C15--C26 C16--C25 C17--C24 C18--C23
+## [49] C19--C22 C20--C21 C20--C21 C19--C22 C18--C23 C17--C24 C16--C25 C15--C26
+## [57] C14--C27 C13--C28 C12--C29 C11--C30 C10--D1  C9 --D2  C8 --D3  C7 --D4 
+## + ... omitted several edges
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Convert an existing igraph object into a ggNetView{-}compatible tbl\_graph.}
+\CommentTok{\# Adds Modularity / Degree / Strength columns and harmonises the schema so it}
+\CommentTok{\# can be plugged straight into ggNetView().}
+\NormalTok{graph\_obj\_from\_igraph }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_igraph}\NormalTok{(}
+  \AttributeTok{igraph        =}\NormalTok{ igraph\_object,}
+  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
+  \AttributeTok{seed          =} \DecValTok{1115}
+\NormalTok{)}
+
+\NormalTok{graph\_obj\_from\_igraph}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 100 nodes and 50 edges
+## #
+## # An unrooted forest with 50 trees
+## #
+## # Node Data: 100 x 8 (active)
+##    name  group modularity modularity2 modularity3 Modularity Degree Strength
+##    <chr> <chr> <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl>
+##  1 C13   C     1          1           1           1               1     26.7
+##  2 C28   C     1          1           1           1               1     26.7
+##  3 C2    C     10         10          10          10              1     37.4
+##  4 D9    D     10         10          10          10              1     37.4
+##  5 A3    A     11         11          11          11              1     37.8
+##  6 D38   D     11         11          11          11              1     37.8
+##  7 B12   B     12         12          12          12              1     41.3
+##  8 D19   D     12         12          12          12              1     41.3
+##  9 A1    A     13         13          13          13              1     45.2
+## 10 D40   D     13         13          13          13              1     45.2
+## # i 90 more rows
+## #
+## # Edge Data: 50 x 3
+##    from    to weight
+##   <int> <int>  <dbl>
+## 1     9    10   45.2
+## 2    15    16   50.6
+## 3     5     6   37.8
+## # i 47 more rows
+\end{verbatim}
+
+\section{Build graph from WGCNA}\label{build-graph-from-wgcna}
+
+\begin{verbatim}
+# Workflow for importing an existing WGCNA pipeline output.
+# (Not evaluated here because it requires external files saved by WGCNA::blockwiseModules.)
+
+# 1. Load the topological overlap matrix (TOM) saved by WGCNA.
+load(file = "WGCNA.tom-block.1.RData")
+TOM_mat <- as.matrix(TOM)
+
+# 2. Load the abundance matrix used to build that TOM (for any downstream
+#    re-thresholding / sanity checks).
+plot.mat = readRDS(file = "plot.mat.Rds")
+
+# 3. Sparsify the TOM: keep only the top_k strongest TOM connections per node.
+#    `trans_TOM_in_WGCNA()` is a helper bundled with ggNetView for this step.
+trans_TOM <- trans_TOM_in_WGCNA(TOM_mat, plot.mat, top_k = 1)
+
+# 4. Load the WGCNA net object (contains module colour assignments).
+net <- readRDS(file = "net.Rds")
+
+# 5. Build the module table — one row per feature, columns: ID + Module.
+module <- data.frame(
+  ID     = names(net$colors),
+  Module = as.character(net$colors)
+)
+
+# 6. Optional ordering of node IDs (used as node_annotation here).
+id <- data.frame(
+  ID = names(sort(net$colors))
+)
+
+# 7. Assemble the tbl_graph: uses the sparsified TOM as edge weights and the
+#    WGCNA module colours as the Modularity assignment (no recomputation).
+obj <- build_graph_from_wgcna(
+  wgcna_tom       = trans_TOM,
+  module          = module,
+  node_annotation = id
+)
+
+obj
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Build graph from multi-graph}\label{build-graph-from-multi-graph}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Consensus network workflow:}
+\CommentTok{\# (1) Build per{-}method networks on the SAME matrix.}
+\CommentTok{\# (2) Convert each tbl\_graph back to an adjacency matrix.}
+\CommentTok{\# (3) Fuse the per{-}method adjacencies into ONE consensus tbl\_graph.}
+
+\CommentTok{\# Restrict to the 40 most abundant OTUs to keep this chunk responsive.}
+\FunctionTok{data}\NormalTok{(otu\_rare\_relative)}
+\NormalTok{mat }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(otu\_rare\_relative)}
+\NormalTok{mat }\OtherTok{\textless{}{-}}\NormalTok{ mat[}\FunctionTok{order}\NormalTok{(}\FunctionTok{rowSums}\NormalTok{(mat), }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{)[}\FunctionTok{seq\_len}\NormalTok{(}\DecValTok{40}\NormalTok{)], ]}
+
+\CommentTok{\# {-}{-}{-}{-} (1) Three per{-}method networks on the same data {-}{-}{-}{-}}
+\CommentTok{\# Spearman correlation through psych::corr.test — baseline.}
+\NormalTok{g\_cor   }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_mat}\NormalTok{(mat, }\AttributeTok{method =} \StringTok{"cor"}\NormalTok{,   }\AttributeTok{cor.method =} \StringTok{"spearman"}\NormalTok{,}
+                                \AttributeTok{proc =} \StringTok{"BH"}\NormalTok{, }\AttributeTok{r.threshold =} \FloatTok{0.4}\NormalTok{, }\AttributeTok{p.threshold =} \FloatTok{0.05}\NormalTok{,}
+                                \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{, }\AttributeTok{seed =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The max module in network is 5 we use the 5  modules for next analysis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# WGCNA{-}style correlation (WGCNA::corAndPvalue + the package\textquotesingle{}s thresholding).}
+\NormalTok{g\_wgcna }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_mat}\NormalTok{(mat, }\AttributeTok{method =} \StringTok{"WGCNA"}\NormalTok{, }\AttributeTok{cor.method =} \StringTok{"spearman"}\NormalTok{,}
+                                \AttributeTok{proc =} \StringTok{"BH"}\NormalTok{, }\AttributeTok{r.threshold =} \FloatTok{0.4}\NormalTok{, }\AttributeTok{p.threshold =} \FloatTok{0.05}\NormalTok{,}
+                                \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{, }\AttributeTok{seed =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The max module in network is 6 we use the 6  modules for next analysis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Hmisc::rcorr — yet another correlation engine, slightly different tie/NA behaviour.}
+\NormalTok{g\_hmisc }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_mat}\NormalTok{(mat, }\AttributeTok{method =} \StringTok{"Hmisc"}\NormalTok{, }\AttributeTok{cor.method =} \StringTok{"spearman"}\NormalTok{,}
+                                \AttributeTok{r.threshold =} \FloatTok{0.4}\NormalTok{, }\AttributeTok{p.threshold =} \FloatTok{0.05}\NormalTok{,}
+                                \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{, }\AttributeTok{seed =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The max module in network is 4 we use the 4  modules for next analysis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# {-}{-}{-}{-} (2) tbl\_graph {-}\textgreater{} adjacency matrix {-}{-}{-}{-}}
+\CommentTok{\# \textasciigrave{}get\_graph\_adjacency()\textasciigrave{} recovers the weighted adjacency matrix from a tbl\_graph,}
+\CommentTok{\# which is the format expected by build\_graph\_from\_consensus().}
+\NormalTok{adj\_cor   }\OtherTok{\textless{}{-}} \FunctionTok{get\_graph\_adjacency}\NormalTok{(g\_cor)}
+\NormalTok{adj\_wgcna }\OtherTok{\textless{}{-}} \FunctionTok{get\_graph\_adjacency}\NormalTok{(g\_wgcna)}
+\NormalTok{adj\_hmisc }\OtherTok{\textless{}{-}} \FunctionTok{get\_graph\_adjacency}\NormalTok{(g\_hmisc)}
+
+\CommentTok{\# Bundle the per{-}method matrices into a named list. The names ("cor", "wgcna",}
+\CommentTok{\# "hmisc") are kept as method labels in subsequent reports.}
+\NormalTok{adj\_list }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\AttributeTok{cor =}\NormalTok{ adj\_cor, }\AttributeTok{wgcna =}\NormalTok{ adj\_wgcna, }\AttributeTok{hmisc =}\NormalTok{ adj\_hmisc)}
+
+\CommentTok{\# {-}{-}{-}{-} (3) Consensus fusion {-}{-}{-}{-}}
+\CommentTok{\# Borda rank fusion: ranks every pair by |w| in each method, averages the ranks,}
+\CommentTok{\# then min{-}max rescales to [{-}1, 1]. Robust to across{-}method weight{-}scale differences.}
+\NormalTok{g\_borda }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_consensus}\NormalTok{(}
+  \AttributeTok{adj\_list              =}\NormalTok{ adj\_list,}
+  \AttributeTok{method                =} \StringTok{"rank\_fusion"}\NormalTok{,}
+  \AttributeTok{rank\_fusion\_algorithm =} \StringTok{"borda"}\NormalTok{,}
+  \AttributeTok{threshold             =} \FloatTok{0.5}\NormalTok{,        }\CommentTok{\# final |w| cutoff applied to the fused matrix}
+  \AttributeTok{top\_modules           =} \DecValTok{5}\NormalTok{,}
+  \AttributeTok{seed                  =} \DecValTok{1}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The max module in network is 3 we use the 3  modules for next analysis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g\_borda}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 8 nodes and 8 edges
+## #
+## # An undirected simple graph with 3 components
+## #
+## # Node Data: 8 x 7 (active)
+##   name   modularity modularity2 modularity3 Modularity Degree Strength
+##   <chr>  <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl>
+## 1 ASV_6  1          1           1           1               3     2.33
+## 2 ASV_10 1          1           1           1               3     2.33
+## 3 ASV_2  1          1           1           1               3     2.33
+## 4 ASV_17 1          1           1           1               3     2.33
+## 5 ASV_36 2          2           2           2               1     1   
+## 6 ASV_38 2          2           2           2               1     1   
+## 7 ASV_33 3          3           3           3               1     1   
+## 8 ASV_37 3          3           3           3               1     1   
+## #
+## # Edge Data: 8 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1     1     2  0.667       0.667 Positive      
+## 2     1     3  0.667       0.667 Positive      
+## 3     1     4  1           1     Positive      
+## # i 5 more rows
 \end{verbatim}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -993,22 +1353,29 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{out }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView\_RMT}\NormalTok{(}\AttributeTok{mat =}\NormalTok{ otu\_rare\_relative, }
-                     \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{, }
-                     \AttributeTok{method =} \StringTok{"WGCNA"}\NormalTok{, }
-                     \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
-                     \AttributeTok{unfold.method =} \StringTok{"gaussian"}\NormalTok{,}
-                     \AttributeTok{bandwidth =} \StringTok{"nrd0"}\NormalTok{,}
-                     \AttributeTok{nr.fit.points =} \DecValTok{20}\NormalTok{,}
-                     \AttributeTok{discard.outliers =} \ConstantTok{TRUE}\NormalTok{,}
-                     \AttributeTok{discard.zeros =} \ConstantTok{TRUE}\NormalTok{,}
-                     \AttributeTok{min.mat.dim =} \DecValTok{40}\NormalTok{,}
-                     \AttributeTok{max.ev.spacing =} \DecValTok{3}\NormalTok{,}
-                     \AttributeTok{save\_plots =} \ConstantTok{FALSE}\NormalTok{,}
-                     \AttributeTok{out\_dir =} \StringTok{"RMT\_plots"}\NormalTok{,}
-                     \AttributeTok{verbose =} \ConstantTok{TRUE}\NormalTok{,}
-                     \AttributeTok{seed =} \DecValTok{1115}
-\NormalTok{                     )}
+\CommentTok{\# {-}{-}{-}{-} RMT threshold scan \#1: WGCNA correlation backend {-}{-}{-}{-}}
+\CommentTok{\# \textasciigrave{}ggNetView\_RMT()\textasciigrave{} scans a series of candidate |r| thresholds, builds the}
+\CommentTok{\# thresholded correlation matrix at each, computes its eigenvalue spacing}
+\CommentTok{\# distribution (NNSD), and picks the threshold at which the NNSD transitions}
+\CommentTok{\# from Gaussian Orthogonal Ensemble (signal + noise) to Poisson (noise{-}free,}
+\CommentTok{\# modular network) — this is the RMT{-}recommended cutoff.}
+\NormalTok{out }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView\_RMT}\NormalTok{(}
+  \AttributeTok{mat              =}\NormalTok{ otu\_rare\_relative, }\CommentTok{\# input matrix (variables x samples)}
+  \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{,            }\CommentTok{\# already relative{-}abundance, no extra transform}
+  \AttributeTok{method           =} \StringTok{"WGCNA"}\NormalTok{,           }\CommentTok{\# use WGCNA::corAndPvalue for correlation}
+  \AttributeTok{cor.method       =} \StringTok{"pearson"}\NormalTok{,         }\CommentTok{\# Pearson correlation}
+  \AttributeTok{unfold.method    =} \StringTok{"gaussian"}\NormalTok{,        }\CommentTok{\# Gaussian KDE unfolding of eigenvalues}
+  \AttributeTok{bandwidth        =} \StringTok{"nrd0"}\NormalTok{,            }\CommentTok{\# KDE bandwidth rule (stats::density default)}
+  \AttributeTok{nr.fit.points    =} \DecValTok{20}\NormalTok{,                }\CommentTok{\# support points (only used if unfold.method = "spline")}
+  \AttributeTok{discard.outliers =} \ConstantTok{TRUE}\NormalTok{,              }\CommentTok{\# IQR{-}trim extreme eigenvalues before unfolding}
+  \AttributeTok{discard.zeros    =} \ConstantTok{TRUE}\NormalTok{,              }\CommentTok{\# drop all{-}zero rows/cols after thresholding}
+  \AttributeTok{min.mat.dim      =} \DecValTok{40}\NormalTok{,                }\CommentTok{\# early{-}stop if effective dim drops below 40}
+  \AttributeTok{max.ev.spacing   =} \DecValTok{3}\NormalTok{,                 }\CommentTok{\# truncate NNSD tail at spacing = 3}
+  \AttributeTok{save\_plots       =} \ConstantTok{FALSE}\NormalTok{,             }\CommentTok{\# don\textquotesingle{}t write diagnostic PNGs to disk}
+  \AttributeTok{out\_dir          =} \StringTok{"RMT\_plots"}\NormalTok{,       }\CommentTok{\# (only used when save\_plots = TRUE)}
+  \AttributeTok{verbose          =} \ConstantTok{TRUE}\NormalTok{,              }\CommentTok{\# print scan progress to console}
+  \AttributeTok{seed             =} \DecValTok{1115}               \CommentTok{\# fix RNG for reproducibility}
+\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1017,7 +1384,7 @@ Example data
 \end{verbatim}
 
 \begin{verbatim}
-## [Info] #non-zeros: 8173831 | Sparseness: 0.0000
+## [Info] #non-zeros: 8173751 | Sparseness: 0.0000
 \end{verbatim}
 
 \begin{verbatim}
@@ -1434,6 +1801,7 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# The chosen threshold to feed downstream into build\_graph\_from\_mat(r.threshold = ...)}
 \NormalTok{out}\SpecialCharTok{$}\NormalTok{chosen\_threshold}
 \end{Highlighting}
 \end{Shaded}
@@ -1444,22 +1812,27 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{out2 }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView\_RMT}\NormalTok{(}\AttributeTok{mat =}\NormalTok{ otu\_rare\_relative, }
-                     \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{, }
-                     \AttributeTok{method =} \StringTok{"cor"}\NormalTok{, }
-                     \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
-                     \AttributeTok{unfold.method =} \StringTok{"gaussian"}\NormalTok{,}
-                     \AttributeTok{bandwidth =} \StringTok{"nrd0"}\NormalTok{,}
-                     \AttributeTok{nr.fit.points =} \DecValTok{20}\NormalTok{,}
-                     \AttributeTok{discard.outliers =} \ConstantTok{TRUE}\NormalTok{,}
-                     \AttributeTok{discard.zeros =} \ConstantTok{TRUE}\NormalTok{,}
-                     \AttributeTok{min.mat.dim =} \DecValTok{40}\NormalTok{,}
-                     \AttributeTok{max.ev.spacing =} \DecValTok{3}\NormalTok{,}
-                     \AttributeTok{save\_plots =} \ConstantTok{FALSE}\NormalTok{,}
-                     \AttributeTok{out\_dir =} \StringTok{"RMT\_plots"}\NormalTok{,}
-                     \AttributeTok{verbose =} \ConstantTok{TRUE}\NormalTok{,}
-                     \AttributeTok{seed =} \DecValTok{1115}
-\NormalTok{                     )}
+\CommentTok{\# {-}{-}{-}{-} RMT threshold scan \#2: plain \textasciigrave{}cor()\textasciigrave{} backend for comparison {-}{-}{-}{-}}
+\CommentTok{\# Same parameters as \textasciigrave{}out\textasciigrave{} above, but with \textasciigrave{}method = "cor"\textasciigrave{} (base stats::cor /}
+\CommentTok{\# psych::corr.test) instead of WGCNA. Useful as a sanity check — the chosen}
+\CommentTok{\# threshold should be very close across the two backends}
+\NormalTok{out2 }\OtherTok{\textless{}{-}} \FunctionTok{ggNetView\_RMT}\NormalTok{(}
+  \AttributeTok{mat              =}\NormalTok{ otu\_rare\_relative,}
+  \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{,}
+  \AttributeTok{method           =} \StringTok{"cor"}\NormalTok{,             }\CommentTok{\# \textless{}{-}{-} only difference vs. \textasciigrave{}out\textasciigrave{}}
+  \AttributeTok{cor.method       =} \StringTok{"pearson"}\NormalTok{,}
+  \AttributeTok{unfold.method    =} \StringTok{"gaussian"}\NormalTok{,}
+  \AttributeTok{bandwidth        =} \StringTok{"nrd0"}\NormalTok{,}
+  \AttributeTok{nr.fit.points    =} \DecValTok{20}\NormalTok{,}
+  \AttributeTok{discard.outliers =} \ConstantTok{TRUE}\NormalTok{,}
+  \AttributeTok{discard.zeros    =} \ConstantTok{TRUE}\NormalTok{,}
+  \AttributeTok{min.mat.dim      =} \DecValTok{40}\NormalTok{,}
+  \AttributeTok{max.ev.spacing   =} \DecValTok{3}\NormalTok{,}
+  \AttributeTok{save\_plots       =} \ConstantTok{FALSE}\NormalTok{,}
+  \AttributeTok{out\_dir          =} \StringTok{"RMT\_plots"}\NormalTok{,}
+  \AttributeTok{verbose          =} \ConstantTok{TRUE}\NormalTok{,}
+  \AttributeTok{seed             =} \DecValTok{1115}
+\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1885,6 +2258,7 @@ Example data
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Compare with out$chosen\_threshold — they should be in the same neighborhood.}
 \NormalTok{out2}\SpecialCharTok{$}\NormalTok{chosen\_threshold}
 \end{Highlighting}
 \end{Shaded}
@@ -1901,20 +2275,26 @@ Build graph object
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# {-}{-}{-}{-} Construct the tidygraph network using the RMT{-}selected r threshold {-}{-}{-}{-}}
+\CommentTok{\# Replaces the usual subjective r{-}cutoff (e.g. 0.6–0.85) with the data{-}driven}
+\CommentTok{\# value \textasciigrave{}out$chosen\_threshold\textasciigrave{} returned above.}
 \NormalTok{graph\_obj }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_mat}\NormalTok{(}
-  \AttributeTok{mat =}\NormalTok{ otu\_rare\_relative,}
-  \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{, }\CommentTok{\#  based your input data}
-  \AttributeTok{r.threshold =}\NormalTok{ out}\SpecialCharTok{$}\NormalTok{chosen\_threshold,}
-  \AttributeTok{p.threshold =} \FloatTok{0.05}\NormalTok{,}
-  \AttributeTok{method =} \StringTok{"WGCNA"}\NormalTok{,}
-  \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
-  \AttributeTok{proc =} \StringTok{"Bonferroni"}\NormalTok{,}
-  \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
-  \AttributeTok{node\_annotation =}\NormalTok{ tax\_tab,}
-  \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
-  \AttributeTok{seed =} \DecValTok{1115}
+  \AttributeTok{mat              =}\NormalTok{ otu\_rare\_relative,      }\CommentTok{\# variable x sample matrix}
+  \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{,                 }\CommentTok{\# match the transform used for RMT scan}
+  \AttributeTok{r.threshold      =}\NormalTok{ out}\SpecialCharTok{$}\NormalTok{chosen\_threshold,   }\CommentTok{\# RMT{-}derived |r| cutoff (objective)}
+  \AttributeTok{p.threshold      =} \FloatTok{0.05}\NormalTok{,                   }\CommentTok{\# significance cutoff on adjusted p{-}values}
+  \AttributeTok{method           =} \StringTok{"WGCNA"}\NormalTok{,                }\CommentTok{\# correlation backend (must match RMT scan)}
+  \AttributeTok{cor.method       =} \StringTok{"pearson"}\NormalTok{,              }\CommentTok{\# correlation type}
+  \AttributeTok{proc             =} \StringTok{"bonferroni"}\NormalTok{,           }\CommentTok{\# multiple{-}testing correction for p{-}values}
+  \AttributeTok{module.method    =} \StringTok{"Fast\_greedy"}\NormalTok{,          }\CommentTok{\# community detection algorithm}
+  \AttributeTok{node\_annotation  =}\NormalTok{ tax\_tab,                }\CommentTok{\# taxonomy joined onto each node (by name)}
+  \AttributeTok{top\_modules      =} \DecValTok{15}\NormalTok{,                     }\CommentTok{\# keep top{-}15 modules; smaller ones {-}\textgreater{} "Others"}
+  \AttributeTok{seed             =} \DecValTok{1115}                    \CommentTok{\# reproducibility}
 \NormalTok{)}
 
+
+\CommentTok{\# Print to inspect node/edge counts and the columns now available on nodes}
+\CommentTok{\# (modularity, modularity2, modularity3, Modularity, Degree, Strength + taxonomy)}
 \NormalTok{graph\_obj}
 \end{Highlighting}
 \end{Shaded}
@@ -2044,7 +2424,7 @@ Build graph object
   \AttributeTok{p.threshold =} \FloatTok{0.05}\NormalTok{,}
   \AttributeTok{method =} \StringTok{"WGCNA"}\NormalTok{,}
   \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
-  \AttributeTok{proc =} \StringTok{"Bonferroni"}\NormalTok{,}
+  \AttributeTok{proc =} \StringTok{"bonferroni"}\NormalTok{,}
   \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
   \AttributeTok{node\_annotation =}\NormalTok{ tax\_tab,}
   \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
@@ -2784,7 +3164,7 @@ Build graph object
   \AttributeTok{p.threshold =} \FloatTok{0.05}\NormalTok{,}
   \AttributeTok{method =} \StringTok{"WGCNA"}\NormalTok{,}
   \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,}
-  \AttributeTok{proc =} \StringTok{"Bonferroni"}\NormalTok{,}
+  \AttributeTok{proc =} \StringTok{"bonferroni"}\NormalTok{,}
   \AttributeTok{module.method =} \StringTok{"Fast\_greedy"}\NormalTok{,}
   \AttributeTok{node\_annotation =}\NormalTok{ tax\_tab,}
   \AttributeTok{top\_modules =} \DecValTok{15}\NormalTok{,}
@@ -4108,7 +4488,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-37-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-42-1} \end{center}
 
 \section{Fruchterman--Reingold force-directed layout}\label{fruchtermanreingold-force-directed-layout}
 
@@ -4128,7 +4508,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-38-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-43-1} \end{center}
 
 \section{Diamond layout}\label{diamond-layout}
 
@@ -4148,7 +4528,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-39-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-44-1} \end{center}
 
 \section{Kk layout}\label{kk-layout}
 
@@ -4168,7 +4548,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-40-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-45-1} \end{center}
 
 \section{Nicley layout}\label{nicley-layout}
 
@@ -4183,12 +4563,66 @@ Build graph object
   \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
   \AttributeTok{fill.by =} \StringTok{"Modularity"}
 \NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{verbatim}
+## Warning in ggNetView(graph_obj = graph_obj, layout = "nicely", center = F, :
+## `layout.module = 'adjacent'` failed at k_nn = 12; retrying with k_nn = 32.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in ggNetView(graph_obj = graph_obj, layout = "nicely", center = F, :
+## `layout.module = 'adjacent'` failed at k_nn = 32; retrying with k_nn = 52.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in ggNetView(graph_obj = graph_obj, layout = "nicely", center = F, :
+## `layout.module = 'adjacent'` failed at k_nn = 52; retrying with k_nn = 72.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in ggNetView(graph_obj = graph_obj, layout = "nicely", center = F, :
+## `layout.module = 'adjacent'` failed at k_nn = 72; retrying with k_nn = 92.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in ggNetView(graph_obj = graph_obj, layout = "nicely", center = F, :
+## `layout.module = 'adjacent'` failed at k_nn = 92; retrying with k_nn = 115.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in ggNetView(graph_obj = graph_obj, layout = "nicely", center = F, :
+## `layout.module = 'adjacent'` failed at k_nn = 115; retrying with k_nn = 144.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in ggNetView(graph_obj = graph_obj, layout = "nicely", center = F, :
+## `layout.module = 'adjacent'` failed at k_nn = 144; retrying with k_nn = 180.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in ggNetView(graph_obj = graph_obj, layout = "nicely", center = F, :
+## `layout.module = 'adjacent'` failed at k_nn = 180; retrying with k_nn = 225.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in ggNetView(graph_obj = graph_obj, layout = "nicely", center = F, :
+## `layout.module = 'adjacent'` failed at k_nn = 225; retrying with k_nn = 282.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in ggNetView(graph_obj = graph_obj, layout = "nicely", center = F, :
+## `layout.module = 'adjacent'` failed at k_nn = 282; retrying with k_nn = 353.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{p}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-41-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-46-1} \end{center}
 
 \section{Petal layout}\label{petal-layout}
 
@@ -4208,7 +4642,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-42-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-47-1} \end{center}
 
 \section{Circle layout}\label{circle-layout}
 
@@ -4230,7 +4664,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-43-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-48-1} \end{center}
 
 \section{Diamond outline layout}\label{diamond-outline-layout}
 
@@ -4250,7 +4684,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-44-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-49-1} \end{center}
 
 \section{Grid layout}\label{grid-layout}
 
@@ -4270,7 +4704,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-45-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-50-1} \end{center}
 
 \section{Heart\_centered layout}\label{heart_centered-layout}
 
@@ -4290,7 +4724,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-46-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-51-1} \end{center}
 
 \section{Lgl layout}\label{lgl-layout}
 
@@ -4309,8 +4743,13 @@ Build graph object
 \end{Shaded}
 
 \begin{verbatim}
-## Warning in alg_fun(graph): At vendor/cigraph/src/layout/large_graph.c:179 : LGL
-## layout does not support disconnected graphs yet.
+## Warning in alg_fun(graph): LGL layout does not support disconnected graphs yet.
+## Source: layout/large_graph.c:179
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in ggNetView(graph_obj = graph_obj, layout = "lgl", center = F, :
+## `layout.module = 'adjacent'` failed at k_nn = 12; retrying with k_nn = 32.
 \end{verbatim}
 
 \begin{Shaded}
@@ -4319,7 +4758,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-47-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-52-1} \end{center}
 
 \section{Randomly layout}\label{randomly-layout}
 
@@ -4339,7 +4778,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-48-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-53-1} \end{center}
 
 \section{Rectangle layout}\label{rectangle-layout}
 
@@ -4359,7 +4798,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-49-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-54-1} \end{center}
 
 \section{Square layout}\label{square-layout}
 
@@ -4379,7 +4818,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-50-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-55-1} \end{center}
 
 \section{Star layout}\label{star-layout}
 
@@ -4399,7 +4838,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-51-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-56-1} \end{center}
 
 \section{Star\_concentric layout}\label{star_concentric-layout}
 
@@ -4419,7 +4858,7 @@ Build graph object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-52-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-57-1} \end{center}
 
 \section{Stress layout}\label{stress-layout}
 
@@ -4434,12 +4873,21 @@ Build graph object
   \AttributeTok{group.by =} \StringTok{"Modularity"}\NormalTok{,}
   \AttributeTok{fill.by =} \StringTok{"Modularity"}
 \NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{verbatim}
+## Warning in ggNetView(graph_obj = graph_obj, layout = "stress", center = F, :
+## `layout.module = 'adjacent'` failed at k_nn = 12; retrying with k_nn = 32.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{p}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-53-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-58-1} \end{center}
 
 \chapter{Network topology information}\label{network-topology-information}
 

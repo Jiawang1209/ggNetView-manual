@@ -39,7 +39,7 @@ graph_obj <- build_graph_from_mat(
   p.threshold = 0.05,
   method = "WGCNA",
   cor.method = "pearson",
-  proc = "Bonferroni",
+  proc = "bonferroni",
   module.method = "Fast_greedy",
   node_annotation = tax_tab,
   top_modules = 15,

@@ -30,23 +30,24 @@ library(igraph)
 ```{r}
 # Access built-in example datasets in ggNetView
 
-# Raw ASV or OTU table
+# Raw ASV/OTU abundance table (rows = ASVs/OTUs, cols = samples)
 data("otu_tab")
 dim(otu_tab)
 otu_tab[1:5, 1:5]
 
 
-# Rarefied ASV or OTU table
+# Rarefied ASV/OTU table (sequencing depth normalised by rarefaction)
 data("otu_rare")
 dim(otu_rare)
 otu_rare[1:5, 1:5]
 
-# Relative abundance table of rarefied ASVs or OTUs
+# Rarefied + converted to relative abundance — most common downstream input
 data("otu_rare_relative")
 dim(otu_rare_relative)
 otu_rare_relative[1:5, 1:5]
 
-# Taxonomic annotation table of ASVs or OTUs
+# Taxonomic annotation for the ASVs/OTUs above.
+# First column must be the ASV/OTU ID (matching rownames of the abundance tables).
 data("tax_tab")
 dim(tax_tab)
 tax_tab[1:5, 1:5]
@@ -55,20 +56,25 @@ tax_tab[1:5, 1:5]
 > Build graph object
 
 ```{r message=F}
+# Build a co-occurrence network directly from an abundance matrix.
+# Internally: (1) optional transform -> (2) correlation -> (3) p-value adjustment
+# -> (4) edge filtering -> (5) community detection -> (6) attach taxonomy.
 graph_obj <- build_graph_from_mat(
-  mat = otu_rare_relative,
-  transfrom.method = "none", #  based your input data
-  r.threshold = 0.7,
-  p.threshold = 0.05,
-  method = "WGCNA",
-  cor.method = "pearson",
-  proc = "Bonferroni",
-  module.method = "Fast_greedy",
-  node_annotation = tax_tab,
-  top_modules = 15,
-  seed = 1115
+  mat              = otu_rare_relative,  # variables x samples numeric matrix
+  transfrom.method = "none",             # input is already relative abundance
+  r.threshold      = 0.7,                # |r| cutoff (subjective; consider ggNetView_RMT)
+  p.threshold      = 0.05,               # adjusted p-value cutoff
+  method           = "WGCNA",            # correlation backend: WGCNA::corAndPvalue
+  cor.method       = "pearson",          # Pearson correlation
+  proc             = "bonferroni",       # multiple-testing correction
+  module.method    = "Fast_greedy",      # community detection algorithm
+  node_annotation  = tax_tab,            # taxonomy joined onto each node by name
+  top_modules      = 15,                 # keep top-15 modules; rest -> "Others"
+  seed             = 1115                # reproducibility
 )
 
+# Inspect node/edge counts and the columns now available on nodes:
+#   modularity, modularity2, modularity3, Modularity, Degree, Strength + taxonomy
 graph_obj
 ```
 
@@ -80,11 +86,14 @@ graph_obj
 >  Example data
 
 ```{r}
-# Access built-in example datasets in ggNetView
+# Edge-list style example data (protein-protein interactions).
 data("ppi_example")
+
+# `df`: edge list — typically 3 columns: node1 | node2 | weight (optional)
 df = ppi_example$ppi
 head(df)
 
+# `node_annotation`: per-node metadata; first column = node ID
 node_annotation = ppi_example$annotation
 head(node_annotation)
 ```
@@ -92,13 +101,15 @@ head(node_annotation)
 > Build graph object
 
 ```{r message=F}
+# Build a tbl_graph from an edge-list data.frame (no correlation step needed —
+# edges are taken as-is from `df`). Community detection still runs on the result.
 graph_obj_from_df <- build_graph_from_df(
-  df = df,
-  node_annotation = node_annotation,
-  directed = F,
-  module.method = "Fast_greedy",
-  top_modules = 15,
-  seed = 1115
+  df              = df,                # edge list
+  node_annotation = node_annotation,   # per-node metadata (joined by name)
+  directed        = F,                 # undirected network
+  module.method   = "Fast_greedy",     # community detection
+  top_modules     = 15,                # keep top-15 modules; rest -> "Others"
+  seed            = 1115
 )
 
 graph_obj_from_df
@@ -106,13 +117,15 @@ graph_obj_from_df
 
 
 ```{r message=F}
+# Same as above, but without any node annotation table.
+# Useful when you only have an edge list and no extra metadata to attach.
 graph_obj_from_df2 <- build_graph_from_df(
-  df = df,
-  node_annotation = NULL,
-  directed = F,
-  module.method = "Fast_greedy",
-  top_modules = 15,
-  seed = 1115
+  df              = df,
+  node_annotation = NULL,              # skip the annotation join entirely
+  directed        = F,
+  module.method   = "Fast_greedy",
+  top_modules     = 15,
+  seed            = 1115
 )
 
 graph_obj_from_df2
@@ -127,24 +140,30 @@ graph_obj_from_df2
 >  Example data
 
 ```{r}
-# Access built-in example datasets in ggNetView
+# Like ppi_example, but `annotation` already contains a `Modularity` column
+# (i.e. module assignments computed elsewhere — we will NOT recompute them).
 data("ppi_module")
+
 df = ppi_module$ppi
 head(df)
 
 node_annotation = ppi_module$annotation
-head(node_annotation)
+head(node_annotation)   # note: must contain a `Modularity` column
 ```
 
 > Build graph object
 
 ```{r message=F}
+# When you already have pre-computed module assignments and want to keep them
+# (e.g. from a previous WGCNA run, expert curation, biological prior),
+# use the `_module` variant — it skips internal community detection and uses
+# the Modularity column from `node_annotation` directly.
 graph_obj_from_module <- build_graph_from_module(
-  df = df,
-  node_annotation = node_annotation,
-  directed = F,
-  top_modules = 15,
-  seed = 1115
+  df              = df,
+  node_annotation = node_annotation,   # MUST contain `Modularity` column
+  directed        = F,
+  top_modules     = 15,
+  seed            = 1115
 )
 
 graph_obj_from_module
@@ -158,30 +177,34 @@ graph_obj_from_module
 >  Example data
 
 ```{r}
+# Square adjacency matrix (already-filtered weights for every node pair).
+# Useful when the network was built externally (NetCoMi, FlashWeave, ...).
 data("adjacency_matrix_example")
 dim(adjacency_matrix_example)
 adjacency_matrix_example[1:5, 1:5]
 
+# Reuse the same taxonomy table as node annotation.
 data("tax_tab")
 dim(tax_tab)
 tax_tab[1:5, 1:5]
-
 ```
 
 
 > Build graph object
 
 ```{r message=F}
+# Build a tbl_graph from a precomputed adjacency matrix.
+# Community detection is run internally (Fast_greedy here) because we have
+# weights but no module assignments yet.
 graph_obj_adj <- build_graph_from_adj_mat(
   adjacency_matrix = adjacency_matrix_example,
-  module.method = "Fast_greedy",
-  node_annotation = tax_tab,
-  top_modules = 15,
-  seed = 1115
+  module.method    = "Fast_greedy",
+  node_annotation  = tax_tab,
+  top_modules      = 15,
+  seed             = 1115
 )
 
 graph_obj_adj
-
 ```
 
 ----
@@ -189,7 +212,26 @@ graph_obj_adj
 ## Build graph from adjacency matrix with module information
 
 ```{r}
+# Add a pre-existing module assignment to the annotation table.
+# Here we just (for demonstration) treat the Kingdom column as the module label;
+# in real use, this should be your actual module assignments.
+tax_tab_module <- tax_tab %>%
+  dplyr::mutate(Modularity = Kingdom)
+```
 
+
+```{r}
+# `_module` variant for adjacency input: REQUIRES `node_annotation` to contain
+# a `Modularity` column. Skips community detection and uses your provided
+# module assignments directly.
+graph_obj_adj_module <- build_graph_from_adj_mat_module(
+  adjacency_matrix = adjacency_matrix_example,
+  node_annotation  = tax_tab_module,   # MUST contain `Modularity` column
+  top_modules      = 15,
+  seed             = 1115
+)
+
+graph_obj_adj_module
 ```
 
 
@@ -201,15 +243,20 @@ graph_obj_adj
 >  Example data
 
 ```{r}
+# Two abundance matrices on the SAME samples but DIFFERENT feature sets,
+# typically used for cross-kingdom networks (e.g. bacteria <-> fungi).
+
+# Bacterial ASV table
 data("BASV_tab")
 dim(BASV_tab)
 BASV_tab[1:5, 1:5]
 
+# Fungal ASV table
 data("FASV_tab")
 dim(FASV_tab)
 FASV_tab[1:5, 1:5]
 
-
+# Combined node annotation table covering BOTH feature sets above.
 data("double_mat_node_df")
 dim(double_mat_node_df)
 head(double_mat_node_df)
@@ -219,28 +266,152 @@ head(double_mat_node_df)
 > Build graph object
 
 ```{r}
+# Cross-domain bipartite-style network:
+# correlations are computed BETWEEN features in mat1 and features in mat2
+# (no within-mat1 / within-mat2 edges), then thresholded, modularised, joined
+# with node annotation.
 graph_obj_double_mat <- build_graph_from_double_mat(
-  mat1 = BASV_tab,
-  mat2 = FASV_tab,
-   module.method = "Fast_greedy",
+  mat1            = BASV_tab,          # set A (e.g. bacteria)
+  mat2            = FASV_tab,          # set B (e.g. fungi)
+  module.method   = "Fast_greedy",
   node_annotation = double_mat_node_df,
-  top_modules = 15,
-  seed = 1115
+  top_modules     = 15,
+  seed            = 1115
 )
 
 graph_obj_double_mat
-
 ```
 
 
 ## Build graph from igraph object
 
+```{r}
+# Load the PPI example dataset (edge list + node annotation).
+data("ppi_example")
+
+# First build a native igraph object directly from the edge list.
+# This is what users typically already have when they come from an igraph workflow.
+igraph_object <- igraph::graph_from_data_frame(
+  d        = ppi_example$ppi,          # edge list
+  vertices = ppi_example$annotation,   # vertex metadata
+  directed = FALSE
+)
+
+igraph_object
+
+# Convert an existing igraph object into a ggNetView-compatible tbl_graph.
+# Adds Modularity / Degree / Strength columns and harmonises the schema so it
+# can be plugged straight into ggNetView().
+graph_obj_from_igraph <- build_graph_from_igraph(
+  igraph        = igraph_object,
+  module.method = "Fast_greedy",
+  seed          = 1115
+)
+
+graph_obj_from_igraph
+```
+
 
 ## Build graph from WGCNA
 
+```
+# Workflow for importing an existing WGCNA pipeline output.
+# (Not evaluated here because it requires external files saved by WGCNA::blockwiseModules.)
 
+# 1. Load the topological overlap matrix (TOM) saved by WGCNA.
+load(file = "WGCNA.tom-block.1.RData")
+TOM_mat <- as.matrix(TOM)
+
+# 2. Load the abundance matrix used to build that TOM (for any downstream
+#    re-thresholding / sanity checks).
+plot.mat = readRDS(file = "plot.mat.Rds")
+
+# 3. Sparsify the TOM: keep only the top_k strongest TOM connections per node.
+#    `trans_TOM_in_WGCNA()` is a helper bundled with ggNetView for this step.
+trans_TOM <- trans_TOM_in_WGCNA(TOM_mat, plot.mat, top_k = 1)
+
+# 4. Load the WGCNA net object (contains module colour assignments).
+net <- readRDS(file = "net.Rds")
+
+# 5. Build the module table — one row per feature, columns: ID + Module.
+module <- data.frame(
+  ID     = names(net$colors),
+  Module = as.character(net$colors)
+)
+
+# 6. Optional ordering of node IDs (used as node_annotation here).
+id <- data.frame(
+  ID = names(sort(net$colors))
+)
+
+# 7. Assemble the tbl_graph: uses the sparsified TOM as edge weights and the
+#    WGCNA module colours as the Modularity assignment (no recomputation).
+obj <- build_graph_from_wgcna(
+  wgcna_tom       = trans_TOM,
+  module          = module,
+  node_annotation = id
+)
+
+obj
+```
+
+
+----
 
 ## Build graph from multi-graph 
+
+```{r}
+# Consensus network workflow:
+# (1) Build per-method networks on the SAME matrix.
+# (2) Convert each tbl_graph back to an adjacency matrix.
+# (3) Fuse the per-method adjacencies into ONE consensus tbl_graph.
+
+# Restrict to the 40 most abundant OTUs to keep this chunk responsive.
+data(otu_rare_relative)
+mat <- as.matrix(otu_rare_relative)
+mat <- mat[order(rowSums(mat), decreasing = TRUE)[seq_len(40)], ]
+
+# ---- (1) Three per-method networks on the same data ----
+# Spearman correlation through psych::corr.test — baseline.
+g_cor   <- build_graph_from_mat(mat, method = "cor",   cor.method = "spearman",
+                                proc = "BH", r.threshold = 0.4, p.threshold = 0.05,
+                                module.method = "Fast_greedy", seed = 1)
+
+# WGCNA-style correlation (WGCNA::corAndPvalue + the package's thresholding).
+g_wgcna <- build_graph_from_mat(mat, method = "WGCNA", cor.method = "spearman",
+                                proc = "BH", r.threshold = 0.4, p.threshold = 0.05,
+                                module.method = "Fast_greedy", seed = 1)
+
+# Hmisc::rcorr — yet another correlation engine, slightly different tie/NA behaviour.
+g_hmisc <- build_graph_from_mat(mat, method = "Hmisc", cor.method = "spearman",
+                                r.threshold = 0.4, p.threshold = 0.05,
+                                module.method = "Fast_greedy", seed = 1)
+
+# ---- (2) tbl_graph -> adjacency matrix ----
+# `get_graph_adjacency()` recovers the weighted adjacency matrix from a tbl_graph,
+# which is the format expected by build_graph_from_consensus().
+adj_cor   <- get_graph_adjacency(g_cor)
+adj_wgcna <- get_graph_adjacency(g_wgcna)
+adj_hmisc <- get_graph_adjacency(g_hmisc)
+
+# Bundle the per-method matrices into a named list. The names ("cor", "wgcna",
+# "hmisc") are kept as method labels in subsequent reports.
+adj_list <- list(cor = adj_cor, wgcna = adj_wgcna, hmisc = adj_hmisc)
+
+# ---- (3) Consensus fusion ----
+# Borda rank fusion: ranks every pair by |w| in each method, averages the ranks,
+# then min-max rescales to [-1, 1]. Robust to across-method weight-scale differences.
+g_borda <- build_graph_from_consensus(
+  adj_list              = adj_list,
+  method                = "rank_fusion",
+  rank_fusion_algorithm = "borda",
+  threshold             = 0.5,        # final |w| cutoff applied to the fused matrix
+  top_modules           = 5,
+  seed                  = 1
+)
+
+g_borda
+```
 
 
 ----

@@ -16,7 +16,7 @@
 <meta name="twitter:description" content='Load R Package library(tidyverse) library(ggNetView) Example data # Access built-in example datasets in ggNetView # Relative abundance table of rarefied ASVs or OTUs data("otu_rare_relative")...'>
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
@@ -66,20 +66,20 @@
 <blockquote>
 <p>Load R Package</p>
 </blockquote>
-<div class="sourceCode" id="cb321"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb342"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Jiawang1209/ggNetView">ggNetView</a></span><span class="op">)</span></span></code></pre></div>
 <blockquote>
 <p>Example data</p>
 </blockquote>
-<div class="sourceCode" id="cb322"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb343"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Access built-in example datasets in ggNetView</span></span>
 <span></span>
 <span><span class="co"># Relative abundance table of rarefied ASVs or OTUs</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"otu_rare_relative"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">otu_rare_relative</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 2859   18</code></pre>
-<div class="sourceCode" id="cb324"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb345"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">otu_rare_relative</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
 <pre><code>##              KO1        KO2        KO3        KO4        KO5
 ## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
@@ -87,12 +87,12 @@
 ## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
 ## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
 ## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667</code></pre>
-<div class="sourceCode" id="cb326"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb347"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Taxonomic annotation table of ASVs or OTUs</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"tax_tab"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">tax_tab</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 2859    8</code></pre>
-<div class="sourceCode" id="cb328"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb349"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tax_tab</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
 <pre><code>## # A tibble: 5 × 5
 ##   OTUID  Kingdom  Phylum          Class          Order            
@@ -105,7 +105,7 @@
 <blockquote>
 <p>Build graph object</p>
 </blockquote>
-<div class="sourceCode" id="cb330"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb351"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">graph_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/build_graph_from_mat.html">build_graph_from_mat</a></span><span class="op">(</span></span>
 <span>  mat <span class="op">=</span> <span class="va">otu_rare_relative</span>,</span>
 <span>  transfrom.method <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#  based your input data</span></span>
@@ -113,7 +113,7 @@
 <span>  p.threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"WGCNA"</span>,</span>
 <span>  cor.method <span class="op">=</span> <span class="st">"pearson"</span>,</span>
-<span>  proc <span class="op">=</span> <span class="st">"Bonferroni"</span>,</span>
+<span>  proc <span class="op">=</span> <span class="st">"bonferroni"</span>,</span>
 <span>  module.method <span class="op">=</span> <span class="st">"Fast_greedy"</span>,</span>
 <span>  node_annotation <span class="op">=</span> <span class="va">tax_tab</span>,</span>
 <span>  top_modules <span class="op">=</span> <span class="fl">15</span>,</span>
@@ -160,7 +160,7 @@
 <blockquote>
 <p>Select one modularity</p>
 </blockquote>
-<div class="sourceCode" id="cb332"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb353"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">module5_subgraph_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_subgraph.html">get_subgraph</a></span><span class="op">(</span>graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
 <span>                                      select_module <span class="op">=</span> <span class="st">"5"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##    Module Number
@@ -180,13 +180,13 @@
 ## 14     11      4
 ## 15     15      4
 ## 16 Others     39</code></pre>
-<div class="sourceCode" id="cb334"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb355"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">module5_subgraph_info</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] "list"</code></pre>
-<div class="sourceCode" id="cb336"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb357"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">module5_subgraph_info</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] "sub_graph_all"    "stat_module"      "sub_graph_select"</code></pre>
-<div class="sourceCode" id="cb338"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb359"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">module5_subgraph_info</span><span class="op">$</span><span class="va">stat_module</span></span></code></pre></div>
 <pre><code>##    Module Number
 ## 1       5     31
@@ -205,7 +205,7 @@
 ## 14     11      4
 ## 15     15      4
 ## 16 Others     39</code></pre>
-<div class="sourceCode" id="cb340"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb361"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">module5_subgraph_info</span><span class="op">$</span><span class="va">sub_graph_all</span></span></code></pre></div>
 <pre><code>## $`5`
 ## # A tbl_graph: 31 nodes and 330 edges
@@ -648,7 +648,7 @@
 ## 2     3     4  0.987       0.987 Positive      
 ## 3     1     6  0.958       0.958 Positive      
 ## # ℹ 31 more rows</code></pre>
-<div class="sourceCode" id="cb342"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb363"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">module5_subgraph_info</span><span class="op">$</span><span class="va">sub_graph_select</span></span></code></pre></div>
 <pre><code>## # A tbl_graph: 31 nodes and 330 edges
 ## #
@@ -681,7 +681,7 @@
 <blockquote>
 <p>Select multi-modularity</p>
 </blockquote>
-<div class="sourceCode" id="cb344"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb365"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">module5_2_8_subgraph_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_subgraph.html">get_subgraph</a></span><span class="op">(</span>graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
 <span>                                      select_module <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"5"</span>,<span class="st">"2"</span>,<span class="st">"8"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##    Module Number
@@ -701,13 +701,13 @@
 ## 14     11      4
 ## 15     15      4
 ## 16 Others     39</code></pre>
-<div class="sourceCode" id="cb346"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb367"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">module5_2_8_subgraph_info</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] "list"</code></pre>
-<div class="sourceCode" id="cb348"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb369"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">module5_2_8_subgraph_info</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] "sub_graph_all"    "stat_module"      "sub_graph_select"</code></pre>
-<div class="sourceCode" id="cb350"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb371"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">module5_2_8_subgraph_info</span><span class="op">$</span><span class="va">stat_module</span></span></code></pre></div>
 <pre><code>##    Module Number
 ## 1       5     31
@@ -726,7 +726,7 @@
 ## 14     11      4
 ## 15     15      4
 ## 16 Others     39</code></pre>
-<div class="sourceCode" id="cb352"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb373"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">module5_2_8_subgraph_info</span><span class="op">$</span><span class="va">sub_graph_all</span></span></code></pre></div>
 <pre><code>## $`5`
 ## # A tbl_graph: 31 nodes and 330 edges
@@ -1169,7 +1169,7 @@
 ## 2     3     4  0.987       0.987 Positive      
 ## 3     1     6  0.958       0.958 Positive      
 ## # ℹ 31 more rows</code></pre>
-<div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb375"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">module5_2_8_subgraph_info</span><span class="op">$</span><span class="va">sub_graph_select</span></span></code></pre></div>
 <pre><code>## # A tbl_graph: 77 nodes and 582 edges
 ## #
@@ -1235,7 +1235,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-01-12.</p>
+    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-05-13.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

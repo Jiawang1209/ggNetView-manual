@@ -43,47 +43,60 @@ tax_tab[1:5, 1:5]
 
 
 ```{r}
-out <- ggNetView_RMT(mat = otu_rare_relative, 
-                     transfrom.method = "none", 
-                     method = "WGCNA", 
-                     cor.method = "pearson",
-                     unfold.method = "gaussian",
-                     bandwidth = "nrd0",
-                     nr.fit.points = 20,
-                     discard.outliers = TRUE,
-                     discard.zeros = TRUE,
-                     min.mat.dim = 40,
-                     max.ev.spacing = 3,
-                     save_plots = FALSE,
-                     out_dir = "RMT_plots",
-                     verbose = TRUE,
-                     seed = 1115
-                     )
+# ---- RMT threshold scan #1: WGCNA correlation backend ----
+# `ggNetView_RMT()` scans a series of candidate |r| thresholds, builds the
+# thresholded correlation matrix at each, computes its eigenvalue spacing
+# distribution (NNSD), and picks the threshold at which the NNSD transitions
+# from Gaussian Orthogonal Ensemble (signal + noise) to Poisson (noise-free,
+# modular network) — this is the RMT-recommended cutoff.
+out <- ggNetView_RMT(
+  mat              = otu_rare_relative, # input matrix (variables x samples)
+  transfrom.method = "none",            # already relative-abundance, no extra transform
+  method           = "WGCNA",           # use WGCNA::corAndPvalue for correlation
+  cor.method       = "pearson",         # Pearson correlation
+  unfold.method    = "gaussian",        # Gaussian KDE unfolding of eigenvalues
+  bandwidth        = "nrd0",            # KDE bandwidth rule (stats::density default)
+  nr.fit.points    = 20,                # support points (only used if unfold.method = "spline")
+  discard.outliers = TRUE,              # IQR-trim extreme eigenvalues before unfolding
+  discard.zeros    = TRUE,              # drop all-zero rows/cols after thresholding
+  min.mat.dim      = 40,                # early-stop if effective dim drops below 40
+  max.ev.spacing   = 3,                 # truncate NNSD tail at spacing = 3
+  save_plots       = FALSE,             # don't write diagnostic PNGs to disk
+  out_dir          = "RMT_plots",       # (only used when save_plots = TRUE)
+  verbose          = TRUE,              # print scan progress to console
+  seed             = 1115               # fix RNG for reproducibility
+)
 
+# The chosen threshold to feed downstream into build_graph_from_mat(r.threshold = ...)
 out$chosen_threshold
 ```
 
 
 
 ```{r}
-out2 <- ggNetView_RMT(mat = otu_rare_relative, 
-                     transfrom.method = "none", 
-                     method = "cor", 
-                     cor.method = "pearson",
-                     unfold.method = "gaussian",
-                     bandwidth = "nrd0",
-                     nr.fit.points = 20,
-                     discard.outliers = TRUE,
-                     discard.zeros = TRUE,
-                     min.mat.dim = 40,
-                     max.ev.spacing = 3,
-                     save_plots = FALSE,
-                     out_dir = "RMT_plots",
-                     verbose = TRUE,
-                     seed = 1115
-                     )
+# ---- RMT threshold scan #2: plain `cor()` backend for comparison ----
+# Same parameters as `out` above, but with `method = "cor"` (base stats::cor /
+# psych::corr.test) instead of WGCNA. Useful as a sanity check — the chosen
+# threshold should be very close across the two backends
+out2 <- ggNetView_RMT(
+  mat              = otu_rare_relative,
+  transfrom.method = "none",
+  method           = "cor",             # <-- only difference vs. `out`
+  cor.method       = "pearson",
+  unfold.method    = "gaussian",
+  bandwidth        = "nrd0",
+  nr.fit.points    = 20,
+  discard.outliers = TRUE,
+  discard.zeros    = TRUE,
+  min.mat.dim      = 40,
+  max.ev.spacing   = 3,
+  save_plots       = FALSE,
+  out_dir          = "RMT_plots",
+  verbose          = TRUE,
+  seed             = 1115
+)
 
-
+# Compare with out$chosen_threshold — they should be in the same neighborhood.
 out2$chosen_threshold
 ```
 
@@ -94,20 +107,26 @@ out2$chosen_threshold
 > Build graph object
 
 ```{r message=F}
+# ---- Construct the tidygraph network using the RMT-selected r threshold ----
+# Replaces the usual subjective r-cutoff (e.g. 0.6–0.85) with the data-driven
+# value `out$chosen_threshold` returned above.
 graph_obj <- build_graph_from_mat(
-  mat = otu_rare_relative,
-  transfrom.method = "none", #  based your input data
-  r.threshold = out$chosen_threshold,
-  p.threshold = 0.05,
-  method = "WGCNA",
-  cor.method = "pearson",
-  proc = "Bonferroni",
-  module.method = "Fast_greedy",
-  node_annotation = tax_tab,
-  top_modules = 15,
-  seed = 1115
+  mat              = otu_rare_relative,      # variable x sample matrix
+  transfrom.method = "none",                 # match the transform used for RMT scan
+  r.threshold      = out$chosen_threshold,   # RMT-derived |r| cutoff (objective)
+  p.threshold      = 0.05,                   # significance cutoff on adjusted p-values
+  method           = "WGCNA",                # correlation backend (must match RMT scan)
+  cor.method       = "pearson",              # correlation type
+  proc             = "bonferroni",           # multiple-testing correction for p-values
+  module.method    = "Fast_greedy",          # community detection algorithm
+  node_annotation  = tax_tab,                # taxonomy joined onto each node (by name)
+  top_modules      = 15,                     # keep top-15 modules; smaller ones -> "Others"
+  seed             = 1115                    # reproducibility
 )
 
+
+# Print to inspect node/edge counts and the columns now available on nodes
+# (modularity, modularity2, modularity3, Modularity, Degree, Strength + taxonomy)
 graph_obj
 ```
 

@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="When a numerical matrix is used as input, it is necessary to filter and screen the resulting correlation matrix. Empirical thresholds are commonly adopted, usually between 0.6 to 0.85; however,...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
@@ -76,7 +76,7 @@
 <blockquote>
 <p>Load R Package</p>
 </blockquote>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Jiawang1209/ggNetView">ggNetView</a></span><span class="op">)</span></span></code></pre></div>
 <hr>
@@ -88,14 +88,14 @@
 <blockquote>
 <p>Example data</p>
 </blockquote>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Access built-in example datasets in ggNetView</span></span>
 <span></span>
 <span><span class="co"># Relative abundance table of rarefied ASVs or OTUs</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"otu_rare_relative"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">otu_rare_relative</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 2859   18</code></pre>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">otu_rare_relative</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
 <pre><code>##              KO1        KO2        KO3        KO4        KO5
 ## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
@@ -103,12 +103,12 @@
 ## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
 ## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
 ## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667</code></pre>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Taxonomic annotation table of ASVs or OTUs</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"tax_tab"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">tax_tab</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 2859    8</code></pre>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tax_tab</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
 <pre><code>## # A tibble: 5 × 5
 ##   OTUID  Kingdom  Phylum          Class          Order            
@@ -123,25 +123,32 @@
 <h2>
 <span class="header-section-number">3.3</span> Compute RMT threshold<a class="anchor" aria-label="anchor" href="#compute-rmt-threshold"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView_RMT.html">ggNetView_RMT</a></span><span class="op">(</span>mat <span class="op">=</span> <span class="va">otu_rare_relative</span>, </span>
-<span>                     transfrom.method <span class="op">=</span> <span class="st">"none"</span>, </span>
-<span>                     method <span class="op">=</span> <span class="st">"WGCNA"</span>, </span>
-<span>                     cor.method <span class="op">=</span> <span class="st">"pearson"</span>,</span>
-<span>                     unfold.method <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
-<span>                     bandwidth <span class="op">=</span> <span class="st">"nrd0"</span>,</span>
-<span>                     nr.fit.points <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>                     discard.outliers <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                     discard.zeros <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                     min.mat.dim <span class="op">=</span> <span class="fl">40</span>,</span>
-<span>                     max.ev.spacing <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>                     save_plots <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                     out_dir <span class="op">=</span> <span class="st">"RMT_plots"</span>,</span>
-<span>                     verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                     seed <span class="op">=</span> <span class="fl">1115</span></span>
-<span>                     <span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- RMT threshold scan #1: WGCNA correlation backend ----</span></span>
+<span><span class="co"># `ggNetView_RMT()` scans a series of candidate |r| thresholds, builds the</span></span>
+<span><span class="co"># thresholded correlation matrix at each, computes its eigenvalue spacing</span></span>
+<span><span class="co"># distribution (NNSD), and picks the threshold at which the NNSD transitions</span></span>
+<span><span class="co"># from Gaussian Orthogonal Ensemble (signal + noise) to Poisson (noise-free,</span></span>
+<span><span class="co"># modular network) — this is the RMT-recommended cutoff.</span></span>
+<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView_RMT.html">ggNetView_RMT</a></span><span class="op">(</span></span>
+<span>  mat              <span class="op">=</span> <span class="va">otu_rare_relative</span>, <span class="co"># input matrix (variables x samples)</span></span>
+<span>  transfrom.method <span class="op">=</span> <span class="st">"none"</span>,            <span class="co"># already relative-abundance, no extra transform</span></span>
+<span>  method           <span class="op">=</span> <span class="st">"WGCNA"</span>,           <span class="co"># use WGCNA::corAndPvalue for correlation</span></span>
+<span>  cor.method       <span class="op">=</span> <span class="st">"pearson"</span>,         <span class="co"># Pearson correlation</span></span>
+<span>  unfold.method    <span class="op">=</span> <span class="st">"gaussian"</span>,        <span class="co"># Gaussian KDE unfolding of eigenvalues</span></span>
+<span>  bandwidth        <span class="op">=</span> <span class="st">"nrd0"</span>,            <span class="co"># KDE bandwidth rule (stats::density default)</span></span>
+<span>  nr.fit.points    <span class="op">=</span> <span class="fl">20</span>,                <span class="co"># support points (only used if unfold.method = "spline")</span></span>
+<span>  discard.outliers <span class="op">=</span> <span class="cn">TRUE</span>,              <span class="co"># IQR-trim extreme eigenvalues before unfolding</span></span>
+<span>  discard.zeros    <span class="op">=</span> <span class="cn">TRUE</span>,              <span class="co"># drop all-zero rows/cols after thresholding</span></span>
+<span>  min.mat.dim      <span class="op">=</span> <span class="fl">40</span>,                <span class="co"># early-stop if effective dim drops below 40</span></span>
+<span>  max.ev.spacing   <span class="op">=</span> <span class="fl">3</span>,                 <span class="co"># truncate NNSD tail at spacing = 3</span></span>
+<span>  save_plots       <span class="op">=</span> <span class="cn">FALSE</span>,             <span class="co"># don't write diagnostic PNGs to disk</span></span>
+<span>  out_dir          <span class="op">=</span> <span class="st">"RMT_plots"</span>,       <span class="co"># (only used when save_plots = TRUE)</span></span>
+<span>  verbose          <span class="op">=</span> <span class="cn">TRUE</span>,              <span class="co"># print scan progress to console</span></span>
+<span>  seed             <span class="op">=</span> <span class="fl">1115</span>               <span class="co"># fix RNG for reproducibility</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [Info] Matrix dimension: 2859 x 2859</code></pre>
-<pre><code>## [Info] #non-zeros: 8173831 | Sparseness: 0.0000</code></pre>
+<pre><code>## [Info] #non-zeros: 8173751 | Sparseness: 0.0000</code></pre>
 <pre><code>##   [Scan]   1/51 | threshold = 0</code></pre>
 <pre><code>##          Effective dimension: 2859</code></pre>
 <pre><code>##   [Scan]   2/51 | threshold = 0.02</code></pre>
@@ -245,26 +252,32 @@
 <pre><code>##   [Scan]  51/51 | threshold = 1</code></pre>
 <pre><code>##          Effective dimension: 2</code></pre>
 <pre><code>##          Too small. Stop scanning.</code></pre>
-<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out</span><span class="op">$</span><span class="va">chosen_threshold</span></span></code></pre></div>
+<div class="sourceCode" id="cb199"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># The chosen threshold to feed downstream into build_graph_from_mat(r.threshold = ...)</span></span>
+<span><span class="va">out</span><span class="op">$</span><span class="va">chosen_threshold</span></span></code></pre></div>
 <pre><code>## [1] 0.82</code></pre>
-<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView_RMT.html">ggNetView_RMT</a></span><span class="op">(</span>mat <span class="op">=</span> <span class="va">otu_rare_relative</span>, </span>
-<span>                     transfrom.method <span class="op">=</span> <span class="st">"none"</span>, </span>
-<span>                     method <span class="op">=</span> <span class="st">"cor"</span>, </span>
-<span>                     cor.method <span class="op">=</span> <span class="st">"pearson"</span>,</span>
-<span>                     unfold.method <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
-<span>                     bandwidth <span class="op">=</span> <span class="st">"nrd0"</span>,</span>
-<span>                     nr.fit.points <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>                     discard.outliers <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                     discard.zeros <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                     min.mat.dim <span class="op">=</span> <span class="fl">40</span>,</span>
-<span>                     max.ev.spacing <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>                     save_plots <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                     out_dir <span class="op">=</span> <span class="st">"RMT_plots"</span>,</span>
-<span>                     verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                     seed <span class="op">=</span> <span class="fl">1115</span></span>
-<span>                     <span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb201"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- RMT threshold scan #2: plain `cor()` backend for comparison ----</span></span>
+<span><span class="co"># Same parameters as `out` above, but with `method = "cor"` (base stats::cor /</span></span>
+<span><span class="co"># psych::corr.test) instead of WGCNA. Useful as a sanity check — the chosen</span></span>
+<span><span class="co"># threshold should be very close across the two backends</span></span>
+<span><span class="va">out2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView_RMT.html">ggNetView_RMT</a></span><span class="op">(</span></span>
+<span>  mat              <span class="op">=</span> <span class="va">otu_rare_relative</span>,</span>
+<span>  transfrom.method <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  method           <span class="op">=</span> <span class="st">"cor"</span>,             <span class="co"># &lt;-- only difference vs. `out`</span></span>
+<span>  cor.method       <span class="op">=</span> <span class="st">"pearson"</span>,</span>
+<span>  unfold.method    <span class="op">=</span> <span class="st">"gaussian"</span>,</span>
+<span>  bandwidth        <span class="op">=</span> <span class="st">"nrd0"</span>,</span>
+<span>  nr.fit.points    <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  discard.outliers <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  discard.zeros    <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  min.mat.dim      <span class="op">=</span> <span class="fl">40</span>,</span>
+<span>  max.ev.spacing   <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  save_plots       <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  out_dir          <span class="op">=</span> <span class="st">"RMT_plots"</span>,</span>
+<span>  verbose          <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed             <span class="op">=</span> <span class="fl">1115</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [Info] Matrix dimension: 2859 x 2859</code></pre>
 <pre><code>## [Info] #non-zeros: 8173761 | Sparseness: 0.0000</code></pre>
 <pre><code>##   [Scan]   1/51 | threshold = 0</code></pre>
@@ -370,8 +383,9 @@
 <pre><code>##   [Scan]  51/51 | threshold = 1</code></pre>
 <pre><code>##          Effective dimension: 10</code></pre>
 <pre><code>##          Too small. Stop scanning.</code></pre>
-<div class="sourceCode" id="cb286"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out2</span><span class="op">$</span><span class="va">chosen_threshold</span></span></code></pre></div>
+<div class="sourceCode" id="cb307"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Compare with out$chosen_threshold — they should be in the same neighborhood.</span></span>
+<span><span class="va">out2</span><span class="op">$</span><span class="va">chosen_threshold</span></span></code></pre></div>
 <pre><code>## [1] 0.82</code></pre>
 </div>
 <div id="build-graph-from-matrix-based-on-rmt-threshold" class="section level2" number="3.4">
@@ -381,21 +395,27 @@
 <blockquote>
 <p>Build graph object</p>
 </blockquote>
-<div class="sourceCode" id="cb288"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">graph_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/build_graph_from_mat.html">build_graph_from_mat</a></span><span class="op">(</span></span>
-<span>  mat <span class="op">=</span> <span class="va">otu_rare_relative</span>,</span>
-<span>  transfrom.method <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#  based your input data</span></span>
-<span>  r.threshold <span class="op">=</span> <span class="va">out</span><span class="op">$</span><span class="va">chosen_threshold</span>,</span>
-<span>  p.threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"WGCNA"</span>,</span>
-<span>  cor.method <span class="op">=</span> <span class="st">"pearson"</span>,</span>
-<span>  proc <span class="op">=</span> <span class="st">"Bonferroni"</span>,</span>
-<span>  module.method <span class="op">=</span> <span class="st">"Fast_greedy"</span>,</span>
-<span>  node_annotation <span class="op">=</span> <span class="va">tax_tab</span>,</span>
-<span>  top_modules <span class="op">=</span> <span class="fl">15</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">1115</span></span>
+<div class="sourceCode" id="cb309"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Construct the tidygraph network using the RMT-selected r threshold ----</span></span>
+<span><span class="co"># Replaces the usual subjective r-cutoff (e.g. 0.6–0.85) with the data-driven</span></span>
+<span><span class="co"># value `out$chosen_threshold` returned above.</span></span>
+<span><span class="va">graph_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/build_graph_from_mat.html">build_graph_from_mat</a></span><span class="op">(</span></span>
+<span>  mat              <span class="op">=</span> <span class="va">otu_rare_relative</span>,      <span class="co"># variable x sample matrix</span></span>
+<span>  transfrom.method <span class="op">=</span> <span class="st">"none"</span>,                 <span class="co"># match the transform used for RMT scan</span></span>
+<span>  r.threshold      <span class="op">=</span> <span class="va">out</span><span class="op">$</span><span class="va">chosen_threshold</span>,   <span class="co"># RMT-derived |r| cutoff (objective)</span></span>
+<span>  p.threshold      <span class="op">=</span> <span class="fl">0.05</span>,                   <span class="co"># significance cutoff on adjusted p-values</span></span>
+<span>  method           <span class="op">=</span> <span class="st">"WGCNA"</span>,                <span class="co"># correlation backend (must match RMT scan)</span></span>
+<span>  cor.method       <span class="op">=</span> <span class="st">"pearson"</span>,              <span class="co"># correlation type</span></span>
+<span>  proc             <span class="op">=</span> <span class="st">"bonferroni"</span>,           <span class="co"># multiple-testing correction for p-values</span></span>
+<span>  module.method    <span class="op">=</span> <span class="st">"Fast_greedy"</span>,          <span class="co"># community detection algorithm</span></span>
+<span>  node_annotation  <span class="op">=</span> <span class="va">tax_tab</span>,                <span class="co"># taxonomy joined onto each node (by name)</span></span>
+<span>  top_modules      <span class="op">=</span> <span class="fl">15</span>,                     <span class="co"># keep top-15 modules; smaller ones -&gt; "Others"</span></span>
+<span>  seed             <span class="op">=</span> <span class="fl">1115</span>                    <span class="co"># reproducibility</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span></span>
+<span><span class="co"># Print to inspect node/edge counts and the columns now available on nodes</span></span>
+<span><span class="co"># (modularity, modularity2, modularity3, Modularity, Degree, Strength + taxonomy)</span></span>
 <span><span class="va">graph_obj</span></span></code></pre></div>
 <pre><code>## # A tbl_graph: 213 nodes and 844 edges
 ## #
@@ -455,7 +475,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-01-12.</p>
+    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-05-13.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
