@@ -8,22 +8,22 @@
 
 
 ```{r warning=F, message=F}
-library(tidyverse)
-library(ggNetView)
+library(tidyverse)   # data manipulation / piping utilities
+library(ggNetView)   # graph builders + info-extraction helpers
 ```
 
 
 >  Example data
 
 ```{r}
-# Access built-in example datasets in ggNetView
+# ---- Built-in example datasets ----
 
-# Relative abundance table of rarefied ASVs or OTUs
+# Relative abundance table of rarefied ASVs/OTUs (rows = ASVs, cols = samples).
 data("otu_rare_relative")
 dim(otu_rare_relative)
 otu_rare_relative[1:5, 1:5]
 
-# Taxonomic annotation table of ASVs or OTUs
+# Taxonomic annotation; first column must be the ASV/OTU ID.
 data("tax_tab")
 dim(tax_tab)
 tax_tab[1:5, 1:5]
@@ -32,18 +32,19 @@ tax_tab[1:5, 1:5]
 > Build graph object
 
 ```{r message=F}
+# ---- Build a co-occurrence network as the input for downstream queries ----
 graph_obj <- build_graph_from_mat(
-  mat = otu_rare_relative,
-  transfrom.method = "none", #  based your input data
-  r.threshold = 0.7,
-  p.threshold = 0.05,
-  method = "WGCNA",
-  cor.method = "pearson",
-  proc = "bonferroni",
-  module.method = "Fast_greedy",
-  node_annotation = tax_tab,
-  top_modules = 15,
-  seed = 1115
+  mat              = otu_rare_relative,  # variables x samples numeric matrix
+  transfrom.method = "none",             # input already relative abundance, no extra transform
+  r.threshold      = 0.7,                # |r| cutoff for keeping an edge
+  p.threshold      = 0.05,               # adjusted p-value cutoff
+  method           = "WGCNA",            # correlation backend: WGCNA::corAndPvalue
+  cor.method       = "pearson",          # Pearson correlation
+  proc             = "bonferroni",       # multiple-testing correction
+  module.method    = "Fast_greedy",      # community detection algorithm
+  node_annotation  = tax_tab,            # taxonomy joined onto each node by name
+  top_modules      = 15,                 # keep top-15 modules; rest -> "Others"
+  seed             = 1115                # fix RNG for reproducibility
 )
 
 graph_obj
@@ -54,51 +55,98 @@ graph_obj
 ## Full-network information
 
 ```{r}
+# ---- Retrieve node-level and edge-level info for the FULL graph ----
+# Returns a list with `node_info` and `edge_info` tibbles.
 graph_obj_info <- get_info_from_graph(graph_obj = graph_obj)
 
-# return a list 
-class(graph_obj_info)
+class(graph_obj_info)         # "list"
 
-names(graph_obj_info)
+names(graph_obj_info)         # "node_info", "edge_info"
 
+graph_obj_info$node_info      # per-node attributes: name, Modularity, Degree, Strength, taxonomy, ...
 
-graph_obj_info$node_info
-
-graph_obj_info$edge_info
-
+graph_obj_info$edge_info      # per-edge attributes: from, to, weight, ...
 ```
 
 
 ## Sub-network (modularity) information
 
 ```{r}
-subgraph_info <- get_subgraph(graph_obj = graph_obj,
-                              select_module = NULL)
+# ---- Split the graph by `Modularity` (one subgraph per module) ----
+# `select_module = NULL` -> no merged subgraph; only per-module split + stats.
+subgraph_info <- get_subgraph(
+  graph_obj     = graph_obj,   # input tbl_graph (must have a `Modularity` column on nodes)
+  select_module = NULL         # NULL -> don't build a merged subgraph
+)
 
+class(subgraph_info)          # "list"
 
-# return a list 
-class(subgraph_info)
-
-names(subgraph_info)
+names(subgraph_info)          # "sub_graph_all", "stat_module", "sub_graph_select"
 ```
 
 ```{r}
+# Per-module node counts (data.frame with columns: Module, Number).
 subgraph_info$stat_module
-
-
-subgraph_info$sub_graph_all
-
-
-subgraph_info$sub_graph_select
 ```
 
+> We select modulerity 5
+
+```{r}
+# ---- Build a merged subgraph for a chosen module ----
+# `select_module = "5"` keeps nodes whose Modularity == "5"
+# (and the edges between them) in `sub_graph_select`.
+graph_module5 <- get_subgraph(
+  graph_obj     = graph_obj,
+  select_module = "5"          # character vector of module labels to retain
+)
+```
+
+
+```{r}
+# ---- Inspect the module-5 subgraph using the same info helper ----
+graph_obj_info <- get_info_from_graph(
+  graph_obj = graph_module5$sub_graph_select   # the merged tbl_graph for module 5
+)
+
+class(graph_obj_info)         # "list"
+
+names(graph_obj_info)         # "node_info", "edge_info"
+
+graph_obj_info$node_info      # nodes belonging to module 5
+
+graph_obj_info$edge_info      # edges between module-5 nodes
+```
 
 
 
 ## Sub-network (sample) information
 
+```{r}
+# ---- Extract sample-level subgraphs ------------------------------------
+# For each sample (column of `mat`), an OTU is treated as "present" when
+# its abundance is > `min_abundance` (default 0). The induced subgraph of
+# `graph_obj` on those present OTUs is returned per sample. With
+# `select_sample` + `combine`, a single merged subgraph is also returned.
+res <- get_sample_subgraph(
+  graph_obj     = graph_obj,                        # the network built above
+  mat           = otu_rare_relative,                # same matrix used to judge "presence" (rownames must match node names)
+  select_sample = colnames(otu_rare_relative)[1:3], # sample IDs to merge into one subgraph (here: first 3 samples)
+  combine       = "union"                           # "union" = OTUs present in ANY selected sample; "intersect" = OTUs present in ALL
+)
+names(res)   # "sub_graph_all", "stat_sample", "sub_graph_select"
+```
 
 
 
+```{r}
+# ---- Inspect the merged 3-sample subgraph ----
+res$sub_graph_select   # tbl_graph: nodes = union/intersect of present OTUs across the 3 samples
+
+graph_obj_info <- get_info_from_graph(graph_obj = res$sub_graph_select)
+
+graph_obj_info$node_info   # node attributes + n_present_samples / present_in_samples columns
+
+graph_obj_info$edge_info   # induced edges between surviving nodes
+```
 
 

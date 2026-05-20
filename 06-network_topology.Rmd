@@ -1,15 +1,10 @@
 # Network topology information
 
 
-
-
 ## Get network topology information
 
 
-
-
 ## Get network topology information with matrix
-
 
 
 ## Get network topology information by parallel
@@ -17,3 +12,5 @@
 
 ## Get network topology information with matrix by parallel
 
+
+## Integrated Value of Influence (IVI)

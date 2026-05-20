@@ -14,12 +14,15 @@ library(ggNetView)
 ```{r}
 # Access built-in example datasets in ggNetView
 
-# Relative abundance table of rarefied ASVs or OTUs
+# ---- Dataset 1: Relative abundance table of rarefied ASVs/OTUs ----
+# Rows = ASVs/OTUs (features / variables), Columns = samples
 data("otu_rare_relative")
-dim(otu_rare_relative)
-otu_rare_relative[1:5, 1:5]
+dim(otu_rare_relative)  # Check matrix dimensions: n_features x n_samples 
+otu_rare_relative[1:5, 1:5] # Preview first 5 rows x 5 cols to confirm data layout
 
-# Taxonomic annotation table of ASVs or OTUs
+# ---- Dataset 2: Taxonomic annotation table for ASVs/OTUs ----
+# Rows = ASVs/OTUs (row names should match the abundance table above)
+# Columns = taxonomic ranks (Kingdom ~ Species, etc.)
 data("tax_tab")
 dim(tax_tab)
 tax_tab[1:5, 1:5]
@@ -28,21 +31,27 @@ tax_tab[1:5, 1:5]
 > Build graph object
 
 ```{r message=F}
+# Build a correlation-based graph object (tbl_graph) from the abundance matrix.
+# This graph object is the foundation for downstream subgraph extraction,
+# layout computation, and visualization.
+
 graph_obj <- build_graph_from_mat(
-  mat = otu_rare_relative,
-  transfrom.method = "none", #  based your input data
-  r.threshold = 0.7,
-  p.threshold = 0.05,
-  method = "WGCNA",
-  cor.method = "pearson",
-  proc = "bonferroni",
-  module.method = "Fast_greedy",
-  node_annotation = tax_tab,
-  top_modules = 15,
-  seed = 1115
+  mat              = otu_rare_relative, # Input matrix: features (rows) x samples (cols)
+  transfrom.method = "none",            # Data transformation before correlation;  Other options: "scale" / "center" / "log2" / "log10" / "ln" / "rrarefy" / "rrarefy_relative"
+  r.threshold      = 0.7,               # Correlation cutoff: keep edges only if |r| >= 0.7
+  p.threshold      = 0.05,              # Significance cutoff: keep edges only if p < 0.05
+  method           = "WGCNA",           # Association method: Other options: "SpiecEasi" / "SPARCC" / "cor" / "Hmisc"
+  cor.method       = "pearson",         # Correlation type: Pearson (also: "spearman" / "kendall")
+  proc             = "bonferroni",      # Multiple-testing correction for p-values.
+                                        # Other options: "BH" / "fdr" / "holm" / "hochberg" / ...
+  module.method    = "Fast_greedy",     # Community / module detection algorithm.  Other options: "Walktrap" / "Edge_betweenness" / "Spinglass"
+  node_annotation  = tax_tab,           # Node metadata (taxonomy) attached to each node
+  top_modules      = 15,                # Keep only the top 15 largest modules for downstream use
+  seed             = 1115               # Random seed for reproducible module detection
 )
 
-graph_obj
+graph_obj                               # Print the graph object: node/edge counts and attributes
+
 ```
 
 
@@ -53,10 +62,17 @@ graph_obj
 > Select one modularity
 
 ```{r}
+# Extract the subgraph corresponding to module "5".
+# Internally, get_subgraph():
+#   1) splits all nodes by the `Modularity` attribute,
+#   2) builds one subgraph per module and stores them in `sub_graph_all`,
+#   3) if `select_module` is provided, also returns `sub_graph_select`
+#      (the graph filtered to those modules via tidygraph::filter),
+#   4) returns `stat_module`: a table of node counts per module across the full graph.
 module5_subgraph_info <- get_subgraph(graph_obj = graph_obj,
                                       select_module = "5")
 
-class(module5_subgraph_info)
+class(module5_subgraph_info) 
 
 names(module5_subgraph_info)
 ```
@@ -64,19 +80,23 @@ names(module5_subgraph_info)
 
 
 ```{r}
-module5_subgraph_info$stat_module
+module5_subgraph_info$stat_module       # Per-module node count summary (Module, Number)
 
-module5_subgraph_info$sub_graph_all
+# module5_subgraph_info$sub_graph_all     # Named list of tbl_graphs, one per module
 
-module5_subgraph_info$sub_graph_select
+module5_subgraph_info$sub_graph_select  # Single tbl_graph containing only module "5"
 ```
 
 
 > Select multi-modularity
 
 ```{r}
-module5_2_8_subgraph_info <- get_subgraph(graph_obj = graph_obj,
-                                      select_module = c("5","2","8"))
+# Extract a combined subgraph for multiple modules at once (modules 5, 2, and 8).
+# `sub_graph_select` will contain all nodes from these three modules
+# plus the edges among them.
+module5_2_8_subgraph_info <- get_subgraph(
+  graph_obj     = graph_obj,
+  select_module = c("5","2","8"))  # Multiple module IDs
 
 class(module5_2_8_subgraph_info)
 
@@ -86,13 +106,83 @@ names(module5_2_8_subgraph_info)
 
 
 ```{r}
-module5_2_8_subgraph_info$stat_module
+module5_2_8_subgraph_info$stat_module      # Global module stats (same as before; not affected by selection)
 
-module5_2_8_subgraph_info$sub_graph_all
+# module5_2_8_subgraph_info$sub_graph_all    # Full per-module subgraph list (unchanged)
 
-module5_2_8_subgraph_info$sub_graph_select
+module5_2_8_subgraph_info$sub_graph_select # Combined subgraph filtered to modules 5, 2, and 8
 ```
 
 
 ## Extract subgraph by sample
+
+```{r}
+# ---- Load example datasets shipped with ggNetView ----------------------
+# Relative-abundance table of rarefied ASVs/OTUs (rows = features, cols = samples)
+
+data("otu_rare_relative")
+# Taxonomic annotation table for those ASVs/OTUs (used as node metadata)
+data("tax_tab")
+
+# ---- Build the correlation-based network -------------------------------
+# This produces a tbl_graph that downstream subgraph / layout / plotting
+# functions all consume.
+graph_obj <- build_graph_from_mat(
+  mat              = otu_rare_relative, # Feature-by-sample matrix
+  transfrom.method = "none",            # No transform: input is already relative abundance
+  r.threshold      = 0.7,               # Keep edges with |r| >= 0.7
+  p.threshold      = 0.05,              # Keep edges with p < 0.05
+  method           = "WGCNA",           # WGCNA correlation + p-values
+  cor.method       = "pearson",         # Pearson correlation
+  proc             = "bonferroni",      # Bonferroni multiple-testing correction
+  module.method    = "Fast_greedy",     # Community detection algorithm
+  node_annotation  = tax_tab,           # Attach taxonomy to each node
+  top_modules      = 15,                # Keep the 15 largest modules
+  seed             = 1115               # Reproducible module assignment
+)
+
+graph_obj
+```
+
+### select subgraph by sample name
+
+```{r}
+# ---- Extract sample-level subgraphs ------------------------------------
+# For each sample (column of `mat`), an OTU is treated as "present" when
+# its abundance is > `min_abundance` (default 0). The induced subgraph of
+# `graph_obj` on those present OTUs is returned per sample. With
+# `select_sample` + `combine`, a single merged subgraph is also returned.
+res <- get_sample_subgraph(
+  graph_obj     = graph_obj,                       # The network built above
+  mat           = otu_rare_relative,               # Same matrix used to judge "presence"
+  select_sample = colnames(otu_rare_relative)[1:3],# Merge the first 3 samples
+  combine       = "union"                          # Keep OTUs present in ANY of the 3 samples (use "intersect" for OTUs present in ALL)
+)
+
+class(res)
+
+names(res)
+```
+
+
+
+
+```{r}
+# ---- Inspect outputs ---------------------------------------------------
+# Per-sample summary table: Sample / Node / Edge / Status.
+# Includes every sample in `mat`, even those whose subgraph is empty.
+res$stat_sample
+
+# Merged subgraph for the 3 selected samples (a single tbl_graph).
+# Its node table carries two extra columns:
+#   - n_present_samples : how many of the 3 selected samples a node appears in
+#   - present_in_samples: comma-separated sample IDs, ordered by `select_sample`
+res$sub_graph_select
+
+
+# detail information
+res$sub_graph_select %>% 
+  tidygraph::activate(., "nodes") %>%
+  tibble::as_tibble()
+```
 
