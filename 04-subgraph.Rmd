@@ -4,8 +4,8 @@
 
 
 ```{r warning=F, message=F}
-library(tidyverse)
-library(ggNetView)
+library(tidyverse)   # data manipulation / piping utilities
+library(ggNetView)   # graph builders + info-extraction helpers
 ```
 
 

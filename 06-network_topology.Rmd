@@ -1,16 +1,236 @@
 # Network topology information
 
+> Load R Package
+
+
+```{r warning=F, message=F}
+library(tidyverse)   # data manipulation / piping utilities
+library(ggNetView)   # graph builders + info-extraction helpers
+```
+
+
+>  Example data
+
+```{r}
+# Access built-in example datasets in ggNetView
+
+# ---- Dataset 1: Relative abundance table of rarefied ASVs/OTUs ----
+# Rows = ASVs/OTUs (features / variables), Columns = samples
+data("otu_rare_relative")
+dim(otu_rare_relative)  # Check matrix dimensions: n_features x n_samples 
+otu_rare_relative[1:5, 1:5] # Preview first 5 rows x 5 cols to confirm data layout
+
+# ---- Dataset 2: Taxonomic annotation table for ASVs/OTUs ----
+# Rows = ASVs/OTUs (row names should match the abundance table above)
+# Columns = taxonomic ranks (Kingdom ~ Species, etc.)
+data("tax_tab")
+dim(tax_tab)
+tax_tab[1:5, 1:5]
+```
+
+> Build graph object
+
+```{r}
+# ---- Build a co-occurrence network from an abundance matrix ----
+# Internal pipeline: transform -> correlation -> p-value adjustment ->
+# edge filtering -> community detection -> attach taxonomy.
+graph_obj <- build_graph_from_mat(
+  mat              = otu_rare_relative,  # variables x samples numeric matrix
+  transfrom.method = "none",             # input already relative abundance, no extra transform
+  method           = "WGCNA",            # correlation backend: WGCNA::corAndPvalue
+  proc             = "bonferroni",       # multiple-testing correction
+  r.threshold      = 0.7,                # |r| cutoff for keeping an edge
+  p.threshold      = 0.05,               # adjusted p-value cutoff
+  node_annotation  = tax_tab,            # taxonomy joined onto each node by name
+  top_modules      = 15,                 # keep top-15 modules; rest -> "Others"
+  seed             = 1115                # fix RNG for reproducibility
+)
+
+graph_obj   # tbl_graph with Modularity / Degree / Strength + taxonomy columns
+```
+
 
 ## Get network topology information
 
+> when `mat = NULL`
+
+```{r}
+# ---- Compute network topology + robustness for a single graph ----
+# When `mat = NULL`, the function still computes all *purely topological*
+# metrics from the igraph object, but the following fields are returned as NA
+# because they require the original abundance matrix:
+#
+#   * Cohension_Positive  - needs per-ASV mean abundance to weight positive r
+#   * Cohension_Negative  - needs per-ASV mean abundance to weight negative r
+#   * Robustness_weight   - abundance-weighted node-removal bootstrap (needs sp.ra)
+#   * Robustness_unweight - tied to the same `mat` branch in the code, so also NA
+#   * Stability           - mean of the two Robustness_* fields, so also NA
+#   * out$Robustness      - the whole 5%-100% removal curve is NA (mean/sd/se)
+#
+# All other fields (Node, Edge, Degree, Distance, Diameter, Density,
+# Transitivity_global/local, Betweenness, Betweenness_edge, Closeness,
+# Eigen_centrality, Modularity, K_core_mean/max/min, Network_efficiency,
+# Network_info.centrality, Vulenrability) are computed normally from `graph_obj`.
+topology_out <- get_network_topology(
+  graph_obj        = graph_obj,   # input tbl_graph (required)
+  mat              = NULL,        # raw abundance matrix; NULL -> skip cohesion + robustness
+  transfrom.method = "none",      # pre-correlation transform (ignored when mat = NULL)
+  method           = "WGCNA",     # correlation backend used to rebuild network.raw from `mat`
+  proc             = "bonferroni",# multiple-testing correction for p-values (used with `mat`)
+  r.threshold      = 0.7,         # |r| cutoff applied when rebuilding network.raw from `mat`
+  p.threshold      = 0.05,        # adjusted p-value cutoff applied when rebuilding network.raw
+  bootstrap        = 100          # # of random ER networks for `Random_nerwork` column;
+                                  # also # of bootstrap iterations for robustness (only when mat != NULL)
+)
+
+class(topology_out)
+
+names(topology_out)
+
+topology_out
+```
 
 ## Get network topology information with matrix
+
+> When a matrix is passed to `mat`, all topology properties are computed.
+
+```{r}
+# ---- Compute the FULL set of network topology + robustness metrics ----
+# When `mat` is provided, the function recomputes the thresholded correlation
+# matrix from `mat` (used as `network.raw`) and ALL topology fields are
+# returned with real values - including the ones that are NA when mat = NULL:
+#   Cohension_Positive / Cohension_Negative
+#   Robustness_weight  / Robustness_unweight
+#   Stability
+#   out$Robustness     (the 5%-100% node-removal curve)
+topology_with_mat <- get_network_topology(
+  graph_obj        = graph_obj,         # input tbl_graph (required)
+  mat              = otu_rare_relative, # raw abundance matrix used to derive sp.ra and rebuild network.raw
+  transfrom.method = "none",            # pre-correlation transform on `mat`; "none" = keep as-is
+  method           = "WGCNA",           # correlation backend: WGCNA::corAndPvalue
+  proc             = "bonferroni",      # multiple-testing correction
+  r.threshold      = 0.7,               # |r| cutoff for keeping an edge in network.raw
+  p.threshold      = 0.05,              # adjusted p-value cutoff for keeping an edge
+  bootstrap        = 100                # # of bootstrap iterations for robustness AND # of random ER networks for the Random_nerwork column
+)
+
+
+topology_with_mat
+```
+
+
+## Get network topology information from sample 
+
+```{r}
+# ---- Per-sample subgraph topology -------------------------------------------
+# Step 1: split `graph_obj` into per-sample subgraphs by the abundance matrix
+#         (an OTU is "present" in a sample when its abundance > min_abundance).
+# Step 2: run the full `get_network_topology()` pipeline on EACH sample subgraph.
+# When `mat` is supplied, every topology field (including cohesion, robustness,
+# stability) is computed for each sample.
+t3_group <- system.time(
+  topology_from_sample <- get_sample_subgraph_topology(
+    graph_obj        = graph_obj,         # input tbl_graph (the full network)
+    mat              = otu_rare_relative, # abundance matrix used for both presence-call AND cohesion/robustness
+    transfrom.method = "none",            # pre-correlation transform on `mat`; "none" = keep as-is
+    method           = "WGCNA",           # correlation backend: WGCNA::corAndPvalue
+    cor.method       = "pearson",         # Pearson correlation
+    proc             = "bonferroni",      # multiple-testing correction 
+    bootstrap        = 100                # # of bootstrap iterations for robustness; also # of random ER nets for reference
+  )
+)
+
+topology_from_sample   # one topology table per sample, plus per-sample robustness curves
+```
+
+
+
 
 
 ## Get network topology information by parallel
 
+```{r}
+# ---- Same as get_network_topology(), but with parallel execution ------------
+# Useful when `bootstrap` is large (the random-ER-network reference loop is
+# the main bottleneck) or when running on `graph_obj_list` of many networks.
+# With `mat = NULL`, cohesion / robustness / stability fields are NA - see
+# get_network_topology() docs for the full list of skipped metrics.
+t4 <- system.time(
+  topology_parallel <- get_network_topology_parallel(
+    graph_obj        = graph_obj,
+    mat              = NULL,           # no abundance matrix -> cohesion + robustness = NA
+    transfrom.method = "none",         # ignored when mat = NULL
+    method           = "WGCNA",        # ignored when mat = NULL (no correlation rebuild)
+    cor.method       = "pearson",      # ignored when mat = NULL
+    proc             = "bonferroni",   # ignored when mat = NULL
+    bootstrap        = 100,            # # of random ER networks for the Random_nerwork column
+    parallel         = TRUE,           # enable parallel backend
+    n_workers        = 2               # # of parallel workers (keep <= cores; 2 is safe under R CMD check)
+  )
+)
+
+topology_parallel
+```
 
 ## Get network topology information with matrix by parallel
 
+```{r}
+# ---- Parallel + abundance matrix -> FULL topology panel ---------------------
+# Same as above, but `mat` is now provided, so every topology field gets a
+# real value (cohesion, robustness, stability included).
+t5 <- system.time(
+  topology_parallel_with_mat <- get_network_topology_parallel(
+    graph_obj        = graph_obj,
+    mat              = otu_rare_relative, # abundance matrix -> enables cohesion + robustness
+    transfrom.method = "none",            # pre-correlation transform on `mat`
+    method           = "WGCNA",           # correlation backend used to rebuild network.raw from `mat`
+    cor.method       = "pearson",         # Pearson correlation
+    proc             = "bonferroni",      # multiple-testing correction
+    bootstrap        = 100,               # bootstrap iterations for robustness + # of random ER reference nets
+    parallel         = TRUE,              # enable parallel backend
+    n_workers        = 2                  # # of parallel workers
+  )
+)
+
+topology_parallel_with_mat
+```
+
+
+
+
+
+
+
 
 ## Integrated Value of Influence (IVI)
+
+```{r}
+# ---- Compute IVI (Salavaty et al. 2020) per node ----------------------------
+# IVI integrates 6 centrality measures across 3 scales (local / semi-local /
+# global) into a single robust influence score. Thin wrapper over
+# influential::ivi() — that package must be installed.
+obj_aug <- get_node_ivi(
+  graph_obj = graph_obj,   # input tbl_graph
+  weights   = NULL,        # NULL = unweighted IVI; pass "weight" to use the graph's `weight` edge attribute
+  mode      = "all",       # edge mode; "all" is the right choice for undirected graphs
+  directed  = FALSE,       # treat the graph as undirected
+  d         = 3,           # search radius for the collective-influence component (paper recommends 3)
+  scale     = "z-scale",   # "range" [1,100] for single-network view, "z-scale" for cross-network / thresholding (z > 1.645), "none" for raw
+  ncores    = 1            # parallel cores for the cluster-rank step; 1 is the safe default
+)
+
+
+obj_aug         # tbl_graph with one extra node column: IVI
+
+
+class(obj_aug)  # still a tbl_graph - all other vertex/edge columns are preserved
+
+
+# ---- Top-10 most influential nodes ------------------------------------------
+# Activate the node table, convert to tibble, sort by IVI descending, take 10.
+obj_aug %>%
+  tidygraph::activate(nodes) %>%
+  tidygraph::as_tibble() %>%
+  dplyr::arrange(desc(IVI)) %>%
+  dplyr::slice_head(n = 10)
+```
