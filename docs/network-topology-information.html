@@ -1,278 +1,103 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html lang="en">
 <head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 7 Network topology information | ggNetView manual documentation</title>
-  <meta name="description" content="This book serves as a systematic user guide for the R package ggNetView. It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization." />
-  <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
-
-  <meta property="og:title" content="Chapter 7 Network topology information | ggNetView manual documentation" />
-  <meta property="og:type" content="book" />
-  
-  <meta property="og:description" content="This book serves as a systematic user guide for the R package ggNetView. It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization." />
-  <meta name="github-repo" content="Jiawang1209/ggNetView-manual" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 7 Network topology information | ggNetView manual documentation" />
-  
-  <meta name="twitter:description" content="This book serves as a systematic user guide for the R package ggNetView. It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization." />
-  
-
-<meta name="author" content="Yue Liu" />
-
-
-<meta name="date" content="2026-05-20" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  
-  
-<link rel="prev" href="network-layout.html"/>
-<link rel="next" href="network-comparison.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-
-
-<style type="text/css">
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-<style type="text/css">
-  
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-</style>
-
-<link rel="stylesheet" href="style.css" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 7 Network topology information | ggNetView manual documentation</title>
+<meta name="author" content="Yue Liu">
+<meta name="description" content="Load R Package library(tidyverse)  # data manipulation / piping utilities library(ggNetView)  # graph builders + info-extraction helpers Example data # Access built-in example datasets in...">
+<meta name="generator" content="bookdown 0.45 with bs4_book()">
+<meta property="og:title" content="Chapter 7 Network topology information | ggNetView manual documentation">
+<meta property="og:type" content="book">
+<meta property="og:description" content="Load R Package library(tidyverse)  # data manipulation / piping utilities library(ggNetView)  # graph builders + info-extraction helpers Example data # Access built-in example datasets in...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 7 Network topology information | ggNetView manual documentation">
+<meta name="twitter:description" content="Load R Package library(tidyverse)  # data manipulation / piping utilities library(ggNetView)  # graph builders + info-extraction helpers Example data # Access built-in example datasets in...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.11.0/transition.js"></script><script src="libs/bs3compat-0.11.0/tabs.js"></script><script src="libs/bs3compat-0.11.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">ggNetView-manial</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> ggNetView manual documentation</a>
-<ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#introdution"><i class="fa fa-check"></i><b>1.1</b> Introdution</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.2</b> Installation</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i><b>1.3</b> Citation</a></li>
-<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#source-code"><i class="fa fa-check"></i><b>1.4</b> Source Code</a></li>
-<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#contact"><i class="fa fa-check"></i><b>1.5</b> Contact</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="build-graph-object.html"><a href="build-graph-object.html"><i class="fa fa-check"></i><b>2</b> Build graph object</a>
-<ul>
-<li class="chapter" data-level="2.1" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-matrix"><i class="fa fa-check"></i><b>2.1</b> Build graph from matrix</a></li>
-<li class="chapter" data-level="2.2" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-data-frame"><i class="fa fa-check"></i><b>2.2</b> Build graph from data frame</a></li>
-<li class="chapter" data-level="2.3" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-data-frame-with-module"><i class="fa fa-check"></i><b>2.3</b> Build graph from data frame with module</a></li>
-<li class="chapter" data-level="2.4" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-adjacency-matrix"><i class="fa fa-check"></i><b>2.4</b> Build graph from adjacency matrix</a></li>
-<li class="chapter" data-level="2.5" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-adjacency-matrix-with-module-information"><i class="fa fa-check"></i><b>2.5</b> Build graph from adjacency matrix with module information</a></li>
-<li class="chapter" data-level="2.6" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-double-matrix"><i class="fa fa-check"></i><b>2.6</b> Build graph from double matrix</a></li>
-<li class="chapter" data-level="2.7" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-igraph-object"><i class="fa fa-check"></i><b>2.7</b> Build graph from igraph object</a></li>
-<li class="chapter" data-level="2.8" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-wgcna"><i class="fa fa-check"></i><b>2.8</b> Build graph from WGCNA</a></li>
-<li class="chapter" data-level="2.9" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-multi-graph"><i class="fa fa-check"></i><b>2.9</b> Build graph from multi-graph</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="random-matrix-theory-rmtbased-random-network.html"><a href="random-matrix-theory-rmtbased-random-network.html"><i class="fa fa-check"></i><b>3</b> Random Matrix Theory (RMT)–based random network</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="random-matrix-theory-rmtbased-random-network.html"><a href="random-matrix-theory-rmtbased-random-network.html#random-matrix-theory-rmt"><i class="fa fa-check"></i><b>3.1</b> Random Matrix Theory (RMT)</a></li>
-<li class="chapter" data-level="3.2" data-path="random-matrix-theory-rmtbased-random-network.html"><a href="random-matrix-theory-rmtbased-random-network.html#example-data"><i class="fa fa-check"></i><b>3.2</b> Example data</a></li>
-<li class="chapter" data-level="3.3" data-path="random-matrix-theory-rmtbased-random-network.html"><a href="random-matrix-theory-rmtbased-random-network.html#compute-rmt-threshold"><i class="fa fa-check"></i><b>3.3</b> Compute RMT threshold</a></li>
-<li class="chapter" data-level="3.4" data-path="random-matrix-theory-rmtbased-random-network.html"><a href="random-matrix-theory-rmtbased-random-network.html#build-graph-from-matrix-based-on-rmt-threshold"><i class="fa fa-check"></i><b>3.4</b> Build graph from matrix based on RMT-threshold</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="get-network-information.html"><a href="get-network-information.html"><i class="fa fa-check"></i><b>4</b> Get network information</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="get-network-information.html"><a href="get-network-information.html#full-network-information"><i class="fa fa-check"></i><b>4.1</b> Full-network information</a></li>
-<li class="chapter" data-level="4.2" data-path="get-network-information.html"><a href="get-network-information.html#sub-network-modularity-information"><i class="fa fa-check"></i><b>4.2</b> Sub-network (modularity) information</a></li>
-<li class="chapter" data-level="4.3" data-path="get-network-information.html"><a href="get-network-information.html#sub-network-sample-information"><i class="fa fa-check"></i><b>4.3</b> Sub-network (sample) information</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="extract-subgraph.html"><a href="extract-subgraph.html"><i class="fa fa-check"></i><b>5</b> Extract subgraph</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="extract-subgraph.html"><a href="extract-subgraph.html#extract-subgraph-by-module"><i class="fa fa-check"></i><b>5.1</b> Extract subgraph by module</a>
-<ul>
-<li class="chapter" data-level="5.1.1" data-path="extract-subgraph.html"><a href="extract-subgraph.html#select-subgraph-by-modularity"><i class="fa fa-check"></i><b>5.1.1</b> select subgraph by modularity</a></li>
-</ul></li>
-<li class="chapter" data-level="5.2" data-path="extract-subgraph.html"><a href="extract-subgraph.html#extract-subgraph-by-sample"><i class="fa fa-check"></i><b>5.2</b> Extract subgraph by sample</a>
-<ul>
-<li class="chapter" data-level="5.2.1" data-path="extract-subgraph.html"><a href="extract-subgraph.html#select-subgraph-by-sample-name"><i class="fa fa-check"></i><b>5.2.1</b> select subgraph by sample name</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="network-layout.html"><a href="network-layout.html"><i class="fa fa-check"></i><b>6</b> Network layout</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="network-layout.html"><a href="network-layout.html#full-graph-layout"><i class="fa fa-check"></i><b>6.1</b> Full graph layout</a>
-<ul>
-<li class="chapter" data-level="6.1.1" data-path="network-layout.html"><a href="network-layout.html#full-network"><i class="fa fa-check"></i><b>6.1.1</b> Full network</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="network-layout.html"><a href="network-layout.html#sub-graph-layout"><i class="fa fa-check"></i><b>6.2</b> Sub graph layout</a>
-<ul>
-<li class="chapter" data-level="6.2.1" data-path="network-layout.html"><a href="network-layout.html#bipartite-network"><i class="fa fa-check"></i><b>6.2.1</b> bipartite network</a></li>
-<li class="chapter" data-level="6.2.2" data-path="network-layout.html"><a href="network-layout.html#tripartite-network"><i class="fa fa-check"></i><b>6.2.2</b> tripartite network</a></li>
-<li class="chapter" data-level="6.2.3" data-path="network-layout.html"><a href="network-layout.html#quadripartite-network"><i class="fa fa-check"></i><b>6.2.3</b> quadripartite network</a></li>
-<li class="chapter" data-level="6.2.4" data-path="network-layout.html"><a href="network-layout.html#pentapartite-network"><i class="fa fa-check"></i><b>6.2.4</b> pentapartite network</a></li>
-<li class="chapter" data-level="6.2.5" data-path="network-layout.html"><a href="network-layout.html#circular-network"><i class="fa fa-check"></i><b>6.2.5</b> circular network</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="network-topology-information.html"><a href="network-topology-information.html"><i class="fa fa-check"></i><b>7</b> Network topology information</a>
-<ul>
-<li class="chapter" data-level="7.1" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information"><i class="fa fa-check"></i><b>7.1</b> Get network topology information</a></li>
-<li class="chapter" data-level="7.2" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information-with-matrix"><i class="fa fa-check"></i><b>7.2</b> Get network topology information with matrix</a></li>
-<li class="chapter" data-level="7.3" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information-from-sample"><i class="fa fa-check"></i><b>7.3</b> Get network topology information from sample</a></li>
-<li class="chapter" data-level="7.4" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information-by-parallel"><i class="fa fa-check"></i><b>7.4</b> Get network topology information by parallel</a></li>
-<li class="chapter" data-level="7.5" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information-with-matrix-by-parallel"><i class="fa fa-check"></i><b>7.5</b> Get network topology information with matrix by parallel</a></li>
-<li class="chapter" data-level="7.6" data-path="network-topology-information.html"><a href="network-topology-information.html#integrated-value-of-influence-ivi"><i class="fa fa-check"></i><b>7.6</b> Integrated Value of Influence (IVI)</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="network-comparison.html"><a href="network-comparison.html"><i class="fa fa-check"></i><b>8</b> Network comparison</a>
-<ul>
-<li class="chapter" data-level="8.1" data-path="network-comparison.html"><a href="network-comparison.html#subgraph-comparisopn"><i class="fa fa-check"></i><b>8.1</b> Subgraph comparisopn</a></li>
-<li class="chapter" data-level="8.2" data-path="network-comparison.html"><a href="network-comparison.html#comparison-of-multi-sample-networks"><i class="fa fa-check"></i><b>8.2</b> Comparison of multi-sample networks</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="network-environment.html"><a href="network-environment.html"><i class="fa fa-check"></i><b>9</b> Network &amp; Environment</a>
-<ul>
-<li class="chapter" data-level="9.1" data-path="network-environment.html"><a href="network-environment.html#network-environment-1"><i class="fa fa-check"></i><b>9.1</b> Network Environment</a></li>
-</ul></li>
-<li class="chapter" data-level="10" data-path="multi-omics-network-analysis.html"><a href="multi-omics-network-analysis.html"><i class="fa fa-check"></i><b>10</b> Multi-omics network analysis</a>
-<ul>
-<li class="chapter" data-level="10.1" data-path="multi-omics-network-analysis.html"><a href="multi-omics-network-analysis.html#multi-omics"><i class="fa fa-check"></i><b>10.1</b> Multi-omics</a></li>
-</ul></li>
-<li class="divider"></li>
-<li><a href="https://github.com/Jiawang1209/ggNetView" target="blank">Published with bookdown</a></li>
-
-</ul>
-
-      </nav>
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">ggNetView manual documentation</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
 
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ggNetView manual documentation</a>
-          </h1>
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"><span class="header-section-number">1</span> ggNetView manual documentation</a></li>
+<li><a class="" href="build-graph-object.html"><span class="header-section-number">2</span> Build graph object</a></li>
+<li><a class="" href="random-matrix-theory-rmtbased-random-network.html"><span class="header-section-number">3</span> Random Matrix Theory (RMT)–based random network</a></li>
+<li><a class="" href="get-network-information.html"><span class="header-section-number">4</span> Get network information</a></li>
+<li><a class="" href="extract-subgraph.html"><span class="header-section-number">5</span> Extract subgraph</a></li>
+<li><a class="" href="network-layout.html"><span class="header-section-number">6</span> Network layout</a></li>
+<li><a class="active" href="network-topology-information.html"><span class="header-section-number">7</span> Network topology information</a></li>
+<li><a class="" href="multi-network-and-comparison.html"><span class="header-section-number">8</span> Multi-Network and comparison</a></li>
+<li><a class="" href="network-environment.html"><span class="header-section-number">9</span> Network &amp; Environment</a></li>
+<li><a class="" href="multi-omics-network-analysis.html"><span class="header-section-number">10</span> Multi-omics network analysis</a></li>
+<li><a class="" href="gallery-of-reproducible-examples.html"><span class="header-section-number">11</span> Gallery of Reproducible Examples</a></li>
+</ul>
+
+        <div class="book-extra">
+          
         </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="network-topology-information" class="section level1 hasAnchor" number="7">
-<h1><span class="header-section-number">Chapter 7</span> Network topology information<a href="network-topology-information.html#network-topology-information" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="network-topology-information" class="section level1" number="7">
+<h1>
+<span class="header-section-number">7</span> Network topology information<a class="anchor" aria-label="anchor" href="#network-topology-information"><i class="fas fa-link"></i></a>
+</h1>
 <blockquote>
 <p>Load R Package</p>
 </blockquote>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="network-topology-information.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># data manipulation / piping utilities</span></span>
-<span id="cb1-2"><a href="network-topology-information.html#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggNetView)   <span class="co"># graph builders + info-extraction helpers</span></span></code></pre></div>
+<div class="sourceCode" id="cb492"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>   <span class="co"># data manipulation / piping utilities</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Jiawang1209/ggNetView">ggNetView</a></span><span class="op">)</span>   <span class="co"># graph builders + info-extraction helpers</span></span></code></pre></div>
 <blockquote>
 <p>Example data</p>
 </blockquote>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="network-topology-information.html#cb2-1" tabindex="-1"></a><span class="co"># Access built-in example datasets in ggNetView</span></span>
-<span id="cb2-2"><a href="network-topology-information.html#cb2-2" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="network-topology-information.html#cb2-3" tabindex="-1"></a><span class="co"># ---- Dataset 1: Relative abundance table of rarefied ASVs/OTUs ----</span></span>
-<span id="cb2-4"><a href="network-topology-information.html#cb2-4" tabindex="-1"></a><span class="co"># Rows = ASVs/OTUs (features / variables), Columns = samples</span></span>
-<span id="cb2-5"><a href="network-topology-information.html#cb2-5" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;otu_rare_relative&quot;</span>)</span>
-<span id="cb2-6"><a href="network-topology-information.html#cb2-6" tabindex="-1"></a><span class="fu">dim</span>(otu_rare_relative)  <span class="co"># Check matrix dimensions: n_features x n_samples </span></span></code></pre></div>
+<div class="sourceCode" id="cb493"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Access built-in example datasets in ggNetView</span></span>
+<span></span>
+<span><span class="co"># ---- Dataset 1: Relative abundance table of rarefied ASVs/OTUs ----</span></span>
+<span><span class="co"># Rows = ASVs/OTUs (features / variables), Columns = samples</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"otu_rare_relative"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">otu_rare_relative</span><span class="op">)</span>  <span class="co"># Check matrix dimensions: n_features x n_samples </span></span></code></pre></div>
 <pre><code>## [1] 2859   18</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="network-topology-information.html#cb4-1" tabindex="-1"></a>otu_rare_relative[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="co"># Preview first 5 rows x 5 cols to confirm data layout</span></span></code></pre></div>
+<div class="sourceCode" id="cb495"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">otu_rare_relative</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> <span class="co"># Preview first 5 rows x 5 cols to confirm data layout</span></span></code></pre></div>
 <pre><code>##              KO1        KO2        KO3        KO4        KO5
 ## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
 ## ASV_2 0.05750000 0.03393333 0.06046667 0.05810000 0.07320000
 ## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
 ## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
 ## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="network-topology-information.html#cb6-1" tabindex="-1"></a><span class="co"># ---- Dataset 2: Taxonomic annotation table for ASVs/OTUs ----</span></span>
-<span id="cb6-2"><a href="network-topology-information.html#cb6-2" tabindex="-1"></a><span class="co"># Rows = ASVs/OTUs (row names should match the abundance table above)</span></span>
-<span id="cb6-3"><a href="network-topology-information.html#cb6-3" tabindex="-1"></a><span class="co"># Columns = taxonomic ranks (Kingdom ~ Species, etc.)</span></span>
-<span id="cb6-4"><a href="network-topology-information.html#cb6-4" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;tax_tab&quot;</span>)</span>
-<span id="cb6-5"><a href="network-topology-information.html#cb6-5" tabindex="-1"></a><span class="fu">dim</span>(tax_tab)</span></code></pre></div>
+<div class="sourceCode" id="cb497"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Dataset 2: Taxonomic annotation table for ASVs/OTUs ----</span></span>
+<span><span class="co"># Rows = ASVs/OTUs (row names should match the abundance table above)</span></span>
+<span><span class="co"># Columns = taxonomic ranks (Kingdom ~ Species, etc.)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"tax_tab"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">tax_tab</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 2859    8</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="network-topology-information.html#cb8-1" tabindex="-1"></a>tax_tab[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb499"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tax_tab</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
 <pre><code>## # A tibble: 5 × 5
 ##   OTUID  Kingdom  Phylum          Class          Order            
 ##   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;            
@@ -284,22 +109,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <blockquote>
 <p>Build graph object</p>
 </blockquote>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="network-topology-information.html#cb10-1" tabindex="-1"></a><span class="co"># ---- Build a co-occurrence network from an abundance matrix ----</span></span>
-<span id="cb10-2"><a href="network-topology-information.html#cb10-2" tabindex="-1"></a><span class="co"># Internal pipeline: transform -&gt; correlation -&gt; p-value adjustment -&gt;</span></span>
-<span id="cb10-3"><a href="network-topology-information.html#cb10-3" tabindex="-1"></a><span class="co"># edge filtering -&gt; community detection -&gt; attach taxonomy.</span></span>
-<span id="cb10-4"><a href="network-topology-information.html#cb10-4" tabindex="-1"></a>graph_obj <span class="ot">&lt;-</span> <span class="fu">build_graph_from_mat</span>(</span>
-<span id="cb10-5"><a href="network-topology-information.html#cb10-5" tabindex="-1"></a>  <span class="at">mat              =</span> otu_rare_relative,  <span class="co"># variables x samples numeric matrix</span></span>
-<span id="cb10-6"><a href="network-topology-information.html#cb10-6" tabindex="-1"></a>  <span class="at">transfrom.method =</span> <span class="st">&quot;none&quot;</span>,             <span class="co"># input already relative abundance, no extra transform</span></span>
-<span id="cb10-7"><a href="network-topology-information.html#cb10-7" tabindex="-1"></a>  <span class="at">method           =</span> <span class="st">&quot;WGCNA&quot;</span>,            <span class="co"># correlation backend: WGCNA::corAndPvalue</span></span>
-<span id="cb10-8"><a href="network-topology-information.html#cb10-8" tabindex="-1"></a>  <span class="at">proc             =</span> <span class="st">&quot;bonferroni&quot;</span>,       <span class="co"># multiple-testing correction</span></span>
-<span id="cb10-9"><a href="network-topology-information.html#cb10-9" tabindex="-1"></a>  <span class="at">r.threshold      =</span> <span class="fl">0.7</span>,                <span class="co"># |r| cutoff for keeping an edge</span></span>
-<span id="cb10-10"><a href="network-topology-information.html#cb10-10" tabindex="-1"></a>  <span class="at">p.threshold      =</span> <span class="fl">0.05</span>,               <span class="co"># adjusted p-value cutoff</span></span>
-<span id="cb10-11"><a href="network-topology-information.html#cb10-11" tabindex="-1"></a>  <span class="at">node_annotation  =</span> tax_tab,            <span class="co"># taxonomy joined onto each node by name</span></span>
-<span id="cb10-12"><a href="network-topology-information.html#cb10-12" tabindex="-1"></a>  <span class="at">top_modules      =</span> <span class="dv">15</span>,                 <span class="co"># keep top-15 modules; rest -&gt; &quot;Others&quot;</span></span>
-<span id="cb10-13"><a href="network-topology-information.html#cb10-13" tabindex="-1"></a>  <span class="at">seed             =</span> <span class="dv">1115</span>                <span class="co"># fix RNG for reproducibility</span></span>
-<span id="cb10-14"><a href="network-topology-information.html#cb10-14" tabindex="-1"></a>)</span>
-<span id="cb10-15"><a href="network-topology-information.html#cb10-15" tabindex="-1"></a></span>
-<span id="cb10-16"><a href="network-topology-information.html#cb10-16" tabindex="-1"></a>graph_obj   <span class="co"># tbl_graph with Modularity / Degree / Strength + taxonomy columns</span></span></code></pre></div>
+<div class="sourceCode" id="cb501"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Build a co-occurrence network from an abundance matrix ----</span></span>
+<span><span class="co"># Internal pipeline: transform -&gt; correlation -&gt; p-value adjustment -&gt;</span></span>
+<span><span class="co"># edge filtering -&gt; community detection -&gt; attach taxonomy.</span></span>
+<span><span class="va">graph_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/build_graph_from_mat.html">build_graph_from_mat</a></span><span class="op">(</span></span>
+<span>  mat              <span class="op">=</span> <span class="va">otu_rare_relative</span>,  <span class="co"># variables x samples numeric matrix</span></span>
+<span>  transfrom.method <span class="op">=</span> <span class="st">"none"</span>,             <span class="co"># input already relative abundance, no extra transform</span></span>
+<span>  method           <span class="op">=</span> <span class="st">"WGCNA"</span>,            <span class="co"># correlation backend: WGCNA::corAndPvalue</span></span>
+<span>  proc             <span class="op">=</span> <span class="st">"bonferroni"</span>,       <span class="co"># multiple-testing correction</span></span>
+<span>  r.threshold      <span class="op">=</span> <span class="fl">0.7</span>,                <span class="co"># |r| cutoff for keeping an edge</span></span>
+<span>  p.threshold      <span class="op">=</span> <span class="fl">0.05</span>,               <span class="co"># adjusted p-value cutoff</span></span>
+<span>  node_annotation  <span class="op">=</span> <span class="va">tax_tab</span>,            <span class="co"># taxonomy joined onto each node by name</span></span>
+<span>  top_modules      <span class="op">=</span> <span class="fl">15</span>,                 <span class="co"># keep top-15 modules; rest -&gt; "Others"</span></span>
+<span>  seed             <span class="op">=</span> <span class="fl">1115</span>                <span class="co"># fix RNG for reproducibility</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">graph_obj</span>   <span class="co"># tbl_graph with Modularity / Degree / Strength + taxonomy columns</span></span></code></pre></div>
 <pre><code>## # A tbl_graph: 213 nodes and 844 edges
 ## #
 ## # An undirected simple graph with 29 components
@@ -328,44 +154,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2   185   208  0.954       0.954 Positive      
 ## 3   185   213  0.957       0.957 Positive      
 ## # ℹ 841 more rows</code></pre>
-<div id="get-network-topology-information" class="section level2 hasAnchor" number="7.1">
-<h2><span class="header-section-number">7.1</span> Get network topology information<a href="network-topology-information.html#get-network-topology-information" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="get-network-topology-information" class="section level2" number="7.1">
+<h2>
+<span class="header-section-number">7.1</span> Get network topology information<a class="anchor" aria-label="anchor" href="#get-network-topology-information"><i class="fas fa-link"></i></a>
+</h2>
 <blockquote>
 <p>when <code>mat = NULL</code></p>
 </blockquote>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="network-topology-information.html#cb12-1" tabindex="-1"></a><span class="co"># ---- Compute network topology + robustness for a single graph ----</span></span>
-<span id="cb12-2"><a href="network-topology-information.html#cb12-2" tabindex="-1"></a><span class="co"># When `mat = NULL`, the function still computes all *purely topological*</span></span>
-<span id="cb12-3"><a href="network-topology-information.html#cb12-3" tabindex="-1"></a><span class="co"># metrics from the igraph object, but the following fields are returned as NA</span></span>
-<span id="cb12-4"><a href="network-topology-information.html#cb12-4" tabindex="-1"></a><span class="co"># because they require the original abundance matrix:</span></span>
-<span id="cb12-5"><a href="network-topology-information.html#cb12-5" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb12-6"><a href="network-topology-information.html#cb12-6" tabindex="-1"></a><span class="co">#   * Cohension_Positive  - needs per-ASV mean abundance to weight positive r</span></span>
-<span id="cb12-7"><a href="network-topology-information.html#cb12-7" tabindex="-1"></a><span class="co">#   * Cohension_Negative  - needs per-ASV mean abundance to weight negative r</span></span>
-<span id="cb12-8"><a href="network-topology-information.html#cb12-8" tabindex="-1"></a><span class="co">#   * Robustness_weight   - abundance-weighted node-removal bootstrap (needs sp.ra)</span></span>
-<span id="cb12-9"><a href="network-topology-information.html#cb12-9" tabindex="-1"></a><span class="co">#   * Robustness_unweight - tied to the same `mat` branch in the code, so also NA</span></span>
-<span id="cb12-10"><a href="network-topology-information.html#cb12-10" tabindex="-1"></a><span class="co">#   * Stability           - mean of the two Robustness_* fields, so also NA</span></span>
-<span id="cb12-11"><a href="network-topology-information.html#cb12-11" tabindex="-1"></a><span class="co">#   * out$Robustness      - the whole 5%-100% removal curve is NA (mean/sd/se)</span></span>
-<span id="cb12-12"><a href="network-topology-information.html#cb12-12" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb12-13"><a href="network-topology-information.html#cb12-13" tabindex="-1"></a><span class="co"># All other fields (Node, Edge, Degree, Distance, Diameter, Density,</span></span>
-<span id="cb12-14"><a href="network-topology-information.html#cb12-14" tabindex="-1"></a><span class="co"># Transitivity_global/local, Betweenness, Betweenness_edge, Closeness,</span></span>
-<span id="cb12-15"><a href="network-topology-information.html#cb12-15" tabindex="-1"></a><span class="co"># Eigen_centrality, Modularity, K_core_mean/max/min, Network_efficiency,</span></span>
-<span id="cb12-16"><a href="network-topology-information.html#cb12-16" tabindex="-1"></a><span class="co"># Network_info.centrality, Vulenrability) are computed normally from `graph_obj`.</span></span>
-<span id="cb12-17"><a href="network-topology-information.html#cb12-17" tabindex="-1"></a>topology_out <span class="ot">&lt;-</span> <span class="fu">get_network_topology</span>(</span>
-<span id="cb12-18"><a href="network-topology-information.html#cb12-18" tabindex="-1"></a>  <span class="at">graph_obj        =</span> graph_obj,   <span class="co"># input tbl_graph (required)</span></span>
-<span id="cb12-19"><a href="network-topology-information.html#cb12-19" tabindex="-1"></a>  <span class="at">mat              =</span> <span class="cn">NULL</span>,        <span class="co"># raw abundance matrix; NULL -&gt; skip cohesion + robustness</span></span>
-<span id="cb12-20"><a href="network-topology-information.html#cb12-20" tabindex="-1"></a>  <span class="at">transfrom.method =</span> <span class="st">&quot;none&quot;</span>,      <span class="co"># pre-correlation transform (ignored when mat = NULL)</span></span>
-<span id="cb12-21"><a href="network-topology-information.html#cb12-21" tabindex="-1"></a>  <span class="at">method           =</span> <span class="st">&quot;WGCNA&quot;</span>,     <span class="co"># correlation backend used to rebuild network.raw from `mat`</span></span>
-<span id="cb12-22"><a href="network-topology-information.html#cb12-22" tabindex="-1"></a>  <span class="at">proc             =</span> <span class="st">&quot;bonferroni&quot;</span>,<span class="co"># multiple-testing correction for p-values (used with `mat`)</span></span>
-<span id="cb12-23"><a href="network-topology-information.html#cb12-23" tabindex="-1"></a>  <span class="at">r.threshold      =</span> <span class="fl">0.7</span>,         <span class="co"># |r| cutoff applied when rebuilding network.raw from `mat`</span></span>
-<span id="cb12-24"><a href="network-topology-information.html#cb12-24" tabindex="-1"></a>  <span class="at">p.threshold      =</span> <span class="fl">0.05</span>,        <span class="co"># adjusted p-value cutoff applied when rebuilding network.raw</span></span>
-<span id="cb12-25"><a href="network-topology-information.html#cb12-25" tabindex="-1"></a>  <span class="at">bootstrap        =</span> <span class="dv">100</span>          <span class="co"># # of random ER networks for `Random_nerwork` column;</span></span>
-<span id="cb12-26"><a href="network-topology-information.html#cb12-26" tabindex="-1"></a>                                  <span class="co"># also # of bootstrap iterations for robustness (only when mat != NULL)</span></span>
-<span id="cb12-27"><a href="network-topology-information.html#cb12-27" tabindex="-1"></a>)</span>
-<span id="cb12-28"><a href="network-topology-information.html#cb12-28" tabindex="-1"></a></span>
-<span id="cb12-29"><a href="network-topology-information.html#cb12-29" tabindex="-1"></a><span class="fu">class</span>(topology_out)</span></code></pre></div>
-<pre><code>## [1] &quot;list&quot;</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="network-topology-information.html#cb14-1" tabindex="-1"></a><span class="fu">names</span>(topology_out)</span></code></pre></div>
-<pre><code>## [1] &quot;topology&quot;   &quot;Robustness&quot;</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="network-topology-information.html#cb16-1" tabindex="-1"></a>topology_out</span></code></pre></div>
+<div class="sourceCode" id="cb503"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Compute network topology + robustness for a single graph ----</span></span>
+<span><span class="co"># When `mat = NULL`, the function still computes all *purely topological*</span></span>
+<span><span class="co"># metrics from the igraph object, but the following fields are returned as NA</span></span>
+<span><span class="co"># because they require the original abundance matrix:</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co">#   * Cohension_Positive  - needs per-ASV mean abundance to weight positive r</span></span>
+<span><span class="co">#   * Cohension_Negative  - needs per-ASV mean abundance to weight negative r</span></span>
+<span><span class="co">#   * Robustness_weight   - abundance-weighted node-removal bootstrap (needs sp.ra)</span></span>
+<span><span class="co">#   * Robustness_unweight - tied to the same `mat` branch in the code, so also NA</span></span>
+<span><span class="co">#   * Stability           - mean of the two Robustness_* fields, so also NA</span></span>
+<span><span class="co">#   * out$Robustness      - the whole 5%-100% removal curve is NA (mean/sd/se)</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># All other fields (Node, Edge, Degree, Distance, Diameter, Density,</span></span>
+<span><span class="co"># Transitivity_global/local, Betweenness, Betweenness_edge, Closeness,</span></span>
+<span><span class="co"># Eigen_centrality, Modularity, K_core_mean/max/min, Network_efficiency,</span></span>
+<span><span class="co"># Network_info.centrality, Vulenrability) are computed normally from `graph_obj`.</span></span>
+<span><span class="va">topology_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_network_topology.html">get_network_topology</a></span><span class="op">(</span></span>
+<span>  graph_obj        <span class="op">=</span> <span class="va">graph_obj</span>,   <span class="co"># input tbl_graph (required)</span></span>
+<span>  mat              <span class="op">=</span> <span class="cn">NULL</span>,        <span class="co"># raw abundance matrix; NULL -&gt; skip cohesion + robustness</span></span>
+<span>  transfrom.method <span class="op">=</span> <span class="st">"none"</span>,      <span class="co"># pre-correlation transform (ignored when mat = NULL)</span></span>
+<span>  method           <span class="op">=</span> <span class="st">"WGCNA"</span>,     <span class="co"># correlation backend used to rebuild network.raw from `mat`</span></span>
+<span>  proc             <span class="op">=</span> <span class="st">"bonferroni"</span>,<span class="co"># multiple-testing correction for p-values (used with `mat`)</span></span>
+<span>  r.threshold      <span class="op">=</span> <span class="fl">0.7</span>,         <span class="co"># |r| cutoff applied when rebuilding network.raw from `mat`</span></span>
+<span>  p.threshold      <span class="op">=</span> <span class="fl">0.05</span>,        <span class="co"># adjusted p-value cutoff applied when rebuilding network.raw</span></span>
+<span>  bootstrap        <span class="op">=</span> <span class="fl">100</span>          <span class="co"># # of random ER networks for `Random_nerwork` column;</span></span>
+<span>                                  <span class="co"># also # of bootstrap iterations for robustness (only when mat != NULL)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">topology_out</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] "list"</code></pre>
+<div class="sourceCode" id="cb505"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">topology_out</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] "topology"   "Robustness"</code></pre>
+<div class="sourceCode" id="cb507"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">topology_out</span></span></code></pre></div>
 <pre><code>## $topology
 ## # A tibble: 24 × 3
 ##    Topology            Target_network Random_nerwork
@@ -425,32 +256,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 39               0.95          NA        NA        NA unweighted
 ## 40               1.00          NA        NA        NA unweighted</code></pre>
 </div>
-<div id="get-network-topology-information-with-matrix" class="section level2 hasAnchor" number="7.2">
-<h2><span class="header-section-number">7.2</span> Get network topology information with matrix<a href="network-topology-information.html#get-network-topology-information-with-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="get-network-topology-information-with-matrix" class="section level2" number="7.2">
+<h2>
+<span class="header-section-number">7.2</span> Get network topology information with matrix<a class="anchor" aria-label="anchor" href="#get-network-topology-information-with-matrix"><i class="fas fa-link"></i></a>
+</h2>
 <blockquote>
 <p>When a matrix is passed to <code>mat</code>, all topology properties are computed.</p>
 </blockquote>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="network-topology-information.html#cb18-1" tabindex="-1"></a><span class="co"># ---- Compute the FULL set of network topology + robustness metrics ----</span></span>
-<span id="cb18-2"><a href="network-topology-information.html#cb18-2" tabindex="-1"></a><span class="co"># When `mat` is provided, the function recomputes the thresholded correlation</span></span>
-<span id="cb18-3"><a href="network-topology-information.html#cb18-3" tabindex="-1"></a><span class="co"># matrix from `mat` (used as `network.raw`) and ALL topology fields are</span></span>
-<span id="cb18-4"><a href="network-topology-information.html#cb18-4" tabindex="-1"></a><span class="co"># returned with real values - including the ones that are NA when mat = NULL:</span></span>
-<span id="cb18-5"><a href="network-topology-information.html#cb18-5" tabindex="-1"></a><span class="co">#   Cohension_Positive / Cohension_Negative</span></span>
-<span id="cb18-6"><a href="network-topology-information.html#cb18-6" tabindex="-1"></a><span class="co">#   Robustness_weight  / Robustness_unweight</span></span>
-<span id="cb18-7"><a href="network-topology-information.html#cb18-7" tabindex="-1"></a><span class="co">#   Stability</span></span>
-<span id="cb18-8"><a href="network-topology-information.html#cb18-8" tabindex="-1"></a><span class="co">#   out$Robustness     (the 5%-100% node-removal curve)</span></span>
-<span id="cb18-9"><a href="network-topology-information.html#cb18-9" tabindex="-1"></a>topology_with_mat <span class="ot">&lt;-</span> <span class="fu">get_network_topology</span>(</span>
-<span id="cb18-10"><a href="network-topology-information.html#cb18-10" tabindex="-1"></a>  <span class="at">graph_obj        =</span> graph_obj,         <span class="co"># input tbl_graph (required)</span></span>
-<span id="cb18-11"><a href="network-topology-information.html#cb18-11" tabindex="-1"></a>  <span class="at">mat              =</span> otu_rare_relative, <span class="co"># raw abundance matrix used to derive sp.ra and rebuild network.raw</span></span>
-<span id="cb18-12"><a href="network-topology-information.html#cb18-12" tabindex="-1"></a>  <span class="at">transfrom.method =</span> <span class="st">&quot;none&quot;</span>,            <span class="co"># pre-correlation transform on `mat`; &quot;none&quot; = keep as-is</span></span>
-<span id="cb18-13"><a href="network-topology-information.html#cb18-13" tabindex="-1"></a>  <span class="at">method           =</span> <span class="st">&quot;WGCNA&quot;</span>,           <span class="co"># correlation backend: WGCNA::corAndPvalue</span></span>
-<span id="cb18-14"><a href="network-topology-information.html#cb18-14" tabindex="-1"></a>  <span class="at">proc             =</span> <span class="st">&quot;bonferroni&quot;</span>,      <span class="co"># multiple-testing correction</span></span>
-<span id="cb18-15"><a href="network-topology-information.html#cb18-15" tabindex="-1"></a>  <span class="at">r.threshold      =</span> <span class="fl">0.7</span>,               <span class="co"># |r| cutoff for keeping an edge in network.raw</span></span>
-<span id="cb18-16"><a href="network-topology-information.html#cb18-16" tabindex="-1"></a>  <span class="at">p.threshold      =</span> <span class="fl">0.05</span>,              <span class="co"># adjusted p-value cutoff for keeping an edge</span></span>
-<span id="cb18-17"><a href="network-topology-information.html#cb18-17" tabindex="-1"></a>  <span class="at">bootstrap        =</span> <span class="dv">100</span>                <span class="co"># # of bootstrap iterations for robustness AND # of random ER networks for the Random_nerwork column</span></span>
-<span id="cb18-18"><a href="network-topology-information.html#cb18-18" tabindex="-1"></a>)</span>
-<span id="cb18-19"><a href="network-topology-information.html#cb18-19" tabindex="-1"></a></span>
-<span id="cb18-20"><a href="network-topology-information.html#cb18-20" tabindex="-1"></a></span>
-<span id="cb18-21"><a href="network-topology-information.html#cb18-21" tabindex="-1"></a>topology_with_mat</span></code></pre></div>
+<div class="sourceCode" id="cb509"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Compute the FULL set of network topology + robustness metrics ----</span></span>
+<span><span class="co"># When `mat` is provided, the function recomputes the thresholded correlation</span></span>
+<span><span class="co"># matrix from `mat` (used as `network.raw`) and ALL topology fields are</span></span>
+<span><span class="co"># returned with real values - including the ones that are NA when mat = NULL:</span></span>
+<span><span class="co">#   Cohension_Positive / Cohension_Negative</span></span>
+<span><span class="co">#   Robustness_weight  / Robustness_unweight</span></span>
+<span><span class="co">#   Stability</span></span>
+<span><span class="co">#   out$Robustness     (the 5%-100% node-removal curve)</span></span>
+<span><span class="va">topology_with_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_network_topology.html">get_network_topology</a></span><span class="op">(</span></span>
+<span>  graph_obj        <span class="op">=</span> <span class="va">graph_obj</span>,         <span class="co"># input tbl_graph (required)</span></span>
+<span>  mat              <span class="op">=</span> <span class="va">otu_rare_relative</span>, <span class="co"># raw abundance matrix used to derive sp.ra and rebuild network.raw</span></span>
+<span>  transfrom.method <span class="op">=</span> <span class="st">"none"</span>,            <span class="co"># pre-correlation transform on `mat`; "none" = keep as-is</span></span>
+<span>  method           <span class="op">=</span> <span class="st">"WGCNA"</span>,           <span class="co"># correlation backend: WGCNA::corAndPvalue</span></span>
+<span>  proc             <span class="op">=</span> <span class="st">"bonferroni"</span>,      <span class="co"># multiple-testing correction</span></span>
+<span>  r.threshold      <span class="op">=</span> <span class="fl">0.7</span>,               <span class="co"># |r| cutoff for keeping an edge in network.raw</span></span>
+<span>  p.threshold      <span class="op">=</span> <span class="fl">0.05</span>,              <span class="co"># adjusted p-value cutoff for keeping an edge</span></span>
+<span>  bootstrap        <span class="op">=</span> <span class="fl">100</span>                <span class="co"># # of bootstrap iterations for robustness AND # of random ER networks for the Random_nerwork column</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">topology_with_mat</span></span></code></pre></div>
 <pre><code>## $topology
 ## # A tibble: 24 × 3
 ##    Topology            Target_network Random_nerwork
@@ -510,27 +344,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 39               0.95  0.01507042 0.010170393 0.0010170393 unweighted
 ## 40               1.00  0.00000000 0.000000000 0.0000000000 unweighted</code></pre>
 </div>
-<div id="get-network-topology-information-from-sample" class="section level2 hasAnchor" number="7.3">
-<h2><span class="header-section-number">7.3</span> Get network topology information from sample<a href="network-topology-information.html#get-network-topology-information-from-sample" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="network-topology-information.html#cb20-1" tabindex="-1"></a><span class="co"># ---- Per-sample subgraph topology -------------------------------------------</span></span>
-<span id="cb20-2"><a href="network-topology-information.html#cb20-2" tabindex="-1"></a><span class="co"># Step 1: split `graph_obj` into per-sample subgraphs by the abundance matrix</span></span>
-<span id="cb20-3"><a href="network-topology-information.html#cb20-3" tabindex="-1"></a><span class="co">#         (an OTU is &quot;present&quot; in a sample when its abundance &gt; min_abundance).</span></span>
-<span id="cb20-4"><a href="network-topology-information.html#cb20-4" tabindex="-1"></a><span class="co"># Step 2: run the full `get_network_topology()` pipeline on EACH sample subgraph.</span></span>
-<span id="cb20-5"><a href="network-topology-information.html#cb20-5" tabindex="-1"></a><span class="co"># When `mat` is supplied, every topology field (including cohesion, robustness,</span></span>
-<span id="cb20-6"><a href="network-topology-information.html#cb20-6" tabindex="-1"></a><span class="co"># stability) is computed for each sample.</span></span>
-<span id="cb20-7"><a href="network-topology-information.html#cb20-7" tabindex="-1"></a>t3_group <span class="ot">&lt;-</span> <span class="fu">system.time</span>(</span>
-<span id="cb20-8"><a href="network-topology-information.html#cb20-8" tabindex="-1"></a>  topology_from_sample <span class="ot">&lt;-</span> <span class="fu">get_sample_subgraph_topology</span>(</span>
-<span id="cb20-9"><a href="network-topology-information.html#cb20-9" tabindex="-1"></a>    <span class="at">graph_obj        =</span> graph_obj,         <span class="co"># input tbl_graph (the full network)</span></span>
-<span id="cb20-10"><a href="network-topology-information.html#cb20-10" tabindex="-1"></a>    <span class="at">mat              =</span> otu_rare_relative, <span class="co"># abundance matrix used for both presence-call AND cohesion/robustness</span></span>
-<span id="cb20-11"><a href="network-topology-information.html#cb20-11" tabindex="-1"></a>    <span class="at">transfrom.method =</span> <span class="st">&quot;none&quot;</span>,            <span class="co"># pre-correlation transform on `mat`; &quot;none&quot; = keep as-is</span></span>
-<span id="cb20-12"><a href="network-topology-information.html#cb20-12" tabindex="-1"></a>    <span class="at">method           =</span> <span class="st">&quot;WGCNA&quot;</span>,           <span class="co"># correlation backend: WGCNA::corAndPvalue</span></span>
-<span id="cb20-13"><a href="network-topology-information.html#cb20-13" tabindex="-1"></a>    <span class="at">cor.method       =</span> <span class="st">&quot;pearson&quot;</span>,         <span class="co"># Pearson correlation</span></span>
-<span id="cb20-14"><a href="network-topology-information.html#cb20-14" tabindex="-1"></a>    <span class="at">proc             =</span> <span class="st">&quot;bonferroni&quot;</span>,      <span class="co"># multiple-testing correction </span></span>
-<span id="cb20-15"><a href="network-topology-information.html#cb20-15" tabindex="-1"></a>    <span class="at">bootstrap        =</span> <span class="dv">100</span>                <span class="co"># # of bootstrap iterations for robustness; also # of random ER nets for reference</span></span>
-<span id="cb20-16"><a href="network-topology-information.html#cb20-16" tabindex="-1"></a>  )</span>
-<span id="cb20-17"><a href="network-topology-information.html#cb20-17" tabindex="-1"></a>)</span>
-<span id="cb20-18"><a href="network-topology-information.html#cb20-18" tabindex="-1"></a></span>
-<span id="cb20-19"><a href="network-topology-information.html#cb20-19" tabindex="-1"></a>topology_from_sample   <span class="co"># one topology table per sample, plus per-sample robustness curves</span></span></code></pre></div>
+<div id="get-network-topology-information-from-sample" class="section level2" number="7.3">
+<h2>
+<span class="header-section-number">7.3</span> Get network topology information from sample<a class="anchor" aria-label="anchor" href="#get-network-topology-information-from-sample"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb511"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Per-sample subgraph topology -------------------------------------------</span></span>
+<span><span class="co"># Step 1: split `graph_obj` into per-sample subgraphs by the abundance matrix</span></span>
+<span><span class="co">#         (an OTU is "present" in a sample when its abundance &gt; min_abundance).</span></span>
+<span><span class="co"># Step 2: run the full `get_network_topology()` pipeline on EACH sample subgraph.</span></span>
+<span><span class="co"># When `mat` is supplied, every topology field (including cohesion, robustness,</span></span>
+<span><span class="co"># stability) is computed for each sample.</span></span>
+<span><span class="va">t3_group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span></span>
+<span>  <span class="va">topology_from_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_sample_subgraph_topology.html">get_sample_subgraph_topology</a></span><span class="op">(</span></span>
+<span>    graph_obj        <span class="op">=</span> <span class="va">graph_obj</span>,         <span class="co"># input tbl_graph (the full network)</span></span>
+<span>    mat              <span class="op">=</span> <span class="va">otu_rare_relative</span>, <span class="co"># abundance matrix used for both presence-call AND cohesion/robustness</span></span>
+<span>    transfrom.method <span class="op">=</span> <span class="st">"none"</span>,            <span class="co"># pre-correlation transform on `mat`; "none" = keep as-is</span></span>
+<span>    method           <span class="op">=</span> <span class="st">"WGCNA"</span>,           <span class="co"># correlation backend: WGCNA::corAndPvalue</span></span>
+<span>    cor.method       <span class="op">=</span> <span class="st">"pearson"</span>,         <span class="co"># Pearson correlation</span></span>
+<span>    proc             <span class="op">=</span> <span class="st">"bonferroni"</span>,      <span class="co"># multiple-testing correction </span></span>
+<span>    bootstrap        <span class="op">=</span> <span class="fl">100</span>                <span class="co"># # of bootstrap iterations for robustness; also # of random ER nets for reference</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">topology_from_sample</span>   <span class="co"># one topology table per sample, plus per-sample robustness curves</span></span></code></pre></div>
 <pre><code>## $subgraph_list
 ## $subgraph_list$KO1
 ## # A tbl_graph: 113 nodes and 161 edges
@@ -2554,30 +2391,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## WT5    WT5   90  103     OK
 ## WT6    WT6  111  162     OK</code></pre>
 </div>
-<div id="get-network-topology-information-by-parallel" class="section level2 hasAnchor" number="7.4">
-<h2><span class="header-section-number">7.4</span> Get network topology information by parallel<a href="network-topology-information.html#get-network-topology-information-by-parallel" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="network-topology-information.html#cb22-1" tabindex="-1"></a><span class="co"># ---- Same as get_network_topology(), but with parallel execution ------------</span></span>
-<span id="cb22-2"><a href="network-topology-information.html#cb22-2" tabindex="-1"></a><span class="co"># Useful when `bootstrap` is large (the random-ER-network reference loop is</span></span>
-<span id="cb22-3"><a href="network-topology-information.html#cb22-3" tabindex="-1"></a><span class="co"># the main bottleneck) or when running on `graph_obj_list` of many networks.</span></span>
-<span id="cb22-4"><a href="network-topology-information.html#cb22-4" tabindex="-1"></a><span class="co"># With `mat = NULL`, cohesion / robustness / stability fields are NA - see</span></span>
-<span id="cb22-5"><a href="network-topology-information.html#cb22-5" tabindex="-1"></a><span class="co"># get_network_topology() docs for the full list of skipped metrics.</span></span>
-<span id="cb22-6"><a href="network-topology-information.html#cb22-6" tabindex="-1"></a>t4 <span class="ot">&lt;-</span> <span class="fu">system.time</span>(</span>
-<span id="cb22-7"><a href="network-topology-information.html#cb22-7" tabindex="-1"></a>  topology_parallel <span class="ot">&lt;-</span> <span class="fu">get_network_topology_parallel</span>(</span>
-<span id="cb22-8"><a href="network-topology-information.html#cb22-8" tabindex="-1"></a>    <span class="at">graph_obj        =</span> graph_obj,</span>
-<span id="cb22-9"><a href="network-topology-information.html#cb22-9" tabindex="-1"></a>    <span class="at">mat              =</span> <span class="cn">NULL</span>,           <span class="co"># no abundance matrix -&gt; cohesion + robustness = NA</span></span>
-<span id="cb22-10"><a href="network-topology-information.html#cb22-10" tabindex="-1"></a>    <span class="at">transfrom.method =</span> <span class="st">&quot;none&quot;</span>,         <span class="co"># ignored when mat = NULL</span></span>
-<span id="cb22-11"><a href="network-topology-information.html#cb22-11" tabindex="-1"></a>    <span class="at">method           =</span> <span class="st">&quot;WGCNA&quot;</span>,        <span class="co"># ignored when mat = NULL (no correlation rebuild)</span></span>
-<span id="cb22-12"><a href="network-topology-information.html#cb22-12" tabindex="-1"></a>    <span class="at">cor.method       =</span> <span class="st">&quot;pearson&quot;</span>,      <span class="co"># ignored when mat = NULL</span></span>
-<span id="cb22-13"><a href="network-topology-information.html#cb22-13" tabindex="-1"></a>    <span class="at">proc             =</span> <span class="st">&quot;bonferroni&quot;</span>,   <span class="co"># ignored when mat = NULL</span></span>
-<span id="cb22-14"><a href="network-topology-information.html#cb22-14" tabindex="-1"></a>    <span class="at">bootstrap        =</span> <span class="dv">100</span>,            <span class="co"># # of random ER networks for the Random_nerwork column</span></span>
-<span id="cb22-15"><a href="network-topology-information.html#cb22-15" tabindex="-1"></a>    <span class="at">parallel         =</span> <span class="cn">TRUE</span>,           <span class="co"># enable parallel backend</span></span>
-<span id="cb22-16"><a href="network-topology-information.html#cb22-16" tabindex="-1"></a>    <span class="at">n_workers        =</span> <span class="dv">2</span>               <span class="co"># # of parallel workers (keep &lt;= cores; 2 is safe under R CMD check)</span></span>
-<span id="cb22-17"><a href="network-topology-information.html#cb22-17" tabindex="-1"></a>  )</span>
-<span id="cb22-18"><a href="network-topology-information.html#cb22-18" tabindex="-1"></a>)</span></code></pre></div>
+<div id="get-network-topology-information-by-parallel" class="section level2" number="7.4">
+<h2>
+<span class="header-section-number">7.4</span> Get network topology information by parallel<a class="anchor" aria-label="anchor" href="#get-network-topology-information-by-parallel"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb513"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Same as get_network_topology(), but with parallel execution ------------</span></span>
+<span><span class="co"># Useful when `bootstrap` is large (the random-ER-network reference loop is</span></span>
+<span><span class="co"># the main bottleneck) or when running on `graph_obj_list` of many networks.</span></span>
+<span><span class="co"># With `mat = NULL`, cohesion / robustness / stability fields are NA - see</span></span>
+<span><span class="co"># get_network_topology() docs for the full list of skipped metrics.</span></span>
+<span><span class="va">t4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span></span>
+<span>  <span class="va">topology_parallel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_network_topology_parallel.html">get_network_topology_parallel</a></span><span class="op">(</span></span>
+<span>    graph_obj        <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>    mat              <span class="op">=</span> <span class="cn">NULL</span>,           <span class="co"># no abundance matrix -&gt; cohesion + robustness = NA</span></span>
+<span>    transfrom.method <span class="op">=</span> <span class="st">"none"</span>,         <span class="co"># ignored when mat = NULL</span></span>
+<span>    method           <span class="op">=</span> <span class="st">"WGCNA"</span>,        <span class="co"># ignored when mat = NULL (no correlation rebuild)</span></span>
+<span>    cor.method       <span class="op">=</span> <span class="st">"pearson"</span>,      <span class="co"># ignored when mat = NULL</span></span>
+<span>    proc             <span class="op">=</span> <span class="st">"bonferroni"</span>,   <span class="co"># ignored when mat = NULL</span></span>
+<span>    bootstrap        <span class="op">=</span> <span class="fl">100</span>,            <span class="co"># # of random ER networks for the Random_nerwork column</span></span>
+<span>    parallel         <span class="op">=</span> <span class="cn">TRUE</span>,           <span class="co"># enable parallel backend</span></span>
+<span>    n_workers        <span class="op">=</span> <span class="fl">2</span>               <span class="co"># # of parallel workers (keep &lt;= cores; 2 is safe under R CMD check)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Number of parallel workers: 2</code></pre>
 <pre><code>## Warning: package ‘future’ was built under R version 4.5.2
 ## Warning: package ‘future’ was built under R version 4.5.2</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="network-topology-information.html#cb25-1" tabindex="-1"></a>topology_parallel</span></code></pre></div>
+<div class="sourceCode" id="cb516"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">topology_parallel</span></span></code></pre></div>
 <pre><code>## $topology
 ## # A tibble: 24 × 3
 ##    Topology            Target_network Random_nerwork
@@ -2637,28 +2478,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 39               0.95          NA        NA        NA unweighted
 ## 40               1.00          NA        NA        NA unweighted</code></pre>
 </div>
-<div id="get-network-topology-information-with-matrix-by-parallel" class="section level2 hasAnchor" number="7.5">
-<h2><span class="header-section-number">7.5</span> Get network topology information with matrix by parallel<a href="network-topology-information.html#get-network-topology-information-with-matrix-by-parallel" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="network-topology-information.html#cb27-1" tabindex="-1"></a><span class="co"># ---- Parallel + abundance matrix -&gt; FULL topology panel ---------------------</span></span>
-<span id="cb27-2"><a href="network-topology-information.html#cb27-2" tabindex="-1"></a><span class="co"># Same as above, but `mat` is now provided, so every topology field gets a</span></span>
-<span id="cb27-3"><a href="network-topology-information.html#cb27-3" tabindex="-1"></a><span class="co"># real value (cohesion, robustness, stability included).</span></span>
-<span id="cb27-4"><a href="network-topology-information.html#cb27-4" tabindex="-1"></a>t5 <span class="ot">&lt;-</span> <span class="fu">system.time</span>(</span>
-<span id="cb27-5"><a href="network-topology-information.html#cb27-5" tabindex="-1"></a>  topology_parallel_with_mat <span class="ot">&lt;-</span> <span class="fu">get_network_topology_parallel</span>(</span>
-<span id="cb27-6"><a href="network-topology-information.html#cb27-6" tabindex="-1"></a>    <span class="at">graph_obj        =</span> graph_obj,</span>
-<span id="cb27-7"><a href="network-topology-information.html#cb27-7" tabindex="-1"></a>    <span class="at">mat              =</span> otu_rare_relative, <span class="co"># abundance matrix -&gt; enables cohesion + robustness</span></span>
-<span id="cb27-8"><a href="network-topology-information.html#cb27-8" tabindex="-1"></a>    <span class="at">transfrom.method =</span> <span class="st">&quot;none&quot;</span>,            <span class="co"># pre-correlation transform on `mat`</span></span>
-<span id="cb27-9"><a href="network-topology-information.html#cb27-9" tabindex="-1"></a>    <span class="at">method           =</span> <span class="st">&quot;WGCNA&quot;</span>,           <span class="co"># correlation backend used to rebuild network.raw from `mat`</span></span>
-<span id="cb27-10"><a href="network-topology-information.html#cb27-10" tabindex="-1"></a>    <span class="at">cor.method       =</span> <span class="st">&quot;pearson&quot;</span>,         <span class="co"># Pearson correlation</span></span>
-<span id="cb27-11"><a href="network-topology-information.html#cb27-11" tabindex="-1"></a>    <span class="at">proc             =</span> <span class="st">&quot;bonferroni&quot;</span>,      <span class="co"># multiple-testing correction</span></span>
-<span id="cb27-12"><a href="network-topology-information.html#cb27-12" tabindex="-1"></a>    <span class="at">bootstrap        =</span> <span class="dv">100</span>,               <span class="co"># bootstrap iterations for robustness + # of random ER reference nets</span></span>
-<span id="cb27-13"><a href="network-topology-information.html#cb27-13" tabindex="-1"></a>    <span class="at">parallel         =</span> <span class="cn">TRUE</span>,              <span class="co"># enable parallel backend</span></span>
-<span id="cb27-14"><a href="network-topology-information.html#cb27-14" tabindex="-1"></a>    <span class="at">n_workers        =</span> <span class="dv">2</span>                  <span class="co"># # of parallel workers</span></span>
-<span id="cb27-15"><a href="network-topology-information.html#cb27-15" tabindex="-1"></a>  )</span>
-<span id="cb27-16"><a href="network-topology-information.html#cb27-16" tabindex="-1"></a>)</span></code></pre></div>
+<div id="get-network-topology-information-with-matrix-by-parallel" class="section level2" number="7.5">
+<h2>
+<span class="header-section-number">7.5</span> Get network topology information with matrix by parallel<a class="anchor" aria-label="anchor" href="#get-network-topology-information-with-matrix-by-parallel"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb518"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Parallel + abundance matrix -&gt; FULL topology panel ---------------------</span></span>
+<span><span class="co"># Same as above, but `mat` is now provided, so every topology field gets a</span></span>
+<span><span class="co"># real value (cohesion, robustness, stability included).</span></span>
+<span><span class="va">t5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span></span>
+<span>  <span class="va">topology_parallel_with_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_network_topology_parallel.html">get_network_topology_parallel</a></span><span class="op">(</span></span>
+<span>    graph_obj        <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>    mat              <span class="op">=</span> <span class="va">otu_rare_relative</span>, <span class="co"># abundance matrix -&gt; enables cohesion + robustness</span></span>
+<span>    transfrom.method <span class="op">=</span> <span class="st">"none"</span>,            <span class="co"># pre-correlation transform on `mat`</span></span>
+<span>    method           <span class="op">=</span> <span class="st">"WGCNA"</span>,           <span class="co"># correlation backend used to rebuild network.raw from `mat`</span></span>
+<span>    cor.method       <span class="op">=</span> <span class="st">"pearson"</span>,         <span class="co"># Pearson correlation</span></span>
+<span>    proc             <span class="op">=</span> <span class="st">"bonferroni"</span>,      <span class="co"># multiple-testing correction</span></span>
+<span>    bootstrap        <span class="op">=</span> <span class="fl">100</span>,               <span class="co"># bootstrap iterations for robustness + # of random ER reference nets</span></span>
+<span>    parallel         <span class="op">=</span> <span class="cn">TRUE</span>,              <span class="co"># enable parallel backend</span></span>
+<span>    n_workers        <span class="op">=</span> <span class="fl">2</span>                  <span class="co"># # of parallel workers</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Number of parallel workers: 2</code></pre>
 <pre><code>## Warning: package ‘future’ was built under R version 4.5.2
 ## Warning: package ‘future’ was built under R version 4.5.2</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="network-topology-information.html#cb30-1" tabindex="-1"></a>topology_parallel_with_mat</span></code></pre></div>
+<div class="sourceCode" id="cb521"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">topology_parallel_with_mat</span></span></code></pre></div>
 <pre><code>## $topology
 ## # A tibble: 24 × 3
 ##    Topology            Target_network Random_nerwork
@@ -2718,24 +2563,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 39               0.95  0.01413146 0.009519073 0.0009519073 unweighted
 ## 40               1.00  0.00000000 0.000000000 0.0000000000 unweighted</code></pre>
 </div>
-<div id="integrated-value-of-influence-ivi" class="section level2 hasAnchor" number="7.6">
-<h2><span class="header-section-number">7.6</span> Integrated Value of Influence (IVI)<a href="network-topology-information.html#integrated-value-of-influence-ivi" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="network-topology-information.html#cb32-1" tabindex="-1"></a><span class="co"># ---- Compute IVI (Salavaty et al. 2020) per node ----------------------------</span></span>
-<span id="cb32-2"><a href="network-topology-information.html#cb32-2" tabindex="-1"></a><span class="co"># IVI integrates 6 centrality measures across 3 scales (local / semi-local /</span></span>
-<span id="cb32-3"><a href="network-topology-information.html#cb32-3" tabindex="-1"></a><span class="co"># global) into a single robust influence score. Thin wrapper over</span></span>
-<span id="cb32-4"><a href="network-topology-information.html#cb32-4" tabindex="-1"></a><span class="co"># influential::ivi() — that package must be installed.</span></span>
-<span id="cb32-5"><a href="network-topology-information.html#cb32-5" tabindex="-1"></a>obj_aug <span class="ot">&lt;-</span> <span class="fu">get_node_ivi</span>(</span>
-<span id="cb32-6"><a href="network-topology-information.html#cb32-6" tabindex="-1"></a>  <span class="at">graph_obj =</span> graph_obj,   <span class="co"># input tbl_graph</span></span>
-<span id="cb32-7"><a href="network-topology-information.html#cb32-7" tabindex="-1"></a>  <span class="at">weights   =</span> <span class="cn">NULL</span>,        <span class="co"># NULL = unweighted IVI; pass &quot;weight&quot; to use the graph&#39;s `weight` edge attribute</span></span>
-<span id="cb32-8"><a href="network-topology-information.html#cb32-8" tabindex="-1"></a>  <span class="at">mode      =</span> <span class="st">&quot;all&quot;</span>,       <span class="co"># edge mode; &quot;all&quot; is the right choice for undirected graphs</span></span>
-<span id="cb32-9"><a href="network-topology-information.html#cb32-9" tabindex="-1"></a>  <span class="at">directed  =</span> <span class="cn">FALSE</span>,       <span class="co"># treat the graph as undirected</span></span>
-<span id="cb32-10"><a href="network-topology-information.html#cb32-10" tabindex="-1"></a>  <span class="at">d         =</span> <span class="dv">3</span>,           <span class="co"># search radius for the collective-influence component (paper recommends 3)</span></span>
-<span id="cb32-11"><a href="network-topology-information.html#cb32-11" tabindex="-1"></a>  <span class="at">scale     =</span> <span class="st">&quot;z-scale&quot;</span>,   <span class="co"># &quot;range&quot; [1,100] for single-network view, &quot;z-scale&quot; for cross-network / thresholding (z &gt; 1.645), &quot;none&quot; for raw</span></span>
-<span id="cb32-12"><a href="network-topology-information.html#cb32-12" tabindex="-1"></a>  <span class="at">ncores    =</span> <span class="dv">1</span>            <span class="co"># parallel cores for the cluster-rank step; 1 is the safe default</span></span>
-<span id="cb32-13"><a href="network-topology-information.html#cb32-13" tabindex="-1"></a>)</span>
-<span id="cb32-14"><a href="network-topology-information.html#cb32-14" tabindex="-1"></a></span>
-<span id="cb32-15"><a href="network-topology-information.html#cb32-15" tabindex="-1"></a></span>
-<span id="cb32-16"><a href="network-topology-information.html#cb32-16" tabindex="-1"></a>obj_aug         <span class="co"># tbl_graph with one extra node column: IVI</span></span></code></pre></div>
+<div id="integrated-value-of-influence-ivi" class="section level2" number="7.6">
+<h2>
+<span class="header-section-number">7.6</span> Integrated Value of Influence (IVI)<a class="anchor" aria-label="anchor" href="#integrated-value-of-influence-ivi"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb523"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Compute IVI (Salavaty et al. 2020) per node ----------------------------</span></span>
+<span><span class="co"># IVI integrates 6 centrality measures across 3 scales (local / semi-local /</span></span>
+<span><span class="co"># global) into a single robust influence score. Thin wrapper over</span></span>
+<span><span class="co"># influential::ivi() — that package must be installed.</span></span>
+<span><span class="va">obj_aug</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_node_ivi.html">get_node_ivi</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,   <span class="co"># input tbl_graph</span></span>
+<span>  weights   <span class="op">=</span> <span class="cn">NULL</span>,        <span class="co"># NULL = unweighted IVI; pass "weight" to use the graph's `weight` edge attribute</span></span>
+<span>  mode      <span class="op">=</span> <span class="st">"all"</span>,       <span class="co"># edge mode; "all" is the right choice for undirected graphs</span></span>
+<span>  directed  <span class="op">=</span> <span class="cn">FALSE</span>,       <span class="co"># treat the graph as undirected</span></span>
+<span>  d         <span class="op">=</span> <span class="fl">3</span>,           <span class="co"># search radius for the collective-influence component (paper recommends 3)</span></span>
+<span>  scale     <span class="op">=</span> <span class="st">"z-scale"</span>,   <span class="co"># "range" [1,100] for single-network view, "z-scale" for cross-network / thresholding (z &gt; 1.645), "none" for raw</span></span>
+<span>  ncores    <span class="op">=</span> <span class="fl">1</span>            <span class="co"># parallel cores for the cluster-rank step; 1 is the safe default</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">obj_aug</span>         <span class="co"># tbl_graph with one extra node column: IVI</span></span></code></pre></div>
 <pre><code>## # A tbl_graph: 213 nodes and 844 edges
 ## #
 ## # An undirected simple graph with 29 components
@@ -2764,15 +2612,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2   185   208  0.954       0.954 Positive      
 ## 3   185   213  0.957       0.957 Positive      
 ## # ℹ 841 more rows</code></pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="network-topology-information.html#cb34-1" tabindex="-1"></a><span class="fu">class</span>(obj_aug)  <span class="co"># still a tbl_graph - all other vertex/edge columns are preserved</span></span></code></pre></div>
-<pre><code>## [1] &quot;tbl_graph&quot; &quot;igraph&quot;</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="network-topology-information.html#cb36-1" tabindex="-1"></a><span class="co"># ---- Top-10 most influential nodes ------------------------------------------</span></span>
-<span id="cb36-2"><a href="network-topology-information.html#cb36-2" tabindex="-1"></a><span class="co"># Activate the node table, convert to tibble, sort by IVI descending, take 10.</span></span>
-<span id="cb36-3"><a href="network-topology-information.html#cb36-3" tabindex="-1"></a>obj_aug <span class="sc">%&gt;%</span></span>
-<span id="cb36-4"><a href="network-topology-information.html#cb36-4" tabindex="-1"></a>  tidygraph<span class="sc">::</span><span class="fu">activate</span>(nodes) <span class="sc">%&gt;%</span></span>
-<span id="cb36-5"><a href="network-topology-information.html#cb36-5" tabindex="-1"></a>  tidygraph<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb36-6"><a href="network-topology-information.html#cb36-6" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(<span class="fu">desc</span>(IVI)) <span class="sc">%&gt;%</span></span>
-<span id="cb36-7"><a href="network-topology-information.html#cb36-7" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb525"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">obj_aug</span><span class="op">)</span>  <span class="co"># still a tbl_graph - all other vertex/edge columns are preserved</span></span></code></pre></div>
+<pre><code>## [1] "tbl_graph" "igraph"</code></pre>
+<div class="sourceCode" id="cb527"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Top-10 most influential nodes ------------------------------------------</span></span>
+<span><span class="co"># Activate the node table, convert to tibble, sort by IVI descending, take 10.</span></span>
+<span><span class="va">obj_aug</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">tidygraph</span><span class="fu">::</span><span class="fu"><a href="https://tidygraph.data-imaginist.com/reference/activate.html">activate</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">tidygraph</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">IVI</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 10 × 15
 ##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
 ##    &lt;chr&gt;   &lt;fct&gt;      &lt;ord&gt;       &lt;chr&gt;       &lt;ord&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
@@ -2791,66 +2641,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </div>
 </div>
-            </section>
+  <div class="chapter-nav">
+<div class="prev"><a href="network-layout.html"><span class="header-section-number">6</span> Network layout</a></div>
+<div class="next"><a href="multi-network-and-comparison.html"><span class="header-section-number">8</span> Multi-Network and comparison</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#network-topology-information"><span class="header-section-number">7</span> Network topology information</a></li>
+<li><a class="nav-link" href="#get-network-topology-information"><span class="header-section-number">7.1</span> Get network topology information</a></li>
+<li><a class="nav-link" href="#get-network-topology-information-with-matrix"><span class="header-section-number">7.2</span> Get network topology information with matrix</a></li>
+<li><a class="nav-link" href="#get-network-topology-information-from-sample"><span class="header-section-number">7.3</span> Get network topology information from sample</a></li>
+<li><a class="nav-link" href="#get-network-topology-information-by-parallel"><span class="header-section-number">7.4</span> Get network topology information by parallel</a></li>
+<li><a class="nav-link" href="#get-network-topology-information-with-matrix-by-parallel"><span class="header-section-number">7.5</span> Get network topology information with matrix by parallel</a></li>
+<li><a class="nav-link" href="#integrated-value-of-influence-ivi"><span class="header-section-number">7.6</span> Integrated Value of Influence (IVI)</a></li>
+</ul>
 
-          </div>
-        </div>
-      </div>
-<a href="network-layout.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="network-comparison.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-05-21.</p>
   </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
-<script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-  "sharing": {
-    "github": false,
-    "facebook": true,
-    "twitter": true,
-    "linkedin": false,
-    "weibo": false,
-    "instapaper": false,
-    "vk": false,
-    "whatsapp": false,
-    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-  },
-  "fontsettings": {
-    "theme": "white",
-    "family": "sans",
-    "size": 2
-  },
-  "edit": {
-    "link": "https://github.com/Jiawang1209/ggNetView/06-network_topology.Rmd",
-    "text": "Edit"
-  },
-  "history": {
-    "link": null,
-    "text": null
-  },
-  "view": {
-    "link": null,
-    "text": null
-  },
-  "download": ["ggNetView-manual.pdf", "ggNetView-manual.epub"],
-  "search": {
-    "engine": "fuse",
-    "options": null
-  },
-  "toc": {
-    "collapse": "subsection"
-  }
-});
-});
-</script>
 
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
 </body>
-
 </html>

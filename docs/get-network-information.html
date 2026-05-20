@@ -1,284 +1,104 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html lang="en">
 <head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Get network information | ggNetView manual documentation</title>
-  <meta name="description" content="This book serves as a systematic user guide for the R package ggNetView. It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization." />
-  <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
-
-  <meta property="og:title" content="Chapter 4 Get network information | ggNetView manual documentation" />
-  <meta property="og:type" content="book" />
-  
-  <meta property="og:description" content="This book serves as a systematic user guide for the R package ggNetView. It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization." />
-  <meta name="github-repo" content="Jiawang1209/ggNetView-manual" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Get network information | ggNetView manual documentation" />
-  
-  <meta name="twitter:description" content="This book serves as a systematic user guide for the R package ggNetView. It is built with bookdown and published in gitbook format, aiming to provide a clear, reproducible, and extensible practical guide for network analysis and visualization." />
-  
-
-<meta name="author" content="Yue Liu" />
-
-
-<meta name="date" content="2026-05-20" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  
-  
-<link rel="prev" href="random-matrix-theory-rmtbased-random-network.html"/>
-<link rel="next" href="extract-subgraph.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-
-
-<style type="text/css">
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-<style type="text/css">
-  
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-</style>
-
-<link rel="stylesheet" href="style.css" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 4 Get network information | ggNetView manual documentation</title>
+<meta name="author" content="Yue Liu">
+<meta name="description" content="Once the graph object is constructed, basic network information can be retrieved, and subnetworks can be extracted.  Load R Package library(tidyverse)  # data manipulation / piping utilities...">
+<meta name="generator" content="bookdown 0.45 with bs4_book()">
+<meta property="og:title" content="Chapter 4 Get network information | ggNetView manual documentation">
+<meta property="og:type" content="book">
+<meta property="og:description" content="Once the graph object is constructed, basic network information can be retrieved, and subnetworks can be extracted.  Load R Package library(tidyverse)  # data manipulation / piping utilities...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 4 Get network information | ggNetView manual documentation">
+<meta name="twitter:description" content="Once the graph object is constructed, basic network information can be retrieved, and subnetworks can be extracted.  Load R Package library(tidyverse)  # data manipulation / piping utilities...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.11.0/transition.js"></script><script src="libs/bs3compat-0.11.0/tabs.js"></script><script src="libs/bs3compat-0.11.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">ggNetView-manial</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> ggNetView manual documentation</a>
-<ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#introdution"><i class="fa fa-check"></i><b>1.1</b> Introdution</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#installation"><i class="fa fa-check"></i><b>1.2</b> Installation</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i><b>1.3</b> Citation</a></li>
-<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#source-code"><i class="fa fa-check"></i><b>1.4</b> Source Code</a></li>
-<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#contact"><i class="fa fa-check"></i><b>1.5</b> Contact</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="build-graph-object.html"><a href="build-graph-object.html"><i class="fa fa-check"></i><b>2</b> Build graph object</a>
-<ul>
-<li class="chapter" data-level="2.1" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-matrix"><i class="fa fa-check"></i><b>2.1</b> Build graph from matrix</a></li>
-<li class="chapter" data-level="2.2" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-data-frame"><i class="fa fa-check"></i><b>2.2</b> Build graph from data frame</a></li>
-<li class="chapter" data-level="2.3" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-data-frame-with-module"><i class="fa fa-check"></i><b>2.3</b> Build graph from data frame with module</a></li>
-<li class="chapter" data-level="2.4" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-adjacency-matrix"><i class="fa fa-check"></i><b>2.4</b> Build graph from adjacency matrix</a></li>
-<li class="chapter" data-level="2.5" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-adjacency-matrix-with-module-information"><i class="fa fa-check"></i><b>2.5</b> Build graph from adjacency matrix with module information</a></li>
-<li class="chapter" data-level="2.6" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-double-matrix"><i class="fa fa-check"></i><b>2.6</b> Build graph from double matrix</a></li>
-<li class="chapter" data-level="2.7" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-igraph-object"><i class="fa fa-check"></i><b>2.7</b> Build graph from igraph object</a></li>
-<li class="chapter" data-level="2.8" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-wgcna"><i class="fa fa-check"></i><b>2.8</b> Build graph from WGCNA</a></li>
-<li class="chapter" data-level="2.9" data-path="build-graph-object.html"><a href="build-graph-object.html#build-graph-from-multi-graph"><i class="fa fa-check"></i><b>2.9</b> Build graph from multi-graph</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="random-matrix-theory-rmtbased-random-network.html"><a href="random-matrix-theory-rmtbased-random-network.html"><i class="fa fa-check"></i><b>3</b> Random Matrix Theory (RMT)–based random network</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="random-matrix-theory-rmtbased-random-network.html"><a href="random-matrix-theory-rmtbased-random-network.html#random-matrix-theory-rmt"><i class="fa fa-check"></i><b>3.1</b> Random Matrix Theory (RMT)</a></li>
-<li class="chapter" data-level="3.2" data-path="random-matrix-theory-rmtbased-random-network.html"><a href="random-matrix-theory-rmtbased-random-network.html#example-data"><i class="fa fa-check"></i><b>3.2</b> Example data</a></li>
-<li class="chapter" data-level="3.3" data-path="random-matrix-theory-rmtbased-random-network.html"><a href="random-matrix-theory-rmtbased-random-network.html#compute-rmt-threshold"><i class="fa fa-check"></i><b>3.3</b> Compute RMT threshold</a></li>
-<li class="chapter" data-level="3.4" data-path="random-matrix-theory-rmtbased-random-network.html"><a href="random-matrix-theory-rmtbased-random-network.html#build-graph-from-matrix-based-on-rmt-threshold"><i class="fa fa-check"></i><b>3.4</b> Build graph from matrix based on RMT-threshold</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="get-network-information.html"><a href="get-network-information.html"><i class="fa fa-check"></i><b>4</b> Get network information</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="get-network-information.html"><a href="get-network-information.html#full-network-information"><i class="fa fa-check"></i><b>4.1</b> Full-network information</a></li>
-<li class="chapter" data-level="4.2" data-path="get-network-information.html"><a href="get-network-information.html#sub-network-modularity-information"><i class="fa fa-check"></i><b>4.2</b> Sub-network (modularity) information</a></li>
-<li class="chapter" data-level="4.3" data-path="get-network-information.html"><a href="get-network-information.html#sub-network-sample-information"><i class="fa fa-check"></i><b>4.3</b> Sub-network (sample) information</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="extract-subgraph.html"><a href="extract-subgraph.html"><i class="fa fa-check"></i><b>5</b> Extract subgraph</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="extract-subgraph.html"><a href="extract-subgraph.html#extract-subgraph-by-module"><i class="fa fa-check"></i><b>5.1</b> Extract subgraph by module</a>
-<ul>
-<li class="chapter" data-level="5.1.1" data-path="extract-subgraph.html"><a href="extract-subgraph.html#select-subgraph-by-modularity"><i class="fa fa-check"></i><b>5.1.1</b> select subgraph by modularity</a></li>
-</ul></li>
-<li class="chapter" data-level="5.2" data-path="extract-subgraph.html"><a href="extract-subgraph.html#extract-subgraph-by-sample"><i class="fa fa-check"></i><b>5.2</b> Extract subgraph by sample</a>
-<ul>
-<li class="chapter" data-level="5.2.1" data-path="extract-subgraph.html"><a href="extract-subgraph.html#select-subgraph-by-sample-name"><i class="fa fa-check"></i><b>5.2.1</b> select subgraph by sample name</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="network-layout.html"><a href="network-layout.html"><i class="fa fa-check"></i><b>6</b> Network layout</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="network-layout.html"><a href="network-layout.html#gephi-layout"><i class="fa fa-check"></i><b>6.1</b> Gephi layout</a></li>
-<li class="chapter" data-level="6.2" data-path="network-layout.html"><a href="network-layout.html#fruchtermanreingold-force-directed-layout"><i class="fa fa-check"></i><b>6.2</b> Fruchterman–Reingold force-directed layout</a></li>
-<li class="chapter" data-level="6.3" data-path="network-layout.html"><a href="network-layout.html#diamond-layout"><i class="fa fa-check"></i><b>6.3</b> Diamond layout</a></li>
-<li class="chapter" data-level="6.4" data-path="network-layout.html"><a href="network-layout.html#kk-layout"><i class="fa fa-check"></i><b>6.4</b> Kk layout</a></li>
-<li class="chapter" data-level="6.5" data-path="network-layout.html"><a href="network-layout.html#nicley-layout"><i class="fa fa-check"></i><b>6.5</b> Nicley layout</a></li>
-<li class="chapter" data-level="6.6" data-path="network-layout.html"><a href="network-layout.html#petal-layout"><i class="fa fa-check"></i><b>6.6</b> Petal layout</a></li>
-<li class="chapter" data-level="6.7" data-path="network-layout.html"><a href="network-layout.html#circle-layout"><i class="fa fa-check"></i><b>6.7</b> Circle layout</a></li>
-<li class="chapter" data-level="6.8" data-path="network-layout.html"><a href="network-layout.html#petal-layout-1"><i class="fa fa-check"></i><b>6.8</b> Petal layout</a></li>
-<li class="chapter" data-level="6.9" data-path="network-layout.html"><a href="network-layout.html#diamond-outline-layout"><i class="fa fa-check"></i><b>6.9</b> Diamond outline layout</a></li>
-<li class="chapter" data-level="6.10" data-path="network-layout.html"><a href="network-layout.html#grid-layout"><i class="fa fa-check"></i><b>6.10</b> Grid layout</a></li>
-<li class="chapter" data-level="6.11" data-path="network-layout.html"><a href="network-layout.html#heart_centered-layout"><i class="fa fa-check"></i><b>6.11</b> Heart_centered layout</a></li>
-<li class="chapter" data-level="6.12" data-path="network-layout.html"><a href="network-layout.html#lgl-layout"><i class="fa fa-check"></i><b>6.12</b> Lgl layout</a></li>
-<li class="chapter" data-level="6.13" data-path="network-layout.html"><a href="network-layout.html#randomly-layout"><i class="fa fa-check"></i><b>6.13</b> Randomly layout</a></li>
-<li class="chapter" data-level="6.14" data-path="network-layout.html"><a href="network-layout.html#rectangle-layout"><i class="fa fa-check"></i><b>6.14</b> Rectangle layout</a></li>
-<li class="chapter" data-level="6.15" data-path="network-layout.html"><a href="network-layout.html#square-layout"><i class="fa fa-check"></i><b>6.15</b> Square layout</a></li>
-<li class="chapter" data-level="6.16" data-path="network-layout.html"><a href="network-layout.html#star-layout"><i class="fa fa-check"></i><b>6.16</b> Star layout</a></li>
-<li class="chapter" data-level="6.17" data-path="network-layout.html"><a href="network-layout.html#star_concentric-layout"><i class="fa fa-check"></i><b>6.17</b> Star_concentric layout</a></li>
-<li class="chapter" data-level="6.18" data-path="network-layout.html"><a href="network-layout.html#stress-layout"><i class="fa fa-check"></i><b>6.18</b> Stress layout</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="network-topology-information.html"><a href="network-topology-information.html"><i class="fa fa-check"></i><b>7</b> Network topology information</a>
-<ul>
-<li class="chapter" data-level="7.1" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information"><i class="fa fa-check"></i><b>7.1</b> Get network topology information</a></li>
-<li class="chapter" data-level="7.2" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information-with-matrix"><i class="fa fa-check"></i><b>7.2</b> Get network topology information with matrix</a></li>
-<li class="chapter" data-level="7.3" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information-by-parallel"><i class="fa fa-check"></i><b>7.3</b> Get network topology information by parallel</a></li>
-<li class="chapter" data-level="7.4" data-path="network-topology-information.html"><a href="network-topology-information.html#get-network-topology-information-with-matrix-by-parallel"><i class="fa fa-check"></i><b>7.4</b> Get network topology information with matrix by parallel</a></li>
-<li class="chapter" data-level="7.5" data-path="network-topology-information.html"><a href="network-topology-information.html#integrated-value-of-influence-ivi"><i class="fa fa-check"></i><b>7.5</b> Integrated Value of Influence (IVI)</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="network-comparison.html"><a href="network-comparison.html"><i class="fa fa-check"></i><b>8</b> Network comparison</a>
-<ul>
-<li class="chapter" data-level="8.1" data-path="network-comparison.html"><a href="network-comparison.html#subgraph-comparisopn"><i class="fa fa-check"></i><b>8.1</b> Subgraph comparisopn</a></li>
-<li class="chapter" data-level="8.2" data-path="network-comparison.html"><a href="network-comparison.html#comparison-of-multi-sample-networks"><i class="fa fa-check"></i><b>8.2</b> Comparison of multi-sample networks</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="network-environment.html"><a href="network-environment.html"><i class="fa fa-check"></i><b>9</b> Network &amp; Environment</a>
-<ul>
-<li class="chapter" data-level="9.1" data-path="network-environment.html"><a href="network-environment.html#network-environment-1"><i class="fa fa-check"></i><b>9.1</b> Network Environment</a></li>
-</ul></li>
-<li class="chapter" data-level="10" data-path="multi-omics-network-analysis.html"><a href="multi-omics-network-analysis.html"><i class="fa fa-check"></i><b>10</b> Multi-omics network analysis</a>
-<ul>
-<li class="chapter" data-level="10.1" data-path="multi-omics-network-analysis.html"><a href="multi-omics-network-analysis.html#multi-omics"><i class="fa fa-check"></i><b>10.1</b> Multi-omics</a></li>
-</ul></li>
-<li class="divider"></li>
-<li><a href="https://github.com/Jiawang1209/ggNetView" target="blank">Published with bookdown</a></li>
-
-</ul>
-
-      </nav>
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">ggNetView manual documentation</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
 
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ggNetView manual documentation</a>
-          </h1>
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"><span class="header-section-number">1</span> ggNetView manual documentation</a></li>
+<li><a class="" href="build-graph-object.html"><span class="header-section-number">2</span> Build graph object</a></li>
+<li><a class="" href="random-matrix-theory-rmtbased-random-network.html"><span class="header-section-number">3</span> Random Matrix Theory (RMT)–based random network</a></li>
+<li><a class="active" href="get-network-information.html"><span class="header-section-number">4</span> Get network information</a></li>
+<li><a class="" href="extract-subgraph.html"><span class="header-section-number">5</span> Extract subgraph</a></li>
+<li><a class="" href="network-layout.html"><span class="header-section-number">6</span> Network layout</a></li>
+<li><a class="" href="network-topology-information.html"><span class="header-section-number">7</span> Network topology information</a></li>
+<li><a class="" href="multi-network-and-comparison.html"><span class="header-section-number">8</span> Multi-Network and comparison</a></li>
+<li><a class="" href="network-environment.html"><span class="header-section-number">9</span> Network &amp; Environment</a></li>
+<li><a class="" href="multi-omics-network-analysis.html"><span class="header-section-number">10</span> Multi-omics network analysis</a></li>
+<li><a class="" href="gallery-of-reproducible-examples.html"><span class="header-section-number">11</span> Gallery of Reproducible Examples</a></li>
+</ul>
+
+        <div class="book-extra">
+          
         </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="get-network-information" class="section level1 hasAnchor" number="4">
-<h1><span class="header-section-number">Chapter 4</span> Get network information<a href="get-network-information.html#get-network-information" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="get-network-information" class="section level1" number="4">
+<h1>
+<span class="header-section-number">4</span> Get network information<a class="anchor" aria-label="anchor" href="#get-network-information"><i class="fas fa-link"></i></a>
+</h1>
 <blockquote>
 <p>Once the graph object is constructed, basic network information can be retrieved, and subnetworks can be extracted.</p>
 </blockquote>
-<hr />
+<hr>
 <blockquote>
 <p>Load R Package</p>
 </blockquote>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="get-network-information.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># data manipulation / piping utilities</span></span>
-<span id="cb1-2"><a href="get-network-information.html#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggNetView)   <span class="co"># graph builders + info-extraction helpers</span></span></code></pre></div>
+<div class="sourceCode" id="cb311"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>   <span class="co"># data manipulation / piping utilities</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Jiawang1209/ggNetView">ggNetView</a></span><span class="op">)</span>   <span class="co"># graph builders + info-extraction helpers</span></span></code></pre></div>
 <blockquote>
 <p>Example data</p>
 </blockquote>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="get-network-information.html#cb2-1" tabindex="-1"></a><span class="co"># ---- Built-in example datasets ----</span></span>
-<span id="cb2-2"><a href="get-network-information.html#cb2-2" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="get-network-information.html#cb2-3" tabindex="-1"></a><span class="co"># Relative abundance table of rarefied ASVs/OTUs (rows = ASVs, cols = samples).</span></span>
-<span id="cb2-4"><a href="get-network-information.html#cb2-4" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;otu_rare_relative&quot;</span>)</span>
-<span id="cb2-5"><a href="get-network-information.html#cb2-5" tabindex="-1"></a><span class="fu">dim</span>(otu_rare_relative)</span></code></pre></div>
+<div class="sourceCode" id="cb312"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Built-in example datasets ----</span></span>
+<span></span>
+<span><span class="co"># Relative abundance table of rarefied ASVs/OTUs (rows = ASVs, cols = samples).</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"otu_rare_relative"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">otu_rare_relative</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 2859   18</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="get-network-information.html#cb4-1" tabindex="-1"></a>otu_rare_relative[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb314"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">otu_rare_relative</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
 <pre><code>##              KO1        KO2        KO3        KO4        KO5
 ## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
 ## ASV_2 0.05750000 0.03393333 0.06046667 0.05810000 0.07320000
 ## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
 ## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
 ## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="get-network-information.html#cb6-1" tabindex="-1"></a><span class="co"># Taxonomic annotation; first column must be the ASV/OTU ID.</span></span>
-<span id="cb6-2"><a href="get-network-information.html#cb6-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;tax_tab&quot;</span>)</span>
-<span id="cb6-3"><a href="get-network-information.html#cb6-3" tabindex="-1"></a><span class="fu">dim</span>(tax_tab)</span></code></pre></div>
+<div class="sourceCode" id="cb316"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Taxonomic annotation; first column must be the ASV/OTU ID.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"tax_tab"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">tax_tab</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 2859    8</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="get-network-information.html#cb8-1" tabindex="-1"></a>tax_tab[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb318"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tax_tab</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
 <pre><code>## # A tibble: 5 × 5
 ##   OTUID  Kingdom  Phylum          Class          Order            
 ##   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;            
@@ -290,22 +110,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <blockquote>
 <p>Build graph object</p>
 </blockquote>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="get-network-information.html#cb10-1" tabindex="-1"></a><span class="co"># ---- Build a co-occurrence network as the input for downstream queries ----</span></span>
-<span id="cb10-2"><a href="get-network-information.html#cb10-2" tabindex="-1"></a>graph_obj <span class="ot">&lt;-</span> <span class="fu">build_graph_from_mat</span>(</span>
-<span id="cb10-3"><a href="get-network-information.html#cb10-3" tabindex="-1"></a>  <span class="at">mat              =</span> otu_rare_relative,  <span class="co"># variables x samples numeric matrix</span></span>
-<span id="cb10-4"><a href="get-network-information.html#cb10-4" tabindex="-1"></a>  <span class="at">transfrom.method =</span> <span class="st">&quot;none&quot;</span>,             <span class="co"># input already relative abundance, no extra transform</span></span>
-<span id="cb10-5"><a href="get-network-information.html#cb10-5" tabindex="-1"></a>  <span class="at">r.threshold      =</span> <span class="fl">0.7</span>,                <span class="co"># |r| cutoff for keeping an edge</span></span>
-<span id="cb10-6"><a href="get-network-information.html#cb10-6" tabindex="-1"></a>  <span class="at">p.threshold      =</span> <span class="fl">0.05</span>,               <span class="co"># adjusted p-value cutoff</span></span>
-<span id="cb10-7"><a href="get-network-information.html#cb10-7" tabindex="-1"></a>  <span class="at">method           =</span> <span class="st">&quot;WGCNA&quot;</span>,            <span class="co"># correlation backend: WGCNA::corAndPvalue</span></span>
-<span id="cb10-8"><a href="get-network-information.html#cb10-8" tabindex="-1"></a>  <span class="at">cor.method       =</span> <span class="st">&quot;pearson&quot;</span>,          <span class="co"># Pearson correlation</span></span>
-<span id="cb10-9"><a href="get-network-information.html#cb10-9" tabindex="-1"></a>  <span class="at">proc             =</span> <span class="st">&quot;bonferroni&quot;</span>,       <span class="co"># multiple-testing correction</span></span>
-<span id="cb10-10"><a href="get-network-information.html#cb10-10" tabindex="-1"></a>  <span class="at">module.method    =</span> <span class="st">&quot;Fast_greedy&quot;</span>,      <span class="co"># community detection algorithm</span></span>
-<span id="cb10-11"><a href="get-network-information.html#cb10-11" tabindex="-1"></a>  <span class="at">node_annotation  =</span> tax_tab,            <span class="co"># taxonomy joined onto each node by name</span></span>
-<span id="cb10-12"><a href="get-network-information.html#cb10-12" tabindex="-1"></a>  <span class="at">top_modules      =</span> <span class="dv">15</span>,                 <span class="co"># keep top-15 modules; rest -&gt; &quot;Others&quot;</span></span>
-<span id="cb10-13"><a href="get-network-information.html#cb10-13" tabindex="-1"></a>  <span class="at">seed             =</span> <span class="dv">1115</span>                <span class="co"># fix RNG for reproducibility</span></span>
-<span id="cb10-14"><a href="get-network-information.html#cb10-14" tabindex="-1"></a>)</span>
-<span id="cb10-15"><a href="get-network-information.html#cb10-15" tabindex="-1"></a></span>
-<span id="cb10-16"><a href="get-network-information.html#cb10-16" tabindex="-1"></a>graph_obj</span></code></pre></div>
+<div class="sourceCode" id="cb320"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Build a co-occurrence network as the input for downstream queries ----</span></span>
+<span><span class="va">graph_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/build_graph_from_mat.html">build_graph_from_mat</a></span><span class="op">(</span></span>
+<span>  mat              <span class="op">=</span> <span class="va">otu_rare_relative</span>,  <span class="co"># variables x samples numeric matrix</span></span>
+<span>  transfrom.method <span class="op">=</span> <span class="st">"none"</span>,             <span class="co"># input already relative abundance, no extra transform</span></span>
+<span>  r.threshold      <span class="op">=</span> <span class="fl">0.7</span>,                <span class="co"># |r| cutoff for keeping an edge</span></span>
+<span>  p.threshold      <span class="op">=</span> <span class="fl">0.05</span>,               <span class="co"># adjusted p-value cutoff</span></span>
+<span>  method           <span class="op">=</span> <span class="st">"WGCNA"</span>,            <span class="co"># correlation backend: WGCNA::corAndPvalue</span></span>
+<span>  cor.method       <span class="op">=</span> <span class="st">"pearson"</span>,          <span class="co"># Pearson correlation</span></span>
+<span>  proc             <span class="op">=</span> <span class="st">"bonferroni"</span>,       <span class="co"># multiple-testing correction</span></span>
+<span>  module.method    <span class="op">=</span> <span class="st">"Fast_greedy"</span>,      <span class="co"># community detection algorithm</span></span>
+<span>  node_annotation  <span class="op">=</span> <span class="va">tax_tab</span>,            <span class="co"># taxonomy joined onto each node by name</span></span>
+<span>  top_modules      <span class="op">=</span> <span class="fl">15</span>,                 <span class="co"># keep top-15 modules; rest -&gt; "Others"</span></span>
+<span>  seed             <span class="op">=</span> <span class="fl">1115</span>                <span class="co"># fix RNG for reproducibility</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">graph_obj</span></span></code></pre></div>
 <pre><code>## # A tbl_graph: 213 nodes and 844 edges
 ## #
 ## # An undirected simple graph with 29 components
@@ -334,17 +155,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2   185   208  0.954       0.954 Positive      
 ## 3   185   213  0.957       0.957 Positive      
 ## # ℹ 841 more rows</code></pre>
-<div id="full-network-information" class="section level2 hasAnchor" number="4.1">
-<h2><span class="header-section-number">4.1</span> Full-network information<a href="get-network-information.html#full-network-information" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="get-network-information.html#cb12-1" tabindex="-1"></a><span class="co"># ---- Retrieve node-level and edge-level info for the FULL graph ----</span></span>
-<span id="cb12-2"><a href="get-network-information.html#cb12-2" tabindex="-1"></a><span class="co"># Returns a list with `node_info` and `edge_info` tibbles.</span></span>
-<span id="cb12-3"><a href="get-network-information.html#cb12-3" tabindex="-1"></a>graph_obj_info <span class="ot">&lt;-</span> <span class="fu">get_info_from_graph</span>(<span class="at">graph_obj =</span> graph_obj)</span>
-<span id="cb12-4"><a href="get-network-information.html#cb12-4" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="get-network-information.html#cb12-5" tabindex="-1"></a><span class="fu">class</span>(graph_obj_info)         <span class="co"># &quot;list&quot;</span></span></code></pre></div>
-<pre><code>## [1] &quot;list&quot;</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="get-network-information.html#cb14-1" tabindex="-1"></a><span class="fu">names</span>(graph_obj_info)         <span class="co"># &quot;node_info&quot;, &quot;edge_info&quot;</span></span></code></pre></div>
-<pre><code>## [1] &quot;node_info&quot; &quot;edge_info&quot;</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="get-network-information.html#cb16-1" tabindex="-1"></a>graph_obj_info<span class="sc">$</span>node_info      <span class="co"># per-node attributes: name, Modularity, Degree, Strength, taxonomy, ...</span></span></code></pre></div>
+<div id="full-network-information" class="section level2" number="4.1">
+<h2>
+<span class="header-section-number">4.1</span> Full-network information<a class="anchor" aria-label="anchor" href="#full-network-information"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb322"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Retrieve node-level and edge-level info for the FULL graph ----</span></span>
+<span><span class="co"># Returns a list with `node_info` and `edge_info` tibbles.</span></span>
+<span><span class="va">graph_obj_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_info_from_graph.html">get_info_from_graph</a></span><span class="op">(</span>graph_obj <span class="op">=</span> <span class="va">graph_obj</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">graph_obj_info</span><span class="op">)</span>         <span class="co"># "list"</span></span></code></pre></div>
+<pre><code>## [1] "list"</code></pre>
+<div class="sourceCode" id="cb324"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">graph_obj_info</span><span class="op">)</span>         <span class="co"># "node_info", "edge_info"</span></span></code></pre></div>
+<pre><code>## [1] "node_info" "edge_info"</code></pre>
+<div class="sourceCode" id="cb326"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph_obj_info</span><span class="op">$</span><span class="va">node_info</span>      <span class="co"># per-node attributes: name, Modularity, Degree, Strength, taxonomy, ...</span></span></code></pre></div>
 <pre><code>## # A tibble: 213 × 11
 ##    name     Modularity Degree Strength Kingdom  Phylum  Class Order Family Genus
 ##    &lt;chr&gt;    &lt;ord&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;
@@ -360,7 +186,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 ASV_2844 5              27     26.5 Bacteria Proteo… Unas… Unas… Unass… Unas…
 ## # ℹ 203 more rows
 ## # ℹ 1 more variable: Species &lt;chr&gt;</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="get-network-information.html#cb18-1" tabindex="-1"></a>graph_obj_info<span class="sc">$</span>edge_info      <span class="co"># per-edge attributes: from, to, weight, ...</span></span></code></pre></div>
+<div class="sourceCode" id="cb328"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph_obj_info</span><span class="op">$</span><span class="va">edge_info</span>      <span class="co"># per-edge attributes: from, to, weight, ...</span></span></code></pre></div>
 <pre><code>## # A tibble: 844 × 5
 ##    from    to       weight correlation corr_direction
 ##    &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;         
@@ -376,14 +203,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 ASV_69  ASV_1418  0.975       0.975 Positive      
 ## # ℹ 834 more rows</code></pre>
 </div>
-<div id="sub-network-modularity-information" class="section level2 hasAnchor" number="4.2">
-<h2><span class="header-section-number">4.2</span> Sub-network (modularity) information<a href="get-network-information.html#sub-network-modularity-information" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="get-network-information.html#cb20-1" tabindex="-1"></a><span class="co"># ---- Split the graph by `Modularity` (one subgraph per module) ----</span></span>
-<span id="cb20-2"><a href="get-network-information.html#cb20-2" tabindex="-1"></a><span class="co"># `select_module = NULL` -&gt; no merged subgraph; only per-module split + stats.</span></span>
-<span id="cb20-3"><a href="get-network-information.html#cb20-3" tabindex="-1"></a>subgraph_info <span class="ot">&lt;-</span> <span class="fu">get_subgraph</span>(</span>
-<span id="cb20-4"><a href="get-network-information.html#cb20-4" tabindex="-1"></a>  <span class="at">graph_obj     =</span> graph_obj,   <span class="co"># input tbl_graph (must have a `Modularity` column on nodes)</span></span>
-<span id="cb20-5"><a href="get-network-information.html#cb20-5" tabindex="-1"></a>  <span class="at">select_module =</span> <span class="cn">NULL</span>         <span class="co"># NULL -&gt; don&#39;t build a merged subgraph</span></span>
-<span id="cb20-6"><a href="get-network-information.html#cb20-6" tabindex="-1"></a>)</span></code></pre></div>
+<div id="sub-network-modularity-information" class="section level2" number="4.2">
+<h2>
+<span class="header-section-number">4.2</span> Sub-network (modularity) information<a class="anchor" aria-label="anchor" href="#sub-network-modularity-information"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb330"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Split the graph by `Modularity` (one subgraph per module) ----</span></span>
+<span><span class="co"># `select_module = NULL` -&gt; no merged subgraph; only per-module split + stats.</span></span>
+<span><span class="va">subgraph_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_subgraph.html">get_subgraph</a></span><span class="op">(</span></span>
+<span>  graph_obj     <span class="op">=</span> <span class="va">graph_obj</span>,   <span class="co"># input tbl_graph (must have a `Modularity` column on nodes)</span></span>
+<span>  select_module <span class="op">=</span> <span class="cn">NULL</span>         <span class="co"># NULL -&gt; don't build a merged subgraph</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code>##    Module Number
 ## 1       5     31
 ## 2       2     24
@@ -401,12 +231,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 14     11      4
 ## 15     15      4
 ## 16 Others     39</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="get-network-information.html#cb22-1" tabindex="-1"></a><span class="fu">class</span>(subgraph_info)          <span class="co"># &quot;list&quot;</span></span></code></pre></div>
-<pre><code>## [1] &quot;list&quot;</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="get-network-information.html#cb24-1" tabindex="-1"></a><span class="fu">names</span>(subgraph_info)          <span class="co"># &quot;sub_graph_all&quot;, &quot;stat_module&quot;, &quot;sub_graph_select&quot;</span></span></code></pre></div>
-<pre><code>## [1] &quot;sub_graph_all&quot;    &quot;stat_module&quot;      &quot;sub_graph_select&quot;</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="get-network-information.html#cb26-1" tabindex="-1"></a><span class="co"># Per-module node counts (data.frame with columns: Module, Number).</span></span>
-<span id="cb26-2"><a href="get-network-information.html#cb26-2" tabindex="-1"></a>subgraph_info<span class="sc">$</span>stat_module</span></code></pre></div>
+<div class="sourceCode" id="cb332"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">subgraph_info</span><span class="op">)</span>          <span class="co"># "list"</span></span></code></pre></div>
+<pre><code>## [1] "list"</code></pre>
+<div class="sourceCode" id="cb334"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">subgraph_info</span><span class="op">)</span>          <span class="co"># "sub_graph_all", "stat_module", "sub_graph_select"</span></span></code></pre></div>
+<pre><code>## [1] "sub_graph_all"    "stat_module"      "sub_graph_select"</code></pre>
+<div class="sourceCode" id="cb336"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Per-module node counts (data.frame with columns: Module, Number).</span></span>
+<span><span class="va">subgraph_info</span><span class="op">$</span><span class="va">stat_module</span></span></code></pre></div>
 <pre><code>##    Module Number
 ## 1       5     31
 ## 2       2     24
@@ -427,13 +260,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <blockquote>
 <p>We select modulerity 5</p>
 </blockquote>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="get-network-information.html#cb28-1" tabindex="-1"></a><span class="co"># ---- Build a merged subgraph for a chosen module ----</span></span>
-<span id="cb28-2"><a href="get-network-information.html#cb28-2" tabindex="-1"></a><span class="co"># `select_module = &quot;5&quot;` keeps nodes whose Modularity == &quot;5&quot;</span></span>
-<span id="cb28-3"><a href="get-network-information.html#cb28-3" tabindex="-1"></a><span class="co"># (and the edges between them) in `sub_graph_select`.</span></span>
-<span id="cb28-4"><a href="get-network-information.html#cb28-4" tabindex="-1"></a>graph_module5 <span class="ot">&lt;-</span> <span class="fu">get_subgraph</span>(</span>
-<span id="cb28-5"><a href="get-network-information.html#cb28-5" tabindex="-1"></a>  <span class="at">graph_obj     =</span> graph_obj,</span>
-<span id="cb28-6"><a href="get-network-information.html#cb28-6" tabindex="-1"></a>  <span class="at">select_module =</span> <span class="st">&quot;5&quot;</span>          <span class="co"># character vector of module labels to retain</span></span>
-<span id="cb28-7"><a href="get-network-information.html#cb28-7" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb338"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Build a merged subgraph for a chosen module ----</span></span>
+<span><span class="co"># `select_module = "5"` keeps nodes whose Modularity == "5"</span></span>
+<span><span class="co"># (and the edges between them) in `sub_graph_select`.</span></span>
+<span><span class="va">graph_module5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_subgraph.html">get_subgraph</a></span><span class="op">(</span></span>
+<span>  graph_obj     <span class="op">=</span> <span class="va">graph_obj</span>,</span>
+<span>  select_module <span class="op">=</span> <span class="st">"5"</span>          <span class="co"># character vector of module labels to retain</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code>##    Module Number
 ## 1       5     31
 ## 2       2     24
@@ -451,16 +285,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 14     11      4
 ## 15     15      4
 ## 16 Others     39</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="get-network-information.html#cb30-1" tabindex="-1"></a><span class="co"># ---- Inspect the module-5 subgraph using the same info helper ----</span></span>
-<span id="cb30-2"><a href="get-network-information.html#cb30-2" tabindex="-1"></a>graph_obj_info <span class="ot">&lt;-</span> <span class="fu">get_info_from_graph</span>(</span>
-<span id="cb30-3"><a href="get-network-information.html#cb30-3" tabindex="-1"></a>  <span class="at">graph_obj =</span> graph_module5<span class="sc">$</span>sub_graph_select   <span class="co"># the merged tbl_graph for module 5</span></span>
-<span id="cb30-4"><a href="get-network-information.html#cb30-4" tabindex="-1"></a>)</span>
-<span id="cb30-5"><a href="get-network-information.html#cb30-5" tabindex="-1"></a></span>
-<span id="cb30-6"><a href="get-network-information.html#cb30-6" tabindex="-1"></a><span class="fu">class</span>(graph_obj_info)         <span class="co"># &quot;list&quot;</span></span></code></pre></div>
-<pre><code>## [1] &quot;list&quot;</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="get-network-information.html#cb32-1" tabindex="-1"></a><span class="fu">names</span>(graph_obj_info)         <span class="co"># &quot;node_info&quot;, &quot;edge_info&quot;</span></span></code></pre></div>
-<pre><code>## [1] &quot;node_info&quot; &quot;edge_info&quot;</code></pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="get-network-information.html#cb34-1" tabindex="-1"></a>graph_obj_info<span class="sc">$</span>node_info      <span class="co"># nodes belonging to module 5</span></span></code></pre></div>
+<div class="sourceCode" id="cb340"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Inspect the module-5 subgraph using the same info helper ----</span></span>
+<span><span class="va">graph_obj_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_info_from_graph.html">get_info_from_graph</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">graph_module5</span><span class="op">$</span><span class="va">sub_graph_select</span>   <span class="co"># the merged tbl_graph for module 5</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">graph_obj_info</span><span class="op">)</span>         <span class="co"># "list"</span></span></code></pre></div>
+<pre><code>## [1] "list"</code></pre>
+<div class="sourceCode" id="cb342"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">graph_obj_info</span><span class="op">)</span>         <span class="co"># "node_info", "edge_info"</span></span></code></pre></div>
+<pre><code>## [1] "node_info" "edge_info"</code></pre>
+<div class="sourceCode" id="cb344"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph_obj_info</span><span class="op">$</span><span class="va">node_info</span>      <span class="co"># nodes belonging to module 5</span></span></code></pre></div>
 <pre><code>## # A tibble: 31 × 11
 ##    name     Modularity Degree Strength Kingdom  Phylum  Class Order Family Genus
 ##    &lt;chr&gt;    &lt;ord&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;
@@ -476,7 +313,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 ASV_2844 5              27     26.5 Bacteria Proteo… Unas… Unas… Unass… Unas…
 ## # ℹ 21 more rows
 ## # ℹ 1 more variable: Species &lt;chr&gt;</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="get-network-information.html#cb36-1" tabindex="-1"></a>graph_obj_info<span class="sc">$</span>edge_info      <span class="co"># edges between module-5 nodes</span></span></code></pre></div>
+<div class="sourceCode" id="cb346"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph_obj_info</span><span class="op">$</span><span class="va">edge_info</span>      <span class="co"># edges between module-5 nodes</span></span></code></pre></div>
 <pre><code>## # A tibble: 330 × 5
 ##    from     to      weight correlation corr_direction
 ##    &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;         
@@ -492,23 +330,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 ASV_1479 ASV_322  0.958       0.958 Positive      
 ## # ℹ 320 more rows</code></pre>
 </div>
-<div id="sub-network-sample-information" class="section level2 hasAnchor" number="4.3">
-<h2><span class="header-section-number">4.3</span> Sub-network (sample) information<a href="get-network-information.html#sub-network-sample-information" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="get-network-information.html#cb38-1" tabindex="-1"></a><span class="co"># ---- Extract sample-level subgraphs ------------------------------------</span></span>
-<span id="cb38-2"><a href="get-network-information.html#cb38-2" tabindex="-1"></a><span class="co"># For each sample (column of `mat`), an OTU is treated as &quot;present&quot; when</span></span>
-<span id="cb38-3"><a href="get-network-information.html#cb38-3" tabindex="-1"></a><span class="co"># its abundance is &gt; `min_abundance` (default 0). The induced subgraph of</span></span>
-<span id="cb38-4"><a href="get-network-information.html#cb38-4" tabindex="-1"></a><span class="co"># `graph_obj` on those present OTUs is returned per sample. With</span></span>
-<span id="cb38-5"><a href="get-network-information.html#cb38-5" tabindex="-1"></a><span class="co"># `select_sample` + `combine`, a single merged subgraph is also returned.</span></span>
-<span id="cb38-6"><a href="get-network-information.html#cb38-6" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">get_sample_subgraph</span>(</span>
-<span id="cb38-7"><a href="get-network-information.html#cb38-7" tabindex="-1"></a>  <span class="at">graph_obj     =</span> graph_obj,                        <span class="co"># the network built above</span></span>
-<span id="cb38-8"><a href="get-network-information.html#cb38-8" tabindex="-1"></a>  <span class="at">mat           =</span> otu_rare_relative,                <span class="co"># same matrix used to judge &quot;presence&quot; (rownames must match node names)</span></span>
-<span id="cb38-9"><a href="get-network-information.html#cb38-9" tabindex="-1"></a>  <span class="at">select_sample =</span> <span class="fu">colnames</span>(otu_rare_relative)[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="co"># sample IDs to merge into one subgraph (here: first 3 samples)</span></span>
-<span id="cb38-10"><a href="get-network-information.html#cb38-10" tabindex="-1"></a>  <span class="at">combine       =</span> <span class="st">&quot;union&quot;</span>                           <span class="co"># &quot;union&quot; = OTUs present in ANY selected sample; &quot;intersect&quot; = OTUs present in ALL</span></span>
-<span id="cb38-11"><a href="get-network-information.html#cb38-11" tabindex="-1"></a>)</span>
-<span id="cb38-12"><a href="get-network-information.html#cb38-12" tabindex="-1"></a><span class="fu">names</span>(res)   <span class="co"># &quot;sub_graph_all&quot;, &quot;stat_sample&quot;, &quot;sub_graph_select&quot;</span></span></code></pre></div>
-<pre><code>## [1] &quot;sub_graph_all&quot;    &quot;stat_sample&quot;      &quot;sub_graph_select&quot;</code></pre>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="get-network-information.html#cb40-1" tabindex="-1"></a><span class="co"># ---- Inspect the merged 3-sample subgraph ----</span></span>
-<span id="cb40-2"><a href="get-network-information.html#cb40-2" tabindex="-1"></a>res<span class="sc">$</span>sub_graph_select   <span class="co"># tbl_graph: nodes = union/intersect of present OTUs across the 3 samples</span></span></code></pre></div>
+<div id="sub-network-sample-information" class="section level2" number="4.3">
+<h2>
+<span class="header-section-number">4.3</span> Sub-network (sample) information<a class="anchor" aria-label="anchor" href="#sub-network-sample-information"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb348"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Extract sample-level subgraphs ------------------------------------</span></span>
+<span><span class="co"># For each sample (column of `mat`), an OTU is treated as "present" when</span></span>
+<span><span class="co"># its abundance is &gt; `min_abundance` (default 0). The induced subgraph of</span></span>
+<span><span class="co"># `graph_obj` on those present OTUs is returned per sample. With</span></span>
+<span><span class="co"># `select_sample` + `combine`, a single merged subgraph is also returned.</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_sample_subgraph.html">get_sample_subgraph</a></span><span class="op">(</span></span>
+<span>  graph_obj     <span class="op">=</span> <span class="va">graph_obj</span>,                        <span class="co"># the network built above</span></span>
+<span>  mat           <span class="op">=</span> <span class="va">otu_rare_relative</span>,                <span class="co"># same matrix used to judge "presence" (rownames must match node names)</span></span>
+<span>  select_sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">otu_rare_relative</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, <span class="co"># sample IDs to merge into one subgraph (here: first 3 samples)</span></span>
+<span>  combine       <span class="op">=</span> <span class="st">"union"</span>                           <span class="co"># "union" = OTUs present in ANY selected sample; "intersect" = OTUs present in ALL</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>   <span class="co"># "sub_graph_all", "stat_sample", "sub_graph_select"</span></span></code></pre></div>
+<pre><code>## [1] "sub_graph_all"    "stat_sample"      "sub_graph_select"</code></pre>
+<div class="sourceCode" id="cb350"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Inspect the merged 3-sample subgraph ----</span></span>
+<span><span class="va">res</span><span class="op">$</span><span class="va">sub_graph_select</span>   <span class="co"># tbl_graph: nodes = union/intersect of present OTUs across the 3 samples</span></span></code></pre></div>
 <pre><code>## # A tbl_graph: 181 nodes and 602 edges
 ## #
 ## # An undirected simple graph with 34 components
@@ -538,9 +380,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2   158   181  0.957       0.957 Positive      
 ## 3   145   147  0.969       0.969 Positive      
 ## # ℹ 599 more rows</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="get-network-information.html#cb42-1" tabindex="-1"></a>graph_obj_info <span class="ot">&lt;-</span> <span class="fu">get_info_from_graph</span>(<span class="at">graph_obj =</span> res<span class="sc">$</span>sub_graph_select)</span>
-<span id="cb42-2"><a href="get-network-information.html#cb42-2" tabindex="-1"></a></span>
-<span id="cb42-3"><a href="get-network-information.html#cb42-3" tabindex="-1"></a>graph_obj_info<span class="sc">$</span>node_info   <span class="co"># node attributes + n_present_samples / present_in_samples columns</span></span></code></pre></div>
+<div class="sourceCode" id="cb352"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph_obj_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/get_info_from_graph.html">get_info_from_graph</a></span><span class="op">(</span>graph_obj <span class="op">=</span> <span class="va">res</span><span class="op">$</span><span class="va">sub_graph_select</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">graph_obj_info</span><span class="op">$</span><span class="va">node_info</span>   <span class="co"># node attributes + n_present_samples / present_in_samples columns</span></span></code></pre></div>
 <pre><code>## # A tibble: 181 × 13
 ##    name     Modularity Degree Strength Kingdom  Phylum  Class Order Family Genus
 ##    &lt;chr&gt;    &lt;ord&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;
@@ -557,7 +400,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## # ℹ 171 more rows
 ## # ℹ 3 more variables: Species &lt;chr&gt;, n_present_samples &lt;int&gt;,
 ## #   present_in_samples &lt;chr&gt;</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="get-network-information.html#cb44-1" tabindex="-1"></a>graph_obj_info<span class="sc">$</span>edge_info   <span class="co"># induced edges between surviving nodes</span></span></code></pre></div>
+<div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph_obj_info</span><span class="op">$</span><span class="va">edge_info</span>   <span class="co"># induced edges between surviving nodes</span></span></code></pre></div>
 <pre><code>## # A tibble: 602 × 5
 ##    from    to       weight correlation corr_direction
 ##    &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;         
@@ -575,66 +419,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </div>
 </div>
-            </section>
+  <div class="chapter-nav">
+<div class="prev"><a href="random-matrix-theory-rmtbased-random-network.html"><span class="header-section-number">3</span> Random Matrix Theory (RMT)–based random network</a></div>
+<div class="next"><a href="extract-subgraph.html"><span class="header-section-number">5</span> Extract subgraph</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#get-network-information"><span class="header-section-number">4</span> Get network information</a></li>
+<li><a class="nav-link" href="#full-network-information"><span class="header-section-number">4.1</span> Full-network information</a></li>
+<li><a class="nav-link" href="#sub-network-modularity-information"><span class="header-section-number">4.2</span> Sub-network (modularity) information</a></li>
+<li><a class="nav-link" href="#sub-network-sample-information"><span class="header-section-number">4.3</span> Sub-network (sample) information</a></li>
+</ul>
 
-          </div>
-        </div>
-      </div>
-<a href="random-matrix-theory-rmtbased-random-network.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="extract-subgraph.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-05-21.</p>
   </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
-<script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-  "sharing": {
-    "github": false,
-    "facebook": true,
-    "twitter": true,
-    "linkedin": false,
-    "weibo": false,
-    "instapaper": false,
-    "vk": false,
-    "whatsapp": false,
-    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-  },
-  "fontsettings": {
-    "theme": "white",
-    "family": "sans",
-    "size": 2
-  },
-  "edit": {
-    "link": "https://github.com/Jiawang1209/ggNetView/03-graph_info.Rmd",
-    "text": "Edit"
-  },
-  "history": {
-    "link": null,
-    "text": null
-  },
-  "view": {
-    "link": null,
-    "text": null
-  },
-  "download": ["ggNetView-manual.pdf", "ggNetView-manual.epub"],
-  "search": {
-    "engine": "fuse",
-    "options": null
-  },
-  "toc": {
-    "collapse": "subsection"
-  }
-});
-});
-</script>
 
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
 </body>
-
 </html>
