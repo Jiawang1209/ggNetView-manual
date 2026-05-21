@@ -1,8 +1,3 @@
----
-output:
-  html_document: default
-  pdf_document: default
----
 # Multi-Network and comparison
 
 > Load R Package

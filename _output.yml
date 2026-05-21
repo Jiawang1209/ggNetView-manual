@@ -1,7 +1,9 @@
 bookdown::gitbook:
   css: style.css
+  toc_depth: 4
   config:
     toc:
+      collapse: none
       before: |
         <li><a href="./">ggNetView-manial</a></li>
       after: |
