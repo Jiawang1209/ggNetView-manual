@@ -1039,9 +1039,9 @@ Build graph object
 \end{Shaded}
 
 \begin{verbatim}
-## IGRAPH 9acdb55 UNW- 100 200 -- 
+## IGRAPH e620d92 UNW- 100 200 -- 
 ## + attr: name (v/c), group (v/c), weight (e/n)
-## + edges from 9acdb55 (vertex names):
+## + edges from e620d92 (vertex names):
 ##  [1] A1 --D40 A2 --D39 A3 --D38 A4 --D37 A5 --D36 A6 --D35 A7 --D34 A8 --D33
 ##  [9] A9 --D32 A10--D31 B1 --D30 B2 --D29 B3 --D28 B4 --D27 B5 --D26 B6 --D25
 ## [17] B7 --D24 B8 --D23 B9 --D22 B10--D21 B11--D20 B12--D19 B13--D18 B14--D17
@@ -8513,7 +8513,990 @@ link\_level = ``Module\&Node2''
 
 \chapter{Network \& Environment}\label{network-environment}
 
-\section{Network Environment}\label{network-environment-1}
+\begin{quote}
+Load R Package
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)   }\CommentTok{\# data manipulation / piping utilities}
+\FunctionTok{library}\NormalTok{(ggNetView)   }\CommentTok{\# graph builders + info{-}extraction helpers}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Built{-}in example datasets shipped with ggNetView:}
+\CommentTok{\#   \textasciigrave{}Envdf\_4st\textasciigrave{} {-} environmental table (samples x env variables)}
+\CommentTok{\#   \textasciigrave{}Spedf\textasciigrave{}     {-} species/feature table (samples x species)}
+\CommentTok{\# Row order MUST match between the two tables.}
+\FunctionTok{data}\NormalTok{(}\StringTok{"Envdf\_4st"}\NormalTok{)}
+\FunctionTok{data}\NormalTok{(}\StringTok{"Spedf"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Network Environment (one core with 4 Envrionment matrix)}\label{network-environment-one-core-with-4-envrionment-matrix}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# {-}{-}{-}{-} Plot: 1 central species block + 4 environmental heatmap quadrants {-}{-}{-}{-}}
+\CommentTok{\# \textasciigrave{}relation\_method = "correlation"\textasciigrave{} means spec{-}env links are based on}
+\CommentTok{\# correlations (psych::corr.test) rather than community distance / mantel.}
+\NormalTok{out1 }\OtherTok{\textless{}{-}} \FunctionTok{gglink\_heatmaps}\NormalTok{(}
+  \AttributeTok{env                =}\NormalTok{ Envdf\_4st,           }\CommentTok{\# environmental table: rows = samples, cols = env factors}
+  \AttributeTok{spec               =}\NormalTok{ Spedf,               }\CommentTok{\# species table: rows = samples (same order as env), cols = species}
+  \AttributeTok{env\_select         =} \FunctionTok{list}\NormalTok{(                }\CommentTok{\# one heatmap quadrant per env block (length must match \textasciigrave{}orientation\textasciigrave{})}
+    \AttributeTok{Env01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{14}\NormalTok{,}
+    \AttributeTok{Env02 =} \DecValTok{15}\SpecialCharTok{:}\DecValTok{28}\NormalTok{,}
+    \AttributeTok{Env03 =} \DecValTok{29}\SpecialCharTok{:}\DecValTok{42}\NormalTok{,}
+    \AttributeTok{Env04 =} \DecValTok{43}\SpecialCharTok{:}\DecValTok{56}
+\NormalTok{  ),}
+  \AttributeTok{spec\_select        =} \FunctionTok{list}\NormalTok{(                }\CommentTok{\# one central species network per block}
+    \AttributeTok{Spec01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{8}                            \CommentTok{\#   take species columns 1..8}
+\NormalTok{  ),}
+  \AttributeTok{relation\_method    =} \StringTok{"correlation"}\NormalTok{,       }\CommentTok{\# spec{-}env link rule: "correlation" (vs "mantel" / "vegdist")}
+  \AttributeTok{spec\_layout        =} \StringTok{"circle\_outline"}\NormalTok{,    }\CommentTok{\# shape of the central network: nodes on a circle outline}
+  \AttributeTok{cor.method         =} \StringTok{"pearson"}\NormalTok{,           }\CommentTok{\# correlation method used for env{-}env tiles and spec{-}env links}
+  \AttributeTok{cor.use            =} \StringTok{"pairwise"}\NormalTok{,          }\CommentTok{\# NA handling: use pairwise{-}complete observations}
+  \AttributeTok{r                  =} \DecValTok{6}\NormalTok{,                   }\CommentTok{\# effective radius of the central network}
+  \AttributeTok{distance           =} \DecValTok{1}\NormalTok{,                   }\CommentTok{\# offset between the central network and each surrounding heatmap}
+  \AttributeTok{HeatmapLabelOrient =} \DecValTok{45}\NormalTok{,                  }\CommentTok{\# rotate heatmap row/column labels 45 deg to avoid overlap}
+  \AttributeTok{HeatmapLabelSize   =} \DecValTok{3}\NormalTok{,                   }\CommentTok{\# smaller label font (3) since many labels are crammed at 45 deg}
+  \AttributeTok{orientation        =} \FunctionTok{c}\NormalTok{(                   }\CommentTok{\# which quadrant each env block lands in (paired with \textasciigrave{}env\_select\textasciigrave{} in order)}
+    \StringTok{"top\_right"}\NormalTok{,}
+    \StringTok{"bottom\_right"}\NormalTok{,}
+    \StringTok{"top\_left"}\NormalTok{,}
+    \StringTok{"bottom\_left"}
+\NormalTok{  )}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The max module in network is 2 we use the 2  modules for next analysis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{class}\NormalTok{(out1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "list"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{length}\NormalTok{(out1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{out1[[}\DecValTok{1}\NormalTok{]]   }\CommentTok{\# gglink\_heatmaps() returns a list of ggplot variants; [[1]] = the default view}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-116-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{out1[[}\DecValTok{2}\NormalTok{]]   }\CommentTok{\# the 2nd ggplot variant (different style — legend / annotation layer)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-116-2} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(out1[[}\DecValTok{3}\NormalTok{]])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         ID Type  Correlation     Pvalue p_signif spec_block env_block
+## 1 Callvulg  N_1  0.194775914 0.36174639              Spec01     Env01
+## 2 Callvulg  P_1 -0.089825004 0.67638229              Spec01     Env01
+## 3 Callvulg  K_1  0.508915172 0.01109495        *     Spec01     Env01
+## 4 Callvulg Ca_1  0.004323521 0.98400337              Spec01     Env01
+## 5 Callvulg Mg_1  0.114475972 0.59428736              Spec01     Env01
+## 6 Callvulg  S_1  0.401157542 0.05203489              Spec01     Env01
+##        method
+## 1 correlation
+## 2 correlation
+## 3 correlation
+## 4 correlation
+## 5 correlation
+## 6 correlation
+\end{verbatim}
+
+\section{Network Environment (one core with 3 Environment matrix)}\label{network-environment-one-core-with-3-environment-matrix}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# {-}{-}{-}{-} Plot: 1 central species block + 3 environmental heatmap quadrants {-}{-}{-}{-}}
+\CommentTok{\# Like the 4{-}quadrant version, but with Env02 dropped and custom styling:}
+\CommentTok{\#   {-} drop\_nonsig = TRUE     : hide non{-}significant spec{-}env links}
+\CommentTok{\#   {-} HeatmapColorBar        : custom low/high colour pair per quadrant}
+\CommentTok{\#   {-} HeatmapPointFill / CorePointFill : override default fill colours}
+\NormalTok{out2 }\OtherTok{\textless{}{-}} \FunctionTok{gglink\_heatmaps}\NormalTok{(}
+  \AttributeTok{env                =}\NormalTok{ Envdf\_4st,           }\CommentTok{\# environmental table: rows = samples, cols = env factors}
+  \AttributeTok{spec               =}\NormalTok{ Spedf,               }\CommentTok{\# species table: rows = samples (same order as env), cols = species}
+  \AttributeTok{env\_select         =} \FunctionTok{list}\NormalTok{(                }\CommentTok{\# 3 env blocks {-}\textgreater{} 3 heatmap quadrants}
+    \AttributeTok{Env01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{14}\NormalTok{,}
+    \AttributeTok{Env03 =} \DecValTok{29}\SpecialCharTok{:}\DecValTok{40}\NormalTok{,}
+    \AttributeTok{Env04 =} \DecValTok{43}\SpecialCharTok{:}\DecValTok{50}
+\NormalTok{  ),}
+  \AttributeTok{spec\_select        =} \FunctionTok{list}\NormalTok{(}\AttributeTok{Spec01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{8}\NormalTok{),  }\CommentTok{\# one central species network (species cols 1..8)}
+  \AttributeTok{relation\_method    =} \StringTok{"correlation"}\NormalTok{,       }\CommentTok{\# spec{-}env link rule: correlation (vs "mantel" / "vegdist")}
+  \AttributeTok{spec\_layout        =} \StringTok{"circle\_outline"}\NormalTok{,    }\CommentTok{\# shape of the central network: nodes on a circle outline}
+  \AttributeTok{cor.method         =} \StringTok{"pearson"}\NormalTok{,           }\CommentTok{\# correlation method for env{-}env tiles and spec{-}env links}
+  \AttributeTok{cor.use            =} \StringTok{"pairwise"}\NormalTok{,          }\CommentTok{\# NA handling: pairwise{-}complete observations}
+  \AttributeTok{drop\_nonsig        =} \ConstantTok{TRUE}\NormalTok{,                }\CommentTok{\# remove non{-}significant spec{-}env links from the plot (still kept in stats)}
+  \AttributeTok{HeatmapColorBar    =} \FunctionTok{list}\NormalTok{(                }\CommentTok{\# one low/high colour pair per env block (length = 3)}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{),  }\CommentTok{\# quadrant 1: blue {-}\textgreater{} red}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#1b7837"}\NormalTok{, }\StringTok{"\#762a83"}\NormalTok{),  }\CommentTok{\# quadrant 2: green {-}\textgreater{} purple}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#4393c3"}\NormalTok{, }\StringTok{"\#d6604d"}\NormalTok{)   }\CommentTok{\# quadrant 3: light blue {-}\textgreater{} brick}
+\NormalTok{  ),}
+  \AttributeTok{HeatmapPointFill   =} \StringTok{"\#8c6bb1"}\NormalTok{,           }\CommentTok{\# fill of the diagonal anchor points on each heatmap}
+  \AttributeTok{CorePointFill      =} \StringTok{"\#225ea8"}\NormalTok{,           }\CommentTok{\# fill of the central species nodes}
+  \AttributeTok{HeatmapLabelOrient =} \DecValTok{45}\NormalTok{,                  }\CommentTok{\# rotate heatmap labels 45 deg to avoid overlap}
+  \AttributeTok{HeatmapLabelSize   =} \DecValTok{3}\NormalTok{,                   }\CommentTok{\# smaller label font (3) since many labels are crammed at 45 deg}
+  \AttributeTok{r                  =} \DecValTok{6}\NormalTok{,                   }\CommentTok{\# effective radius of the central network}
+  \AttributeTok{distance           =} \DecValTok{1}\NormalTok{,                   }\CommentTok{\# offset between the central network and each surrounding heatmap}
+  \AttributeTok{orientation        =} \FunctionTok{c}\NormalTok{(                   }\CommentTok{\# 3 quadrants — length MUST match \textasciigrave{}env\_select\textasciigrave{}}
+    \StringTok{"top\_right"}\NormalTok{,}
+    \StringTok{"top\_left"}\NormalTok{,}
+    \StringTok{"bottom\_left"}
+\NormalTok{  )}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The max module in network is 2 we use the 2  modules for next analysis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{out2[[}\DecValTok{1}\NormalTok{]]   }\CommentTok{\# default view (1st ggplot variant from the returned list)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-117-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{out2[[}\DecValTok{1}\NormalTok{]]   }\CommentTok{\# }\AlertTok{NOTE}\CommentTok{: duplicate of the line above — same plot; can be removed}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-117-2} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(out2[[}\DecValTok{3}\NormalTok{]])   }\CommentTok{\# the 3rd ggplot variant (different style/annotation)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         ID Type  Correlation     Pvalue p_signif spec_block env_block
+## 1 Callvulg  N_1  0.194775914 0.36174639              Spec01     Env01
+## 2 Callvulg  P_1 -0.089825004 0.67638229              Spec01     Env01
+## 3 Callvulg  K_1  0.508915172 0.01109495        *     Spec01     Env01
+## 4 Callvulg Ca_1  0.004323521 0.98400337              Spec01     Env01
+## 5 Callvulg Mg_1  0.114475972 0.59428736              Spec01     Env01
+## 6 Callvulg  S_1  0.401157542 0.05203489              Spec01     Env01
+##        method
+## 1 correlation
+## 2 correlation
+## 3 correlation
+## 4 correlation
+## 5 correlation
+## 6 correlation
+\end{verbatim}
+
+\section{Network Environment (one core with 4 Envrionment matrix)}\label{network-environment-one-core-with-4-envrionment-matrix-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# {-}{-}{-}{-} Plot: 1 central species block + 4 environmental heatmap quadrants {-}{-}{-}{-}}
+\CommentTok{\# \textasciigrave{}gglink\_heatmaps()\textasciigrave{} puts a central species network in the middle, surrounds}
+\CommentTok{\# it with one env{-}env heatmap per "quadrant", and draws spec{-}env correlation}
+\CommentTok{\# links between the central nodes and the diagonal anchor points on each heatmap.}
+\NormalTok{p0 }\OtherTok{\textless{}{-}} \FunctionTok{gglink\_heatmaps}\NormalTok{(}
+  \AttributeTok{env                =}\NormalTok{ Envdf\_4st,        }\CommentTok{\# environmental table: rows = samples, cols = env factors}
+  \AttributeTok{spec               =}\NormalTok{ Spedf,            }\CommentTok{\# species table: rows = samples (same order as env), cols = species}
+  \AttributeTok{spec\_select        =} \FunctionTok{list}\NormalTok{(             }\CommentTok{\# one central species network per block}
+    \AttributeTok{Spec01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{15}                        \CommentTok{\#   take species columns 1..15}
+\NormalTok{  ),}
+  \AttributeTok{env\_select         =} \FunctionTok{list}\NormalTok{(             }\CommentTok{\# one heatmap quadrant per env block (length must match \textasciigrave{}orientation\textasciigrave{})}
+    \AttributeTok{Env01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{14}\NormalTok{,}
+    \AttributeTok{Env02 =} \DecValTok{15}\SpecialCharTok{:}\DecValTok{28}\NormalTok{,}
+    \AttributeTok{Env03 =} \DecValTok{29}\SpecialCharTok{:}\DecValTok{42}\NormalTok{,}
+    \AttributeTok{Env04 =} \DecValTok{43}\SpecialCharTok{:}\DecValTok{56}
+\NormalTok{  ),}
+  \AttributeTok{orientation        =} \FunctionTok{c}\NormalTok{(                }\CommentTok{\# where each env block is drawn relative to the centre}
+    \StringTok{"top\_right"}\NormalTok{,}
+    \StringTok{"bottom\_right"}\NormalTok{,}
+    \StringTok{"top\_left"}\NormalTok{,}
+    \StringTok{"bottom\_left"}
+\NormalTok{  ),}
+  \AttributeTok{cor.method         =} \StringTok{"pearson"}\NormalTok{,        }\CommentTok{\# correlation method (Pearson / Spearman / Kendall)}
+  \AttributeTok{cor.use            =} \StringTok{"pairwise"}\NormalTok{,       }\CommentTok{\# NA handling: pairwise{-}complete observations}
+  \AttributeTok{distance           =} \FloatTok{0.5}\NormalTok{,              }\CommentTok{\# offset between central network and the heatmaps (bigger = pushed out further)}
+  \AttributeTok{drop\_nonsig        =}\NormalTok{ T,                }\CommentTok{\# hide non{-}significant spec{-}env links (still kept in the stats data)}
+  \AttributeTok{r                  =} \DecValTok{4}\NormalTok{,                }\CommentTok{\# effective radius of the central network}
+  \AttributeTok{scale\_networks     =}\NormalTok{ T,                }\CommentTok{\# normalise each central network to the same visual radius}
+  \AttributeTok{group\_layout       =} \StringTok{"snake"}\NormalTok{,          }\CommentTok{\# anchor arrangement for multi{-}block centres (here only 1 block, so cosmetic)}
+  \AttributeTok{spec\_layout        =} \StringTok{"square\_outline"}\NormalTok{,    }\CommentTok{\# shape of the central network: nodes on a circle outline}
+  \AttributeTok{anchor\_dist        =} \DecValTok{13}\NormalTok{,               }\CommentTok{\# spacing between anchors}
+  \AttributeTok{HeatmapLabelSize   =} \DecValTok{4}\NormalTok{,                }\CommentTok{\# font size of row/column labels on heatmaps}
+  \AttributeTok{HeatmapSigSize     =} \DecValTok{5}\NormalTok{,                }\CommentTok{\# font size of significance marks (*, **, ***) inside heatmap tiles}
+  \AttributeTok{HeatmapColorBar    =} \FunctionTok{list}\NormalTok{(             }\CommentTok{\# one low/high colour pair per heatmap quadrant (length = \# of env blocks)}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{),  }\CommentTok{\# quadrant 1: blue {-}\textgreater{} red}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#1b7837"}\NormalTok{, }\StringTok{"\#762a83"}\NormalTok{),  }\CommentTok{\# quadrant 2: green {-}\textgreater{} purple}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#4393c3"}\NormalTok{, }\StringTok{"\#d6604d"}\NormalTok{),  }\CommentTok{\# quadrant 3: light blue {-}\textgreater{} brick}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#92c5de"}\NormalTok{, }\StringTok{"\#f4a582"}\NormalTok{)   }\CommentTok{\# quadrant 4: pale blue {-}\textgreater{} peach}
+\NormalTok{  ),}
+  \AttributeTok{HeatmapLabelOrient =} \DecValTok{45}\NormalTok{,               }\CommentTok{\# rotation angle (deg) for heatmap labels — 45 avoids overlap}
+  \AttributeTok{SigLineWidth       =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{),          }\CommentTok{\# min/max line width for SIGNIFICANT spec{-}env links (mapped by strength)}
+  \AttributeTok{SigLineColor       =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#9ecae1"}\NormalTok{, }\StringTok{"\#fc9272"}\NormalTok{),  }\CommentTok{\# colour gradient endpoints for significant links (low {-}\textgreater{} high)}
+  \AttributeTok{HeatmapPointSize   =} \DecValTok{5}\NormalTok{,                }\CommentTok{\# size of the diagonal anchor points where links land on each heatmap}
+  \AttributeTok{CorePointSize      =} \DecValTok{10}\NormalTok{,               }\CommentTok{\# size of the central species nodes}
+  \AttributeTok{HeatmapPointFill   =} \StringTok{"\#3690c0"}\NormalTok{,        }\CommentTok{\# fill colour of the heatmap diagonal anchor points}
+  \AttributeTok{CorePointFill      =} \StringTok{"\#e7298a"}         \CommentTok{\# fill colour of the central species nodes}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The max module in network is 3 we use the 3  modules for next analysis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p0[[}\DecValTok{1}\NormalTok{]]   }\CommentTok{\# gglink\_heatmaps() returns a list of ggplot variants; [[1]] = the default view}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-118-1} \end{center}
+
+\section{Network Environment (two core)}\label{network-environment-two-core}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# {-}{-}{-}{-} Plot: 2 central species blocks, each with its own layout shape {-}{-}{-}{-}}
+\CommentTok{\# \textasciigrave{}spec\_select\textasciigrave{} now has 2 entries {-}\textgreater{} 2 central networks placed on the anchor frame.}
+\CommentTok{\# \textasciigrave{}spec\_layout\textasciigrave{} gives one shape per block: first block circular outline, second square.}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{gglink\_heatmaps}\NormalTok{(}
+  \AttributeTok{env                =}\NormalTok{ Envdf\_4st,}
+  \AttributeTok{spec               =}\NormalTok{ Spedf,}
+  \AttributeTok{spec\_select        =} \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{Spec01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{15}\NormalTok{,                       }\CommentTok{\# block 1: species cols 1..15}
+    \AttributeTok{Spec02 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{15}                        \CommentTok{\# block 2: same cols (demo; in real use pick a different set)}
+\NormalTok{  ),}
+  \AttributeTok{env\_select         =} \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{Env01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{14}\NormalTok{,}
+    \AttributeTok{Env02 =} \DecValTok{15}\SpecialCharTok{:}\DecValTok{28}\NormalTok{,}
+    \AttributeTok{Env03 =} \DecValTok{29}\SpecialCharTok{:}\DecValTok{42}\NormalTok{,}
+    \AttributeTok{Env04 =} \DecValTok{43}\SpecialCharTok{:}\DecValTok{56}
+\NormalTok{  ),}
+  \AttributeTok{spec\_layout        =} \FunctionTok{c}\NormalTok{(}\StringTok{"circle\_outline"}\NormalTok{, }\StringTok{"square\_outline"}\NormalTok{),  }\CommentTok{\# one layout shape per spec block}
+  \AttributeTok{orientation        =} \FunctionTok{c}\NormalTok{(}
+    \StringTok{"top\_right"}\NormalTok{,}
+    \StringTok{"bottom\_right"}\NormalTok{,}
+    \StringTok{"top\_left"}\NormalTok{,}
+    \StringTok{"bottom\_left"}
+\NormalTok{  ),}
+  \AttributeTok{cor.method         =} \StringTok{"pearson"}\NormalTok{,}
+  \AttributeTok{cor.use            =} \StringTok{"pairwise"}\NormalTok{,}
+  \AttributeTok{distance           =} \FloatTok{0.5}\NormalTok{,}
+  \AttributeTok{drop\_nonsig        =}\NormalTok{ T,}
+  \AttributeTok{r                  =} \DecValTok{4}\NormalTok{,}
+  \AttributeTok{scale\_networks     =}\NormalTok{ T,}
+  \AttributeTok{group\_layout       =} \StringTok{"snake"}\NormalTok{,          }\CommentTok{\# anchor arrangement for the 2 central networks}
+  \AttributeTok{anchor\_dist        =} \DecValTok{13}\NormalTok{,}
+  \AttributeTok{HeatmapLabelSize   =} \DecValTok{4}\NormalTok{,}
+  \AttributeTok{HeatmapSigSize     =} \DecValTok{5}\NormalTok{,}
+  \AttributeTok{HeatmapColorBar    =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{),}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#1b7837"}\NormalTok{, }\StringTok{"\#762a83"}\NormalTok{),}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#4393c3"}\NormalTok{, }\StringTok{"\#d6604d"}\NormalTok{),}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#92c5de"}\NormalTok{, }\StringTok{"\#f4a582"}\NormalTok{)}
+\NormalTok{  ),}
+  \AttributeTok{HeatmapLabelOrient =} \DecValTok{45}\NormalTok{,}
+  \AttributeTok{SigLineWidth       =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{),}
+  \AttributeTok{SigLineColor       =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#9ecae1"}\NormalTok{, }\StringTok{"\#fc9272"}\NormalTok{),}
+  \AttributeTok{HeatmapPointSize   =} \DecValTok{5}\NormalTok{,}
+  \AttributeTok{CorePointSize      =} \DecValTok{10}\NormalTok{,}
+  \AttributeTok{HeatmapPointFill   =} \StringTok{"\#3690c0"}\NormalTok{,}
+  \AttributeTok{CorePointFill      =} \StringTok{"\#e7298a"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The max module in network is 3 we use the 3  modules for next analysis
+## The max module in network is 3 we use the 3  modules for next analysis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p[[}\DecValTok{2}\NormalTok{]]   }\CommentTok{\# take the 2nd element from the return list (different ggplot variant)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-119-1} \end{center}
+
+\section{Network Environment (three core)}\label{network-environment-three-core}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# {-}{-}{-}{-} Plot 2: THREE central species blocks + restricted spec{-}env comparisons {-}{-}{-}{-}}
+\CommentTok{\# {-} 3 spec blocks, each with a different layout shape.}
+\CommentTok{\# {-} \textasciigrave{}comparisons\_groups\textasciigrave{} restricts which (env\_block, spec\_block) pairs get linked}
+\CommentTok{\#   instead of drawing every possible combination.}
+\CommentTok{\# {-} \textasciigrave{}scale\_networks = FALSE\textasciigrave{} lets the 3 blocks keep their native sizes.}
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{gglink\_heatmaps}\NormalTok{(}
+  \AttributeTok{env                =}\NormalTok{ Envdf\_4st,}
+  \AttributeTok{spec               =}\NormalTok{ Spedf,}
+  \AttributeTok{spec\_select        =} \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{Spec01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{15}\NormalTok{,}
+    \AttributeTok{Spec02 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{15}\NormalTok{,}
+    \AttributeTok{Spec03 =} \DecValTok{16}\SpecialCharTok{:}\DecValTok{20}                       \CommentTok{\# smaller 3rd block to demo size differences}
+\NormalTok{  ),}
+  \AttributeTok{env\_select         =} \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{Env01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{14}\NormalTok{,}
+    \AttributeTok{Env02 =} \DecValTok{15}\SpecialCharTok{:}\DecValTok{28}\NormalTok{,}
+    \AttributeTok{Env03 =} \DecValTok{29}\SpecialCharTok{:}\DecValTok{42}\NormalTok{,}
+    \AttributeTok{Env04 =} \DecValTok{43}\SpecialCharTok{:}\DecValTok{56}
+\NormalTok{  ),}
+  \AttributeTok{orientation        =} \FunctionTok{c}\NormalTok{(}
+    \StringTok{"top\_right"}\NormalTok{,}
+    \StringTok{"bottom\_right"}\NormalTok{,}
+    \StringTok{"top\_left"}\NormalTok{,}
+    \StringTok{"bottom\_left"}
+\NormalTok{  ),}
+  \AttributeTok{spec\_layout        =} \FunctionTok{c}\NormalTok{(}\StringTok{"rectangle\_outline"}\NormalTok{, }\StringTok{"square\_outline"}\NormalTok{, }\StringTok{"circle\_outline"}\NormalTok{),  }\CommentTok{\# one shape per spec block}
+  \AttributeTok{cor.method         =} \StringTok{"pearson"}\NormalTok{,}
+  \AttributeTok{cor.use            =} \StringTok{"pairwise"}\NormalTok{,}
+  \AttributeTok{distance           =} \DecValTok{1}\NormalTok{,                }\CommentTok{\# bigger gap between centre and heatmaps}
+  \AttributeTok{drop\_nonsig        =}\NormalTok{ T,}
+  \AttributeTok{r                  =} \FloatTok{1.2}\NormalTok{,              }\CommentTok{\# minimum block radius (because scale\_networks = F, this is the floor)}
+  \AttributeTok{scale\_networks     =}\NormalTok{ F,                }\CommentTok{\# do NOT normalise sizes {-}\textgreater{} blocks keep their natural scale}
+  \AttributeTok{anchor\_dist        =} \DecValTok{6}\NormalTok{,}
+  \AttributeTok{HeatmapLabelSize   =} \DecValTok{4}\NormalTok{,}
+  \AttributeTok{HeatmapSigSize     =} \DecValTok{5}\NormalTok{,}
+  \AttributeTok{HeatmapColorBar    =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{),}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#1b7837"}\NormalTok{, }\StringTok{"\#762a83"}\NormalTok{),}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#4393c3"}\NormalTok{, }\StringTok{"\#d6604d"}\NormalTok{),}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#92c5de"}\NormalTok{, }\StringTok{"\#f4a582"}\NormalTok{)}
+\NormalTok{  ),}
+  \AttributeTok{HeatmapLabelOrient =} \DecValTok{45}\NormalTok{,}
+  \AttributeTok{SigLineWidth       =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{),}
+  \AttributeTok{SigLineColor       =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#9ecae1"}\NormalTok{, }\StringTok{"\#fc9272"}\NormalTok{),}
+  \AttributeTok{comparisons        =}\NormalTok{ T,                }\CommentTok{\# master switch: enable spec{-}env analysis + linking}
+  \AttributeTok{comparisons\_groups =} \FunctionTok{list}\NormalTok{(             }\CommentTok{\# only draw links for these specific (env\_block, spec\_block) pairs}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env01"}\NormalTok{, }\StringTok{"Spec01"}\NormalTok{),}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env02"}\NormalTok{, }\StringTok{"Spec02"}\NormalTok{),}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env03"}\NormalTok{, }\StringTok{"Spec03"}\NormalTok{),}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env04"}\NormalTok{, }\StringTok{"Spec03"}\NormalTok{)}
+\NormalTok{  ),}
+  \AttributeTok{HeatmapPointSize   =} \DecValTok{5}\NormalTok{,}
+  \AttributeTok{CorePointSize      =} \DecValTok{10}\NormalTok{,}
+  \AttributeTok{HeatmapPointFill   =} \StringTok{"\#3690c0"}\NormalTok{,}
+  \AttributeTok{CorePointFill      =} \StringTok{"\#e7298a"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The max module in network is 3 we use the 3  modules for next analysis
+## The max module in network is 3 we use the 3  modules for next analysis
+\end{verbatim}
+
+\begin{verbatim}
+## The max module in network is 2 we use the 2  modules for next analysis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p2[[}\DecValTok{1}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-120-1} \end{center}
+
+\section{Mantel test and drop\_nonsig = T}\label{mantel-test-and-drop_nonsig-t}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{gglink\_heatmaps}\NormalTok{(}
+  \CommentTok{\# {-}{-}{-}{-} Data input {-}{-}{-}{-}}
+  \AttributeTok{env  =}\NormalTok{ Envdf\_4st,                          }\CommentTok{\# environmental data frame: one column per env variable}
+  \AttributeTok{spec =}\NormalTok{ Spedf,                              }\CommentTok{\# species data frame: one column per species / taxonomic unit}
+
+  \CommentTok{\# {-}{-}{-}{-} Spec blocks (central networks) {-}{-}{-}{-}}
+  \CommentTok{\# Each list element defines one central species network (column indices into \textasciigrave{}spec\textasciigrave{}).}
+  \CommentTok{\# The block names (Spec01, Spec02 ...) are used later to match \textasciigrave{}comparisons\_groups\textasciigrave{}.}
+  \CommentTok{\# }\AlertTok{NOTE}\CommentTok{: spec\_collapse = TRUE is enabled below, so these 10 blocks are NOT drawn as}
+  \CommentTok{\#       networks — each one is collapsed into a single labelled point bearing the block name.}
+  \AttributeTok{spec\_select =} \FunctionTok{list}\NormalTok{(}\AttributeTok{Spec01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{15}\NormalTok{,}
+                     \AttributeTok{Spec02 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{15}\NormalTok{,}
+                     \AttributeTok{Spec03 =} \DecValTok{16}\SpecialCharTok{:}\DecValTok{20}\NormalTok{,}
+                     \AttributeTok{Spec04 =} \DecValTok{16}\SpecialCharTok{:}\DecValTok{20}\NormalTok{,}
+                     \AttributeTok{Spec05 =} \DecValTok{16}\SpecialCharTok{:}\DecValTok{20}\NormalTok{,}
+                     \AttributeTok{Spec06 =} \DecValTok{16}\SpecialCharTok{:}\DecValTok{20}\NormalTok{,}
+                     \AttributeTok{Spec07 =} \DecValTok{5}\SpecialCharTok{:}\DecValTok{20}\NormalTok{,}
+                     \AttributeTok{Spec08 =} \DecValTok{21}\SpecialCharTok{:}\DecValTok{25}\NormalTok{,}
+                     \AttributeTok{Spec09 =} \DecValTok{26}\SpecialCharTok{:}\DecValTok{35}\NormalTok{,}
+                     \AttributeTok{Spec10 =} \DecValTok{36}\SpecialCharTok{:}\DecValTok{44}
+\NormalTok{  ),}
+
+  \CommentTok{\# {-}{-}{-}{-} Collapse each spec\_block into a single point {-}{-}{-}{-}}
+  \CommentTok{\# T = each spec\_select element is rendered as ONE labelled point ("Spec01"..."Spec10").}
+  \CommentTok{\# In this mode spec\_layout / spec\_relation / scale\_networks have no effect (no network drawn).}
+  \CommentTok{\# The point positions are decided by \textasciigrave{}group\_layout\textasciigrave{} below.}
+  \AttributeTok{spec\_collapse =}\NormalTok{ T,}
+
+  \CommentTok{\# {-}{-}{-}{-} Env blocks (the four heatmap quadrants) {-}{-}{-}{-}}
+  \CommentTok{\# Each element defines one env block; each block becomes one heatmap quadrant.}
+  \AttributeTok{env\_select =} \FunctionTok{list}\NormalTok{(}\AttributeTok{Env01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{14}\NormalTok{,}
+                    \AttributeTok{Env02 =} \DecValTok{15}\SpecialCharTok{:}\DecValTok{28}\NormalTok{,}
+                    \AttributeTok{Env03 =} \DecValTok{29}\SpecialCharTok{:}\DecValTok{42}\NormalTok{,}
+                    \AttributeTok{Env04 =} \DecValTok{43}\SpecialCharTok{:}\DecValTok{56}\NormalTok{),}
+
+  \CommentTok{\# {-}{-}{-}{-} Orientation of the four heatmaps {-}{-}{-}{-}}
+  \CommentTok{\# Order pairs with env\_select: Env01 {-}\textgreater{} top\_right, Env02 {-}\textgreater{} bottom\_right, etc.}
+  \AttributeTok{orientation =} \FunctionTok{c}\NormalTok{(}\StringTok{"top\_right"}\NormalTok{,}
+                  \StringTok{"bottom\_right"}\NormalTok{,}
+                  \StringTok{"top\_left"}\NormalTok{,}
+                  \StringTok{"bottom\_left"}\NormalTok{),}
+
+  \CommentTok{\# spec\_layout = c("rectangle\_outline", "square\_outline", "circle\_outline"),}
+  \CommentTok{\# \^{} Node{-}shape layout for the central species networks; ignored when spec\_collapse = T,}
+  \CommentTok{\#   so commenting it out makes no difference here.}
+
+  \CommentTok{\# {-}{-}{-}{-} Relation method (this run uses mantel) {-}{-}{-}{-}}
+  \AttributeTok{relation\_method =} \StringTok{"mantel"}\NormalTok{,                }\CommentTok{\# use the mantel branch instead of correlation}
+  \AttributeTok{mantel.method   =} \StringTok{"mantel"}\NormalTok{,                }\CommentTok{\# legacy compatibility argument; unused by the current implementation, leave as{-}is}
+  \AttributeTok{mantel\_kind     =} \FunctionTok{c}\NormalTok{(}\StringTok{"col\_vs\_col"}\NormalTok{),         }\CommentTok{\# * mantel granularity:}
+                                             \CommentTok{\#   "col\_vs\_col"   = legacy mode: spec single{-}column dist}
+                                             \CommentTok{\#                    vs env single{-}column dist (close to rank correlation)}
+                                             \CommentTok{\#   "block\_vs\_col" = recommended ecological mode (default):}
+                                             \CommentTok{\#                    spec WHOLE{-}BLOCK dist vs single env column dist}
+                                             \CommentTok{\# }\AlertTok{NOTE}\CommentTok{: under col\_vs\_col + spec\_collapse = T, every link generated}
+                                             \CommentTok{\#       by each spec column inside a block starts from the SAME}
+                                             \CommentTok{\#       collapsed point — a console message will warn about this.}
+  \AttributeTok{cor.method =} \StringTok{"pearson"}\NormalTok{,                    }\CommentTok{\# correlation method; under mantel mode it falls through to mantel.method2; also used for env{-}env autocorrelation heatmaps}
+  \AttributeTok{cor.use    =} \StringTok{"pairwise"}\NormalTok{,                   }\CommentTok{\# NA handling: pairwise{-}complete observations}
+  \AttributeTok{drop\_nonsig =}\NormalTok{ T,                           }\CommentTok{\# T = hide non{-}significant links from the plot}
+
+  \CommentTok{\# {-}{-}{-}{-} Central{-}network geometry {-}{-}{-}{-}}
+  \AttributeTok{r =} \DecValTok{1}\NormalTok{,                                     }\CommentTok{\# base radius of the central network; under spec\_collapse = T only controls how tightly the points pack}
+  \AttributeTok{scale\_networks =}\NormalTok{ F,                        }\CommentTok{\# F = do NOT normalise all networks to a common size;}
+                                             \CommentTok{\#     auto{-}disabled when spec\_collapse = T}
+
+  \CommentTok{\# {-}{-}{-}{-} Overall arrangement of the (collapsed) spec points {-}{-}{-}{-}}
+  \AttributeTok{group\_layout =} \StringTok{"circle"}\NormalTok{,                   }\CommentTok{\# ring layout: the 10 points are spread evenly around a circle}
+  \CommentTok{\# nrow = 5,                                \# only used by row/column/snake layouts; no effect for circle}
+  \AttributeTok{anchor\_dist =} \DecValTok{8}\NormalTok{,                           }\CommentTok{\# distance from each point to the centre (radius of the ring)}
+  \AttributeTok{distance    =} \DecValTok{4}\NormalTok{,                           }\CommentTok{\# offset between the centre point group and the outer heatmaps}
+
+  \CommentTok{\# {-}{-}{-}{-} Heatmap text annotations {-}{-}{-}{-}}
+  \AttributeTok{HeatmapLabelSize  =} \DecValTok{4}\NormalTok{,                     }\CommentTok{\# font size for heatmap row/col labels (ID/Type)}
+  \AttributeTok{HeatmapSigSize    =} \DecValTok{5}\NormalTok{,                     }\CommentTok{\# font size for the significance marks (*, **, ***) inside heatmap tiles}
+
+  \CommentTok{\# {-}{-}{-}{-} Per{-}quadrant colour palettes (low {-}\textgreater{} high) {-}{-}{-}{-}}
+  \CommentTok{\# Length must match \textasciigrave{}orientation\textasciigrave{} (4 quadrants); paired in order.}
+  \AttributeTok{HeatmapColorBar =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{),                 }\CommentTok{\# quadrant 1: top\_right}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#1b7837"}\NormalTok{, }\StringTok{"\#762a83"}\NormalTok{),                 }\CommentTok{\# quadrant 2: bottom\_right}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#4393c3"}\NormalTok{, }\StringTok{"\#d6604d"}\NormalTok{),                 }\CommentTok{\# quadrant 3: top\_left}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#92c5de"}\NormalTok{, }\StringTok{"\#f4a582"}\NormalTok{)                  }\CommentTok{\# quadrant 4: bottom\_left}
+\NormalTok{  ),}
+  \AttributeTok{HeatmapLabelOrient =} \DecValTok{45}\NormalTok{,                   }\CommentTok{\# rotate heatmap labels 45 deg to avoid overlap}
+
+  \CommentTok{\# {-}{-}{-}{-} Spec{-}env link (segment) styling {-}{-}{-}{-}}
+  \AttributeTok{SigLineWidth =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{),                    }\CommentTok{\# min / max line width for significant links (mapped by {-}log10(p))}
+  \AttributeTok{SigLineColor =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#9ecae1"}\NormalTok{, }\StringTok{"\#fc9272"}\NormalTok{),    }\CommentTok{\# colour gradient endpoints for mantel r low / high}
+
+  \CommentTok{\# {-}{-}{-}{-} Restrict which (env\_block, spec\_block) pairs are drawn {-}{-}{-}{-}}
+  \CommentTok{\# Under mantel mode, each (env\_block, spec\_block) pair triggers a set of mantel tests}
+  \CommentTok{\# (col\_vs\_col: |spec cols| x |env cols| tests; block\_vs\_col: |env cols| tests).}
+  \AttributeTok{comparisons =}\NormalTok{ T,                           }\CommentTok{\# enable the restriction (otherwise ALL possible pairs are drawn)}
+  \AttributeTok{comparisons\_groups =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env01"}\NormalTok{, }\StringTok{"Spec01"}\NormalTok{),                    }\CommentTok{\# Env01 paired only with Spec01}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env02"}\NormalTok{, }\StringTok{"Spec02"}\NormalTok{),                    }\CommentTok{\# Env02 paired only with Spec02}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env03"}\NormalTok{, }\StringTok{"Spec03"}\NormalTok{),                    }\CommentTok{\# Env03 paired only with Spec03}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env04"}\NormalTok{, }\StringTok{"Spec03"}\NormalTok{)                     }\CommentTok{\# Env04 also paired only with Spec03}
+\NormalTok{  ),}
+
+  \CommentTok{\# {-}{-}{-}{-} Point sizes {-}{-}{-}{-}}
+  \AttributeTok{HeatmapPointSize =} \DecValTok{4}\NormalTok{,                      }\CommentTok{\# size of the anchor points on each heatmap\textquotesingle{}s diagonal}
+  \AttributeTok{CorePointSize    =} \DecValTok{10}\NormalTok{,                     }\CommentTok{\# size of the collapsed spec points (larger than non{-}collapse default for visibility)}
+
+  \CommentTok{\# {-}{-}{-}{-} Point fill colours (vectors are recycled in order) {-}{-}{-}{-}}
+  \CommentTok{\# HeatmapPointFill: length = \# of quadrants (4), paired with \textasciigrave{}orientation\textasciigrave{} in order.}
+  \AttributeTok{HeatmapPointFill =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{, }\StringTok{"\#1b7837"}\NormalTok{, }\StringTok{"\#762a83"}\NormalTok{),}
+
+  \CommentTok{\# CorePointFill: length = \# of spec\_select blocks (10), paired with names(spec\_select) in order.}
+  \CommentTok{\# With spec\_collapse = T, each block is one point, so 1 colour = 1 point.}
+  \CommentTok{\# First 5 points blue, last 5 points red — visually splits the 10 blocks into two groups.}
+  \AttributeTok{CorePointFill =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#2166ac"}\NormalTok{,}
+                    \StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{,}
+                    \StringTok{"\#b2182b"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `spec_collapse = TRUE` collapses each spec block into one point; in the current mode (relation_method = 'mantel', mantel_kind = 'col_vs_col') link sources are per spec column, so all column-level links from a block will originate from the same collapsed point. Consider `relation_method = 'mantel'` + `mantel_kind = 'block_vs_col'` for a one-line-per-block visualisation.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p2[[}\DecValTok{2}\NormalTok{]]   }\CommentTok{\# curved{-}line connection version}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-121-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(p2[[}\DecValTok{3}\NormalTok{]])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         ID Type Correlation Pvalue spec_block env_block p_signif method
+## 1 Callvulg  N_1  0.01289455  0.382     Spec01     Env01          mantel
+## 2 Empenigr  N_1  0.01959886  0.350     Spec01     Env01          mantel
+## 3 Rhodtome  N_1 -0.15248826  0.893     Spec01     Env01          mantel
+## 4 Vaccmyrt  N_1 -0.02514002  0.528     Spec01     Env01          mantel
+## 5 Vaccviti  N_1  0.07366673  0.230     Spec01     Env01          mantel
+## 6 Pinusylv  N_1  0.12714109  0.161     Spec01     Env01          mantel
+\end{verbatim}
+
+\section{Network Environment (multi-core)}\label{network-environment-multi-core}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{gglink\_heatmaps}\NormalTok{(}
+  \CommentTok{\# {-}{-}{-}{-} Data input {-}{-}{-}{-}}
+  \AttributeTok{env                =}\NormalTok{ Envdf\_4st,            }\CommentTok{\# environmental data frame: one column per env variable}
+  \AttributeTok{spec               =}\NormalTok{ Spedf,                }\CommentTok{\# species data frame: one column per species / taxonomic unit}
+
+  \CommentTok{\# {-}{-}{-}{-} Spec blocks (central networks) {-}{-}{-}{-}}
+  \CommentTok{\# Each list element defines one central species network (column indices into \textasciigrave{}spec\textasciigrave{}).}
+  \CommentTok{\# The block names (Spec01, Spec02 ...) are used later to match \textasciigrave{}comparisons\_groups\textasciigrave{}.}
+  \AttributeTok{spec\_select        =} \FunctionTok{list}\NormalTok{(}\AttributeTok{Spec01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{15}\NormalTok{,}
+                            \AttributeTok{Spec02 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{15}\NormalTok{,}
+                            \AttributeTok{Spec03 =} \DecValTok{16}\SpecialCharTok{:}\DecValTok{20}\NormalTok{,}
+                            \AttributeTok{Spec04 =} \DecValTok{16}\SpecialCharTok{:}\DecValTok{20}\NormalTok{,}
+                            \AttributeTok{Spec05 =} \DecValTok{16}\SpecialCharTok{:}\DecValTok{20}\NormalTok{,}
+                            \AttributeTok{Spec06 =} \DecValTok{16}\SpecialCharTok{:}\DecValTok{20}\NormalTok{,}
+                            \AttributeTok{Spec07 =} \DecValTok{5}\SpecialCharTok{:}\DecValTok{20}\NormalTok{,}
+                            \AttributeTok{Spec08 =} \DecValTok{21}\SpecialCharTok{:}\DecValTok{25}\NormalTok{,}
+                            \AttributeTok{Spec09 =} \DecValTok{26}\SpecialCharTok{:}\DecValTok{35}\NormalTok{,}
+                            \AttributeTok{Spec10 =} \DecValTok{36}\SpecialCharTok{:}\DecValTok{44}\NormalTok{),}
+
+  \CommentTok{\# {-}{-}{-}{-} Env blocks (the four heatmap quadrants) {-}{-}{-}{-}}
+  \CommentTok{\# Each element defines one env block; each block becomes one heatmap quadrant.}
+  \AttributeTok{env\_select         =} \FunctionTok{list}\NormalTok{(}\AttributeTok{Env01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{14}\NormalTok{,}
+                            \AttributeTok{Env02 =} \DecValTok{15}\SpecialCharTok{:}\DecValTok{28}\NormalTok{,}
+                            \AttributeTok{Env03 =} \DecValTok{29}\SpecialCharTok{:}\DecValTok{42}\NormalTok{,}
+                            \AttributeTok{Env04 =} \DecValTok{43}\SpecialCharTok{:}\DecValTok{56}\NormalTok{),}
+
+  \CommentTok{\# {-}{-}{-}{-} Orientation of the four heatmaps {-}{-}{-}{-}}
+  \CommentTok{\# Order pairs with env\_select: Env01 {-}\textgreater{} top\_right, Env02 {-}\textgreater{} bottom\_right, etc.}
+  \AttributeTok{orientation        =} \FunctionTok{c}\NormalTok{(}\StringTok{"top\_right"}\NormalTok{,}
+                         \StringTok{"bottom\_right"}\NormalTok{,}
+                         \StringTok{"top\_left"}\NormalTok{,}
+                         \StringTok{"bottom\_left"}\NormalTok{),}
+
+  \CommentTok{\# spec\_layout      = c("rectangle\_outline", "square\_outline", "circle\_outline"),}
+  \CommentTok{\# \^{} Node{-}shape layout for the central species networks; commented out here, so the default "circle\_outline" is used.}
+
+  \CommentTok{\# {-}{-}{-}{-} Correlation parameters {-}{-}{-}{-}}
+  \AttributeTok{cor.method         =} \StringTok{"pearson"}\NormalTok{,            }\CommentTok{\# correlation method: pearson / kendall / spearman}
+  \AttributeTok{cor.use            =} \StringTok{"pairwise"}\NormalTok{,           }\CommentTok{\# NA handling: pairwise{-}complete observations}
+  \AttributeTok{drop\_nonsig        =}\NormalTok{ T,                    }\CommentTok{\# T = hide non{-}significant links from the plot}
+
+  \CommentTok{\# {-}{-}{-}{-} Central{-}network geometry {-}{-}{-}{-}}
+  \AttributeTok{r                  =} \DecValTok{1}\NormalTok{,                    }\CommentTok{\# base radius of the central network}
+  \AttributeTok{scale\_networks     =}\NormalTok{ F,                    }\CommentTok{\# F = do NOT normalise all networks to a common size;}
+                                             \CommentTok{\#     networks with more nodes will be scaled up proportionally}
+
+  \CommentTok{\# {-}{-}{-}{-} Overall arrangement of the multiple spec networks {-}{-}{-}{-}}
+  \AttributeTok{group\_layout       =} \StringTok{"snake"}\NormalTok{,              }\CommentTok{\# snake layout (rows zig{-}zag back and forth)}
+  \AttributeTok{nrow               =} \DecValTok{5}\NormalTok{,                    }\CommentTok{\# number of rows used by the snake layout (10 networks {-}\textgreater{} 5 rows x 2 cols)}
+  \AttributeTok{anchor\_dist        =} \DecValTok{8}\NormalTok{,                    }\CommentTok{\# spacing between adjacent central networks}
+  \AttributeTok{distance           =} \DecValTok{6}\NormalTok{,                    }\CommentTok{\# offset between the central networks and the outer heatmaps}
+
+  \CommentTok{\# {-}{-}{-}{-} Heatmap text annotations {-}{-}{-}{-}}
+  \AttributeTok{HeatmapLabelSize   =} \DecValTok{4}\NormalTok{,                    }\CommentTok{\# font size for heatmap row/col labels (ID/Type)}
+  \AttributeTok{HeatmapSigSize     =} \DecValTok{5}\NormalTok{,                    }\CommentTok{\# font size for the significance marks (*, **, ***) inside heatmap tiles}
+
+  \CommentTok{\# {-}{-}{-}{-} Per{-}quadrant colour palettes (low {-}\textgreater{} high) {-}{-}{-}{-}}
+  \CommentTok{\# Length must match \textasciigrave{}orientation\textasciigrave{} (4 quadrants); paired in order.}
+  \AttributeTok{HeatmapColorBar    =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{),                 }\CommentTok{\# quadrant 1: top\_right}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#1b7837"}\NormalTok{, }\StringTok{"\#762a83"}\NormalTok{),                 }\CommentTok{\# quadrant 2: bottom\_right}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#4393c3"}\NormalTok{, }\StringTok{"\#d6604d"}\NormalTok{),                 }\CommentTok{\# quadrant 3: top\_left}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#92c5de"}\NormalTok{, }\StringTok{"\#f4a582"}\NormalTok{)                  }\CommentTok{\# quadrant 4: bottom\_left}
+\NormalTok{  ),}
+  \AttributeTok{HeatmapLabelOrient =} \DecValTok{45}\NormalTok{,                   }\CommentTok{\# rotate heatmap labels 45 deg to avoid overlap}
+
+  \CommentTok{\# {-}{-}{-}{-} Spec{-}env link (segment) styling {-}{-}{-}{-}}
+  \AttributeTok{SigLineWidth       =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{),              }\CommentTok{\# min / max line width for the links (mapped by {-}log10(p))}
+  \AttributeTok{SigLineColor       =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#9ecae1"}\NormalTok{, }\StringTok{"\#fc9272"}\NormalTok{),  }\CommentTok{\# colour gradient endpoints for correlation low / high}
+
+  \CommentTok{\# {-}{-}{-}{-} Restrict which (env\_block, spec\_block) pairs are drawn {-}{-}{-}{-}}
+  \AttributeTok{comparisons        =}\NormalTok{ T,                    }\CommentTok{\# enable the restriction (otherwise ALL possible pairs are drawn)}
+  \AttributeTok{comparisons\_groups =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env01"}\NormalTok{, }\StringTok{"Spec01"}\NormalTok{),                    }\CommentTok{\# Env01 paired only with Spec01}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env02"}\NormalTok{, }\StringTok{"Spec02"}\NormalTok{),                    }\CommentTok{\# Env02 paired only with Spec02}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env03"}\NormalTok{, }\StringTok{"Spec03"}\NormalTok{),                    }\CommentTok{\# Env03 paired only with Spec03}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env04"}\NormalTok{, }\StringTok{"Spec03"}\NormalTok{)                     }\CommentTok{\# Env04 also paired only with Spec03}
+\NormalTok{  ),}
+
+  \CommentTok{\# {-}{-}{-}{-} Point sizes {-}{-}{-}{-}}
+  \AttributeTok{HeatmapPointSize   =} \DecValTok{5}\NormalTok{,                    }\CommentTok{\# size of the anchor points on each heatmap\textquotesingle{}s diagonal}
+  \AttributeTok{CorePointSize      =} \DecValTok{5}\NormalTok{,                    }\CommentTok{\# size of the central{-}network nodes}
+
+  \CommentTok{\# {-}{-}{-}{-} Point fill colours (vectors are recycled in order) {-}{-}{-}{-}}
+  \CommentTok{\# HeatmapPointFill: length = \# of quadrants (4), paired with \textasciigrave{}orientation\textasciigrave{} in order.}
+  \AttributeTok{HeatmapPointFill   =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{, }\StringTok{"\#1b7837"}\NormalTok{, }\StringTok{"\#762a83"}\NormalTok{),}
+
+  \CommentTok{\# CorePointFill: length = \# of spec\_select blocks (10), paired with names(spec\_select) in order.}
+  \CommentTok{\# First 5 networks coloured blue, last 5 coloured red — visually splits the 10 networks into two groups.}
+  \AttributeTok{CorePointFill      =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#2166ac"}\NormalTok{,}
+                         \StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{,}
+                         \StringTok{"\#b2182b"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The max module in network is 3 we use the 3  modules for next analysis
+## The max module in network is 3 we use the 3  modules for next analysis
+\end{verbatim}
+
+\begin{verbatim}
+## The max module in network is 2 we use the 2  modules for next analysis
+## The max module in network is 2 we use the 2  modules for next analysis
+## The max module in network is 2 we use the 2  modules for next analysis
+## The max module in network is 2 we use the 2  modules for next analysis
+\end{verbatim}
+
+\begin{verbatim}
+## The max module in network is 3 we use the 3  modules for next analysis
+\end{verbatim}
+
+\begin{verbatim}
+## The max module in network is 2 we use the 2  modules for next analysis
+## The max module in network is 2 we use the 2  modules for next analysis
+\end{verbatim}
+
+\begin{verbatim}
+## The max module in network is 3 we use the 3  modules for next analysis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p2[[}\DecValTok{1}\NormalTok{]]   }\CommentTok{\# take the 1st element: the straight{-}line version of the plot}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-122-1} \end{center}
+
+\section{Network Environment (combine-core to one point)}\label{network-environment-combine-core-to-one-point}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{gglink\_heatmaps}\NormalTok{(}
+  \CommentTok{\# {-}{-}{-}{-} Data input {-}{-}{-}{-}}
+  \AttributeTok{env                =}\NormalTok{ Envdf\_4st,            }\CommentTok{\# environmental data frame: one column per env variable}
+  \AttributeTok{spec               =}\NormalTok{ Spedf,                }\CommentTok{\# species data frame: one column per species / taxonomic unit}
+
+  \CommentTok{\# {-}{-}{-}{-} Spec blocks (central networks) {-}{-}{-}{-}}
+  \CommentTok{\# Each list element defines one central species network (column indices into \textasciigrave{}spec\textasciigrave{}).}
+  \CommentTok{\# The block names (Spec01, Spec02 ...) are used later to match \textasciigrave{}comparisons\_groups\textasciigrave{}.}
+  \CommentTok{\# }\AlertTok{NOTE}\CommentTok{: spec\_collapse = TRUE is enabled below, so these 6 blocks are NOT drawn as}
+  \CommentTok{\#       networks — each one is collapsed into a single labelled point bearing the block name.}
+  \AttributeTok{spec\_select        =} \FunctionTok{list}\NormalTok{(}\AttributeTok{Spec01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{,}
+                            \AttributeTok{Spec02 =} \DecValTok{11}\SpecialCharTok{:}\DecValTok{20}\NormalTok{,}
+                            \AttributeTok{Spec03 =} \DecValTok{5}\SpecialCharTok{:}\DecValTok{21}\NormalTok{,}
+                            \AttributeTok{Spec04 =} \DecValTok{20}\SpecialCharTok{:}\DecValTok{26}\NormalTok{,}
+                            \AttributeTok{Spec05 =} \DecValTok{30}\SpecialCharTok{:}\DecValTok{40}\NormalTok{,}
+                            \AttributeTok{Spec06 =} \DecValTok{25}\SpecialCharTok{:}\DecValTok{44}\NormalTok{),}
+
+  \CommentTok{\# {-}{-}{-}{-} Collapse each spec\_block into a single point {-}{-}{-}{-}}
+  \CommentTok{\# T = each spec\_select element is rendered as ONE labelled point ("Spec01"..."Spec06").}
+  \CommentTok{\# In this mode spec\_layout / spec\_relation / scale\_networks have no effect (no network drawn).}
+  \CommentTok{\# The point positions are decided by \textasciigrave{}group\_layout\textasciigrave{} below.}
+  \AttributeTok{spec\_collapse      =}\NormalTok{ T,}
+
+  \CommentTok{\# {-}{-}{-}{-} Env blocks (the four heatmap quadrants) {-}{-}{-}{-}}
+  \CommentTok{\# Each element defines one env block; each block becomes one heatmap quadrant.}
+  \AttributeTok{env\_select         =} \FunctionTok{list}\NormalTok{(}\AttributeTok{Env01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{14}\NormalTok{,}
+                            \AttributeTok{Env02 =} \DecValTok{15}\SpecialCharTok{:}\DecValTok{28}\NormalTok{,}
+                            \AttributeTok{Env03 =} \DecValTok{29}\SpecialCharTok{:}\DecValTok{42}\NormalTok{,}
+                            \AttributeTok{Env04 =} \DecValTok{43}\SpecialCharTok{:}\DecValTok{56}\NormalTok{),}
+
+  \CommentTok{\# {-}{-}{-}{-} Orientation of the four heatmaps {-}{-}{-}{-}}
+  \CommentTok{\# Order pairs with env\_select: Env01 {-}\textgreater{} top\_right, Env02 {-}\textgreater{} bottom\_right, etc.}
+  \AttributeTok{orientation        =} \FunctionTok{c}\NormalTok{(}\StringTok{"top\_right"}\NormalTok{,}
+                         \StringTok{"bottom\_right"}\NormalTok{,}
+                         \StringTok{"top\_left"}\NormalTok{,}
+                         \StringTok{"bottom\_left"}\NormalTok{),}
+
+  \CommentTok{\# spec\_layout      = c("rectangle\_outline", "square\_outline", "circle\_outline"),}
+  \CommentTok{\# \^{} Node{-}shape layout for the central species networks; ignored when spec\_collapse = T,}
+  \CommentTok{\#   so commenting it out makes no difference here.}
+
+  \CommentTok{\# {-}{-}{-}{-} Relation method (this run uses mantel) {-}{-}{-}{-}}
+  \AttributeTok{relation\_method    =} \StringTok{"mantel"}\NormalTok{,             }\CommentTok{\# use the mantel branch instead of correlation}
+  \AttributeTok{mantel.method      =} \StringTok{"mantel"}\NormalTok{,             }\CommentTok{\# legacy compatibility argument; unused by the current implementation, leave as{-}is}
+  \AttributeTok{mantel\_kind        =} \FunctionTok{c}\NormalTok{(}\StringTok{"col\_vs\_col"}\NormalTok{),      }\CommentTok{\# * mantel granularity:}
+                                             \CommentTok{\#   "col\_vs\_col"   = legacy mode: spec single{-}column dist}
+                                             \CommentTok{\#                    vs env single{-}column dist (close to rank correlation)}
+                                             \CommentTok{\#   "block\_vs\_col" = recommended ecological mode (default):}
+                                             \CommentTok{\#                    spec WHOLE{-}BLOCK dist vs single env column dist}
+                                             \CommentTok{\# }\AlertTok{NOTE}\CommentTok{: under col\_vs\_col + spec\_collapse = T, every link generated}
+                                             \CommentTok{\#       by each spec column inside a block starts from the SAME}
+                                             \CommentTok{\#       collapsed point — a console message will warn about this.}
+  \AttributeTok{cor.method         =} \StringTok{"pearson"}\NormalTok{,            }\CommentTok{\# correlation method; under mantel mode it falls through to mantel.method2; also used for env{-}env autocorrelation heatmaps}
+  \AttributeTok{cor.use            =} \StringTok{"pairwise"}\NormalTok{,           }\CommentTok{\# NA handling: pairwise{-}complete observations}
+  \AttributeTok{drop\_nonsig        =}\NormalTok{ T,                    }\CommentTok{\# T = hide non{-}significant links from the plot}
+
+  \CommentTok{\# {-}{-}{-}{-} Central{-}network geometry {-}{-}{-}{-}}
+  \AttributeTok{r                  =} \FloatTok{0.1}\NormalTok{,                  }\CommentTok{\# base radius of the central network; under spec\_collapse = T only controls how tightly the points pack}
+  \AttributeTok{scale\_networks     =}\NormalTok{ F,                    }\CommentTok{\# F = do NOT normalise all networks to a common size;}
+                                             \CommentTok{\#     auto{-}disabled when spec\_collapse = T}
+
+  \CommentTok{\# {-}{-}{-}{-} Overall arrangement of the (collapsed) spec points {-}{-}{-}{-}}
+  \AttributeTok{group\_layout       =} \StringTok{"row"}\NormalTok{,                }\CommentTok{\# row layout: points are placed along a horizontal row}
+  \AttributeTok{group\_angle        =} \DecValTok{45}\NormalTok{,                   }\CommentTok{\# rotate the whole point row by 45 deg around the centre}
+  \CommentTok{\# nrow             = 5,                    \# only used by row/column/snake when wrapping into multiple rows; not needed here}
+  \AttributeTok{anchor\_dist        =} \DecValTok{4}\NormalTok{,                    }\CommentTok{\# spacing between adjacent points along the row}
+  \AttributeTok{distance           =} \SpecialCharTok{{-}}\DecValTok{3}\NormalTok{,                   }\CommentTok{\# offset between the centre point group and the outer heatmaps (negative {-}\textgreater{} pull heatmaps INWARD, toward the centre)}
+
+  \CommentTok{\# {-}{-}{-}{-} Heatmap text annotations {-}{-}{-}{-}}
+  \AttributeTok{HeatmapLabelSize   =} \DecValTok{4}\NormalTok{,                    }\CommentTok{\# font size for heatmap row/col labels (ID/Type)}
+  \AttributeTok{HeatmapSigSize     =} \DecValTok{5}\NormalTok{,                    }\CommentTok{\# font size for the significance marks (*, **, ***) inside heatmap tiles}
+
+  \CommentTok{\# {-}{-}{-}{-} Per{-}quadrant colour palettes (low {-}\textgreater{} high) {-}{-}{-}{-}}
+  \CommentTok{\# Length must match \textasciigrave{}orientation\textasciigrave{} (4 quadrants); paired in order.}
+  \AttributeTok{HeatmapColorBar    =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{),                 }\CommentTok{\# quadrant 1: top\_right}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#1b7837"}\NormalTok{, }\StringTok{"\#762a83"}\NormalTok{),                 }\CommentTok{\# quadrant 2: bottom\_right}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#4393c3"}\NormalTok{, }\StringTok{"\#d6604d"}\NormalTok{),                 }\CommentTok{\# quadrant 3: top\_left}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#92c5de"}\NormalTok{, }\StringTok{"\#f4a582"}\NormalTok{)                  }\CommentTok{\# quadrant 4: bottom\_left}
+\NormalTok{  ),}
+  \AttributeTok{HeatmapLabelOrient =} \DecValTok{45}\NormalTok{,                   }\CommentTok{\# rotate heatmap labels 45 deg to avoid overlap}
+
+  \CommentTok{\# {-}{-}{-}{-} Spec{-}env link (segment) styling {-}{-}{-}{-}}
+  \AttributeTok{SigLineWidth       =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{),              }\CommentTok{\# min / max line width for the links (mapped by {-}log10(p))}
+  \AttributeTok{SigLineColor       =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#9ecae1"}\NormalTok{, }\StringTok{"\#fc9272"}\NormalTok{),  }\CommentTok{\# colour gradient endpoints for mantel r low / high}
+
+  \CommentTok{\# {-}{-}{-}{-} Restrict which (env\_block, spec\_block) pairs are drawn {-}{-}{-}{-}}
+  \CommentTok{\# Under mantel mode, each (env\_block, spec\_block) pair triggers a set of mantel tests}
+  \CommentTok{\# (col\_vs\_col: |spec cols| x |env cols| tests; block\_vs\_col: |env cols| tests).}
+  \AttributeTok{comparisons        =}\NormalTok{ T,                    }\CommentTok{\# enable the restriction (otherwise ALL possible pairs are drawn)}
+  \AttributeTok{comparisons\_groups =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env01"}\NormalTok{, }\StringTok{"Spec01"}\NormalTok{),                    }\CommentTok{\# Env01 paired only with Spec01}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env02"}\NormalTok{, }\StringTok{"Spec02"}\NormalTok{),                    }\CommentTok{\# Env02 paired only with Spec02}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env03"}\NormalTok{, }\StringTok{"Spec03"}\NormalTok{),                    }\CommentTok{\# Env03 paired only with Spec03}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env04"}\NormalTok{, }\StringTok{"Spec03"}\NormalTok{)                     }\CommentTok{\# Env04 also paired only with Spec03}
+\NormalTok{  ),}
+
+  \CommentTok{\# {-}{-}{-}{-} Point sizes {-}{-}{-}{-}}
+  \AttributeTok{HeatmapPointSize   =} \DecValTok{4}\NormalTok{,                    }\CommentTok{\# size of the anchor points on each heatmap\textquotesingle{}s diagonal}
+  \AttributeTok{CorePointSize      =} \DecValTok{10}\NormalTok{,                   }\CommentTok{\# size of the collapsed spec points (larger than non{-}collapse default for visibility)}
+
+  \CommentTok{\# {-}{-}{-}{-} Point fill colours (vectors are recycled in order) {-}{-}{-}{-}}
+  \CommentTok{\# HeatmapPointFill: length = \# of quadrants (4), paired with \textasciigrave{}orientation\textasciigrave{} in order.}
+  \AttributeTok{HeatmapPointFill   =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{, }\StringTok{"\#1b7837"}\NormalTok{, }\StringTok{"\#762a83"}\NormalTok{),}
+
+  \CommentTok{\# CorePointFill: length = \# of spec\_select blocks (6), paired with names(spec\_select) in order.}
+  \CommentTok{\# With spec\_collapse = T, each block is one point, so 1 colour = 1 point.}
+  \CommentTok{\# Six distinct colours here, one per Spec01..Spec06 — visually distinguishes every block.}
+  \AttributeTok{CorePointFill      =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{, }\StringTok{"\#1b7837"}\NormalTok{,}
+                         \StringTok{"\#762a83"}\NormalTok{, }\StringTok{"\#9ecae1"}\NormalTok{, }\StringTok{"\#fc9272"}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `spec_collapse = TRUE` collapses each spec block into one point; in the current mode (relation_method = 'mantel', mantel_kind = 'col_vs_col') link sources are per spec column, so all column-level links from a block will originate from the same collapsed point. Consider `relation_method = 'mantel'` + `mantel_kind = 'block_vs_col'` for a one-line-per-block visualisation.
+\end{verbatim}
+
+\begin{verbatim}
+## `distance = -3` is negative; the env heatmaps will be pulled inward and may overlap the central point group. If a heatmap anchor becomes <= 0 you will get a warning and the corresponding heatmap may flip to the opposite side -- use a less negative value if that happens.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p2[[}\DecValTok{1}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-123-1} \end{center}
+
+\section{Change group angle}\label{change-group-angle}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p3 }\OtherTok{\textless{}{-}} \FunctionTok{gglink\_heatmaps}\NormalTok{(}
+  \CommentTok{\# {-}{-}{-}{-} Data input {-}{-}{-}{-}}
+  \AttributeTok{env                =}\NormalTok{ Envdf\_4st,            }\CommentTok{\# environmental data frame: one column per env variable}
+  \AttributeTok{spec               =}\NormalTok{ Spedf,                }\CommentTok{\# species data frame: one column per species / taxonomic unit}
+
+  \CommentTok{\# {-}{-}{-}{-} Spec blocks (central networks) {-}{-}{-}{-}}
+  \CommentTok{\# Each list element defines one central species network (column indices into \textasciigrave{}spec\textasciigrave{}).}
+  \CommentTok{\# The block names (Spec01, Spec02 ...) are used later to match \textasciigrave{}comparisons\_groups\textasciigrave{}.}
+  \CommentTok{\# }\AlertTok{NOTE}\CommentTok{: spec\_collapse = TRUE is enabled below, so these 6 blocks are NOT drawn as}
+  \CommentTok{\#       networks — each one is collapsed into a single labelled point bearing the block name.}
+  \AttributeTok{spec\_select        =} \FunctionTok{list}\NormalTok{(}\AttributeTok{Spec01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{,}
+                            \AttributeTok{Spec02 =} \DecValTok{11}\SpecialCharTok{:}\DecValTok{20}\NormalTok{,}
+                            \AttributeTok{Spec03 =} \DecValTok{5}\SpecialCharTok{:}\DecValTok{21}\NormalTok{,}
+                            \AttributeTok{Spec04 =} \DecValTok{20}\SpecialCharTok{:}\DecValTok{26}\NormalTok{,}
+                            \AttributeTok{Spec05 =} \DecValTok{30}\SpecialCharTok{:}\DecValTok{40}\NormalTok{,}
+                            \AttributeTok{Spec06 =} \DecValTok{25}\SpecialCharTok{:}\DecValTok{44}\NormalTok{),}
+
+  \CommentTok{\# {-}{-}{-}{-} Collapse each spec\_block into a single point {-}{-}{-}{-}}
+  \CommentTok{\# T = each spec\_select element is rendered as ONE labelled point ("Spec01"..."Spec06").}
+  \CommentTok{\# In this mode spec\_layout / spec\_relation / scale\_networks have no effect (no network drawn).}
+  \CommentTok{\# The point positions are decided by \textasciigrave{}group\_layout\textasciigrave{} below.}
+  \AttributeTok{spec\_collapse      =}\NormalTok{ T,}
+
+  \CommentTok{\# {-}{-}{-}{-} Env blocks (the four heatmap quadrants) {-}{-}{-}{-}}
+  \CommentTok{\# Each element defines one env block; each block becomes one heatmap quadrant.}
+  \AttributeTok{env\_select         =} \FunctionTok{list}\NormalTok{(}\AttributeTok{Env01 =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{14}\NormalTok{,}
+                            \AttributeTok{Env02 =} \DecValTok{15}\SpecialCharTok{:}\DecValTok{28}\NormalTok{,}
+                            \AttributeTok{Env03 =} \DecValTok{29}\SpecialCharTok{:}\DecValTok{42}\NormalTok{,}
+                            \AttributeTok{Env04 =} \DecValTok{43}\SpecialCharTok{:}\DecValTok{56}\NormalTok{),}
+
+  \CommentTok{\# {-}{-}{-}{-} Orientation of the four heatmaps {-}{-}{-}{-}}
+  \CommentTok{\# Order pairs with env\_select: Env01 {-}\textgreater{} top\_right, Env02 {-}\textgreater{} bottom\_right, etc.}
+  \AttributeTok{orientation        =} \FunctionTok{c}\NormalTok{(}\StringTok{"top\_right"}\NormalTok{,}
+                         \StringTok{"bottom\_right"}\NormalTok{,}
+                         \StringTok{"top\_left"}\NormalTok{,}
+                         \StringTok{"bottom\_left"}\NormalTok{),}
+
+  \CommentTok{\# spec\_layout      = c("rectangle\_outline", "square\_outline", "circle\_outline"),}
+  \CommentTok{\# \^{} Node{-}shape layout for the central species networks; ignored when spec\_collapse = T,}
+  \CommentTok{\#   so commenting it out makes no difference here.}
+
+  \CommentTok{\# {-}{-}{-}{-} Relation method (this run uses mantel) {-}{-}{-}{-}}
+  \AttributeTok{relation\_method    =} \StringTok{"mantel"}\NormalTok{,             }\CommentTok{\# use the mantel branch instead of correlation}
+  \AttributeTok{mantel.method      =} \StringTok{"mantel"}\NormalTok{,             }\CommentTok{\# legacy compatibility argument; unused by the current implementation, leave as{-}is}
+  \AttributeTok{mantel\_kind        =} \FunctionTok{c}\NormalTok{(}\StringTok{"col\_vs\_col"}\NormalTok{),      }\CommentTok{\# * mantel granularity:}
+                                             \CommentTok{\#   "col\_vs\_col"   = legacy mode: spec single{-}column dist}
+                                             \CommentTok{\#                    vs env single{-}column dist (close to rank correlation)}
+                                             \CommentTok{\#   "block\_vs\_col" = recommended ecological mode (default):}
+                                             \CommentTok{\#                    spec WHOLE{-}BLOCK dist vs single env column dist}
+                                             \CommentTok{\# }\AlertTok{NOTE}\CommentTok{: under col\_vs\_col + spec\_collapse = T, every link generated}
+                                             \CommentTok{\#       by each spec column inside a block starts from the SAME}
+                                             \CommentTok{\#       collapsed point — a console message will warn about this.}
+  \AttributeTok{cor.method         =} \StringTok{"pearson"}\NormalTok{,            }\CommentTok{\# correlation method; under mantel mode it falls through to mantel.method2; also used for env{-}env autocorrelation heatmaps}
+  \AttributeTok{cor.use            =} \StringTok{"pairwise"}\NormalTok{,           }\CommentTok{\# NA handling: pairwise{-}complete observations}
+  \AttributeTok{drop\_nonsig        =}\NormalTok{ T,                    }\CommentTok{\# T = hide non{-}significant links from the plot}
+
+  \CommentTok{\# {-}{-}{-}{-} Central{-}network geometry {-}{-}{-}{-}}
+  \AttributeTok{r                  =} \FloatTok{0.1}\NormalTok{,                  }\CommentTok{\# base radius of the central network; under spec\_collapse = T only controls how tightly the points pack}
+  \AttributeTok{scale\_networks     =}\NormalTok{ F,                    }\CommentTok{\# F = do NOT normalise all networks to a common size;}
+                                             \CommentTok{\#     auto{-}disabled when spec\_collapse = T}
+
+  \CommentTok{\# {-}{-}{-}{-} Overall arrangement of the (collapsed) spec points {-}{-}{-}{-}}
+  \AttributeTok{group\_layout       =} \StringTok{"arc"}\NormalTok{,                }\CommentTok{\# arc layout: points are spread along an ARC (a partial circle, not a full ring)}
+  \AttributeTok{group\_angle        =} \DecValTok{45}\NormalTok{,                   }\CommentTok{\# rotate the whole arc by 45 deg around the centre (starting angle)}
+  \AttributeTok{group\_arc\_angle    =} \DecValTok{90}\NormalTok{,                   }\CommentTok{\# angular span of the arc in degrees: 90 = quarter circle, 180 = half circle, 360 = full ring}
+  \CommentTok{\# nrow             = 5,                    \# only used by row/column/snake when wrapping into multiple rows; not needed here}
+  \AttributeTok{anchor\_dist        =} \DecValTok{4}\NormalTok{,                    }\CommentTok{\# distance from each point to the centre (radius of the arc)}
+  \AttributeTok{distance           =} \SpecialCharTok{{-}}\DecValTok{3}\NormalTok{,                   }\CommentTok{\# offset between the centre point group and the outer heatmaps (negative {-}\textgreater{} pull heatmaps INWARD, toward the centre)}
+
+  \CommentTok{\# {-}{-}{-}{-} Heatmap text annotations {-}{-}{-}{-}}
+  \AttributeTok{HeatmapLabelSize   =} \DecValTok{4}\NormalTok{,                    }\CommentTok{\# font size for heatmap row/col labels (ID/Type)}
+  \AttributeTok{HeatmapSigSize     =} \DecValTok{5}\NormalTok{,                    }\CommentTok{\# font size for the significance marks (*, **, ***) inside heatmap tiles}
+
+  \CommentTok{\# {-}{-}{-}{-} Per{-}quadrant colour palettes (low {-}\textgreater{} high) {-}{-}{-}{-}}
+  \CommentTok{\# Length must match \textasciigrave{}orientation\textasciigrave{} (4 quadrants); paired in order.}
+  \AttributeTok{HeatmapColorBar    =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{),                 }\CommentTok{\# quadrant 1: top\_right}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#1b7837"}\NormalTok{, }\StringTok{"\#762a83"}\NormalTok{),                 }\CommentTok{\# quadrant 2: bottom\_right}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#4393c3"}\NormalTok{, }\StringTok{"\#d6604d"}\NormalTok{),                 }\CommentTok{\# quadrant 3: top\_left}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"\#92c5de"}\NormalTok{, }\StringTok{"\#f4a582"}\NormalTok{)                  }\CommentTok{\# quadrant 4: bottom\_left}
+\NormalTok{  ),}
+  \AttributeTok{HeatmapLabelOrient =} \DecValTok{45}\NormalTok{,                   }\CommentTok{\# rotate heatmap labels 45 deg to avoid overlap}
+
+  \CommentTok{\# {-}{-}{-}{-} Spec{-}env link (segment) styling {-}{-}{-}{-}}
+  \AttributeTok{SigLineWidth       =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{),              }\CommentTok{\# min / max line width for the links (mapped by {-}log10(p))}
+  \AttributeTok{SigLineColor       =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#9ecae1"}\NormalTok{, }\StringTok{"\#fc9272"}\NormalTok{),  }\CommentTok{\# colour gradient endpoints for mantel r low / high}
+
+  \CommentTok{\# {-}{-}{-}{-} Restrict which (env\_block, spec\_block) pairs are drawn {-}{-}{-}{-}}
+  \CommentTok{\# Under mantel mode, each (env\_block, spec\_block) pair triggers a set of mantel tests}
+  \CommentTok{\# (col\_vs\_col: |spec cols| x |env cols| tests; block\_vs\_col: |env cols| tests).}
+  \AttributeTok{comparisons        =}\NormalTok{ T,                    }\CommentTok{\# enable the restriction (otherwise ALL possible pairs are drawn)}
+  \AttributeTok{comparisons\_groups =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env01"}\NormalTok{, }\StringTok{"Spec01"}\NormalTok{),                    }\CommentTok{\# Env01 paired only with Spec01}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env02"}\NormalTok{, }\StringTok{"Spec02"}\NormalTok{),                    }\CommentTok{\# Env02 paired only with Spec02}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env03"}\NormalTok{, }\StringTok{"Spec03"}\NormalTok{),                    }\CommentTok{\# Env03 paired only with Spec03}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Env04"}\NormalTok{, }\StringTok{"Spec03"}\NormalTok{)                     }\CommentTok{\# Env04 also paired only with Spec03}
+\NormalTok{  ),}
+
+  \CommentTok{\# {-}{-}{-}{-} Point sizes {-}{-}{-}{-}}
+  \AttributeTok{HeatmapPointSize   =} \DecValTok{4}\NormalTok{,                    }\CommentTok{\# size of the anchor points on each heatmap\textquotesingle{}s diagonal}
+  \AttributeTok{CorePointSize      =} \DecValTok{10}\NormalTok{,                   }\CommentTok{\# size of the collapsed spec points (larger than non{-}collapse default for visibility)}
+
+  \CommentTok{\# {-}{-}{-}{-} Point fill colours (vectors are recycled in order) {-}{-}{-}{-}}
+  \CommentTok{\# HeatmapPointFill: length = \# of quadrants (4), paired with \textasciigrave{}orientation\textasciigrave{} in order.}
+  \AttributeTok{HeatmapPointFill   =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{, }\StringTok{"\#1b7837"}\NormalTok{, }\StringTok{"\#762a83"}\NormalTok{),}
+
+  \CommentTok{\# CorePointFill: length = \# of spec\_select blocks (6), paired with names(spec\_select) in order.}
+  \CommentTok{\# With spec\_collapse = T, each block is one point, so 1 colour = 1 point.}
+  \CommentTok{\# Six distinct colours, one per Spec01..Spec06 — visually distinguishes every block.}
+  \AttributeTok{CorePointFill      =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#2166ac"}\NormalTok{, }\StringTok{"\#b2182b"}\NormalTok{, }\StringTok{"\#1b7837"}\NormalTok{,}
+                         \StringTok{"\#762a83"}\NormalTok{, }\StringTok{"\#9ecae1"}\NormalTok{, }\StringTok{"\#fc9272"}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `spec_collapse = TRUE` collapses each spec block into one point; in the current mode (relation_method = 'mantel', mantel_kind = 'col_vs_col') link sources are per spec column, so all column-level links from a block will originate from the same collapsed point. Consider `relation_method = 'mantel'` + `mantel_kind = 'block_vs_col'` for a one-line-per-block visualisation.
+\end{verbatim}
+
+\begin{verbatim}
+## `distance = -3` is negative; the env heatmaps will be pulled inward and may overlap the central point group. If a heatmap anchor becomes <= 0 you will get a warning and the corresponding heatmap may flip to the opposite side -- use a less negative value if that happens.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: `distance = -3` is too negative for the current central layout -- at
+## least one heatmap anchor became <= 0. The corresponding heatmap will flip to
+## the opposite side or collapse onto the origin. Try a larger (less negative)
+## `distance`.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p3[[}\DecValTok{1}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-124-1} \end{center}
 
 \chapter{Multi-omics network analysis}\label{multi-omics-network-analysis}
 
