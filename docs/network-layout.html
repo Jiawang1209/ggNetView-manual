@@ -21,6 +21,7 @@
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -56,7 +57,7 @@
 </ul>
 
         <div class="book-extra">
-          
+          <p><a id="book-repo" href="https://github.com/Jiawang1209/ggNetView">View book source <i class="fab fa-github"></i></a></p>
         </div>
       </nav>
 </div>
@@ -155,14 +156,10 @@
 <h2>
 <span class="header-section-number">6.1</span> Full graph layout<a class="anchor" aria-label="anchor" href="#full-graph-layout"><i class="fas fa-link"></i></a>
 </h2>
-<div id="full-network" class="section level3" number="6.1.1">
+<div id="gephi-layout" class="section level3" number="6.1.1">
 <h3>
-<span class="header-section-number">6.1.1</span> Full network<a class="anchor" aria-label="anchor" href="#full-network"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.1.1</span> Gephi layout<a class="anchor" aria-label="anchor" href="#gephi-layout"><i class="fas fa-link"></i></a>
 </h3>
-<div id="gephi-layout" class="section level4" number="6.1.1.1">
-<h4>
-<span class="header-section-number">6.1.1.1</span> Gephi layout<a class="anchor" aria-label="anchor" href="#gephi-layout"><i class="fas fa-link"></i></a>
-</h4>
 <blockquote>
 <p>layout.module = “random”</p>
 </blockquote>
@@ -218,10 +215,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-51-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="fruchtermanreingold-force-directed-layout" class="section level4" number="6.1.1.2">
-<h4>
-<span class="header-section-number">6.1.1.2</span> Fruchterman–Reingold force-directed layout<a class="anchor" aria-label="anchor" href="#fruchtermanreingold-force-directed-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="fruchtermanreingold-force-directed-layout" class="section level3" number="6.1.2">
+<h3>
+<span class="header-section-number">6.1.2</span> Fruchterman–Reingold force-directed layout<a class="anchor" aria-label="anchor" href="#fruchtermanreingold-force-directed-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb413"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># FR2: a force-directed layout (springs pull connected nodes, repulsion pushes</span></span>
 <span><span class="co"># all others apart). Classic choice; reveals dense vs. sparse regions clearly.</span></span>
@@ -238,10 +235,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-52-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="diamond-layout" class="section level4" number="6.1.1.3">
-<h4>
-<span class="header-section-number">6.1.1.3</span> Diamond layout<a class="anchor" aria-label="anchor" href="#diamond-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="diamond-layout" class="section level3" number="6.1.3">
+<h3>
+<span class="header-section-number">6.1.3</span> Diamond layout<a class="anchor" aria-label="anchor" href="#diamond-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "diamond": modules arranged on a rhombic / diamond-shaped lattice.</span></span>
 <span><span class="co"># Good for showing many modules side-by-side without overlap.</span></span>
@@ -258,10 +255,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-53-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="kk-layout" class="section level4" number="6.1.1.4">
-<h4>
-<span class="header-section-number">6.1.1.4</span> KK layout<a class="anchor" aria-label="anchor" href="#kk-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="kk-layout" class="section level3" number="6.1.4">
+<h3>
+<span class="header-section-number">6.1.4</span> KK layout<a class="anchor" aria-label="anchor" href="#kk-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb415"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Kamada-Kawai force-directed layout: like FR but optimises a stress function;</span></span>
 <span><span class="co"># tends to give smoother, more even spacing for medium-sized networks.</span></span>
@@ -278,10 +275,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-54-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="nicley-layout" class="section level4" number="6.1.1.5">
-<h4>
-<span class="header-section-number">6.1.1.5</span> Nicley layout<a class="anchor" aria-label="anchor" href="#nicley-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="nicley-layout" class="section level3" number="6.1.5">
+<h3>
+<span class="header-section-number">6.1.5</span> Nicley layout<a class="anchor" aria-label="anchor" href="#nicley-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb416"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "nicely": igraph's auto-pick layout — chooses a reasonable algorithm based on</span></span>
 <span><span class="co"># graph size and structure. Safe default when you don't want to pick yourself.</span></span>
@@ -318,10 +315,10 @@
 <code class="sourceCode R"><span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-55-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="petal-layout" class="section level4" number="6.1.1.6">
-<h4>
-<span class="header-section-number">6.1.1.6</span> Petal layout<a class="anchor" aria-label="anchor" href="#petal-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="petal-layout" class="section level3" number="6.1.6">
+<h3>
+<span class="header-section-number">6.1.6</span> Petal layout<a class="anchor" aria-label="anchor" href="#petal-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "petal": each module is laid out as a circular petal radiating from the</span></span>
 <span><span class="co"># global centre. Visually emphasises modular structure.</span></span>
@@ -338,10 +335,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-56-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="circle-layout" class="section level4" number="6.1.1.7">
-<h4>
-<span class="header-section-number">6.1.1.7</span> Circle layout<a class="anchor" aria-label="anchor" href="#circle-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="circle-layout" class="section level3" number="6.1.7">
+<h3>
+<span class="header-section-number">6.1.7</span> Circle layout<a class="anchor" aria-label="anchor" href="#circle-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb429"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "circle": all nodes placed on a single ring. Useful for small networks or for</span></span>
 <span><span class="co"># emphasising edges over node positions.</span></span>
@@ -358,10 +355,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-57-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="diamond-outline-layout" class="section level4" number="6.1.1.8">
-<h4>
-<span class="header-section-number">6.1.1.8</span> Diamond outline layout<a class="anchor" aria-label="anchor" href="#diamond-outline-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="diamond-outline-layout" class="section level3" number="6.1.8">
+<h3>
+<span class="header-section-number">6.1.8</span> Diamond outline layout<a class="anchor" aria-label="anchor" href="#diamond-outline-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb430"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "diamond_outline": diamond layout but nodes pushed toward the module border —</span></span>
 <span><span class="co"># hollow-looking modules, easier to read edge connections inside each module.</span></span>
@@ -378,10 +375,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-58-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="grid-layout" class="section level4" number="6.1.1.9">
-<h4>
-<span class="header-section-number">6.1.1.9</span> Grid layout<a class="anchor" aria-label="anchor" href="#grid-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="grid-layout" class="section level3" number="6.1.9">
+<h3>
+<span class="header-section-number">6.1.9</span> Grid layout<a class="anchor" aria-label="anchor" href="#grid-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb431"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "grid": nodes snapped to a regular rectangular grid.</span></span>
 <span><span class="co"># Edges may cross a lot, but useful for systematic comparison plots.</span></span>
@@ -398,10 +395,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-59-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="heart_centered-layout" class="section level4" number="6.1.1.10">
-<h4>
-<span class="header-section-number">6.1.1.10</span> Heart_centered layout<a class="anchor" aria-label="anchor" href="#heart_centered-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="heart_centered-layout" class="section level3" number="6.1.10">
+<h3>
+<span class="header-section-number">6.1.10</span> Heart_centered layout<a class="anchor" aria-label="anchor" href="#heart_centered-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb432"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "heart_centered": stylised heart-shaped frame with nodes pulled toward the</span></span>
 <span><span class="co"># centre. Mostly cosmetic — handy for talks / decorative figures.</span></span>
@@ -418,10 +415,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-60-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="lgl-layout" class="section level4" number="6.1.1.11">
-<h4>
-<span class="header-section-number">6.1.1.11</span> Lgl layout<a class="anchor" aria-label="anchor" href="#lgl-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="lgl-layout" class="section level3" number="6.1.11">
+<h3>
+<span class="header-section-number">6.1.11</span> Lgl layout<a class="anchor" aria-label="anchor" href="#lgl-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb433"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "lgl" (Large Graph Layout): force-directed layout designed for large graphs;</span></span>
 <span><span class="co"># spreads nodes radially around dense cores. Scales better than FR/KK.</span></span>
@@ -442,10 +439,10 @@
 <code class="sourceCode R"><span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-61-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="randomly-layout" class="section level4" number="6.1.1.12">
-<h4>
-<span class="header-section-number">6.1.1.12</span> Randomly layout<a class="anchor" aria-label="anchor" href="#randomly-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="randomly-layout" class="section level3" number="6.1.12">
+<h3>
+<span class="header-section-number">6.1.12</span> Randomly layout<a class="anchor" aria-label="anchor" href="#randomly-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb437"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "randomly": nodes placed at uniformly random positions inside the canvas.</span></span>
 <span><span class="co"># Baseline / sanity-check layout — not informative on its own.</span></span>
@@ -462,10 +459,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-62-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="rectangle-layout" class="section level4" number="6.1.1.13">
-<h4>
-<span class="header-section-number">6.1.1.13</span> Rectangle layout<a class="anchor" aria-label="anchor" href="#rectangle-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="rectangle-layout" class="section level3" number="6.1.13">
+<h3>
+<span class="header-section-number">6.1.13</span> Rectangle layout<a class="anchor" aria-label="anchor" href="#rectangle-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb438"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "rectangle": nodes laid out along a rectangular frame.</span></span>
 <span><span class="co"># Good when you want to free up the centre for annotations / edge bundles.</span></span>
@@ -482,10 +479,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-63-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="square-layout" class="section level4" number="6.1.1.14">
-<h4>
-<span class="header-section-number">6.1.1.14</span> Square layout<a class="anchor" aria-label="anchor" href="#square-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="square-layout" class="section level3" number="6.1.14">
+<h3>
+<span class="header-section-number">6.1.14</span> Square layout<a class="anchor" aria-label="anchor" href="#square-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb439"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "square": like rectangle but constrained to a square aspect ratio.</span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
@@ -501,10 +498,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-64-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="star-layout" class="section level4" number="6.1.1.15">
-<h4>
-<span class="header-section-number">6.1.1.15</span> Star layout<a class="anchor" aria-label="anchor" href="#star-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="star-layout" class="section level3" number="6.1.15">
+<h3>
+<span class="header-section-number">6.1.15</span> Star layout<a class="anchor" aria-label="anchor" href="#star-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb440"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "star": one central node + others arranged as rays radiating outward.</span></span>
 <span><span class="co"># Best when there is a clear hub node; less useful for community-rich graphs.</span></span>
@@ -521,10 +518,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-65-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="star_concentric-layout" class="section level4" number="6.1.1.16">
-<h4>
-<span class="header-section-number">6.1.1.16</span> Star_concentric layout<a class="anchor" aria-label="anchor" href="#star_concentric-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="star_concentric-layout" class="section level3" number="6.1.16">
+<h3>
+<span class="header-section-number">6.1.16</span> Star_concentric layout<a class="anchor" aria-label="anchor" href="#star_concentric-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb441"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "star_concentric": star layout with multiple concentric rings — nodes ranked</span></span>
 <span><span class="co"># by some centrality measure end up closer to the centre.</span></span>
@@ -541,10 +538,10 @@
 <span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-66-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="stress-layout" class="section level4" number="6.1.1.17">
-<h4>
-<span class="header-section-number">6.1.1.17</span> Stress layout<a class="anchor" aria-label="anchor" href="#stress-layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="stress-layout" class="section level3" number="6.1.17">
+<h3>
+<span class="header-section-number">6.1.17</span> Stress layout<a class="anchor" aria-label="anchor" href="#stress-layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb442"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "stress": stress-majorisation layout (from graphlayouts). Generally produces</span></span>
 <span><span class="co"># the cleanest "FR/KK-like" results and is reproducible across runs — a strong</span></span>
@@ -564,10 +561,10 @@
 <code class="sourceCode R"><span><span class="va">p</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-67-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="circular_modules_gephi_layout" class="section level4" number="6.1.1.18">
-<h4>
-<span class="header-section-number">6.1.1.18</span> circular_modules_gephi_layout<a class="anchor" aria-label="anchor" href="#circular_modules_gephi_layout"><i class="fas fa-link"></i></a>
-</h4>
+<div id="circular_modules_gephi_layout" class="section level3" number="6.1.18">
+<h3>
+<span class="header-section-number">6.1.18</span> circular_modules_gephi_layout<a class="anchor" aria-label="anchor" href="#circular_modules_gephi_layout"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb445"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_modules_gephi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
 <span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
@@ -603,10 +600,10 @@
 <span><span class="va">p_modules_equal_gephi</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-69-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="consensus_module_gephi" class="section level4" number="6.1.1.19">
-<h4>
-<span class="header-section-number">6.1.1.19</span> consensus_module_gephi<a class="anchor" aria-label="anchor" href="#consensus_module_gephi"><i class="fas fa-link"></i></a>
-</h4>
+<div id="consensus_module_gephi" class="section level3" number="6.1.19">
+<h3>
+<span class="header-section-number">6.1.19</span> consensus_module_gephi<a class="anchor" aria-label="anchor" href="#consensus_module_gephi"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb447"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_consensus_module</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
 <span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
@@ -641,10 +638,10 @@
 <code class="sourceCode R"><span><span class="va">p_consensus_module2</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-70-2.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="consensus_module_equal_gephi" class="section level4" number="6.1.1.20">
-<h4>
-<span class="header-section-number">6.1.1.20</span> consensus_module_equal_gephi<a class="anchor" aria-label="anchor" href="#consensus_module_equal_gephi"><i class="fas fa-link"></i></a>
-</h4>
+<div id="consensus_module_equal_gephi" class="section level3" number="6.1.20">
+<h3>
+<span class="header-section-number">6.1.20</span> consensus_module_equal_gephi<a class="anchor" aria-label="anchor" href="#consensus_module_equal_gephi"><i class="fas fa-link"></i></a>
+</h3>
 <div class="sourceCode" id="cb451"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_consensus_module3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
 <span>  graph_obj <span class="op">=</span> <span class="va">graph_obj</span>,</span>
@@ -694,7 +691,6 @@
 <div class="sourceCode" id="cb455"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_consensus_module5</span></span></code></pre></div>
 <div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-71-3.png" alt="" width="768" style="display: block; margin: auto;"></div>
-</div>
 </div>
 </div>
 <div id="sub-graph-layout" class="section level2" number="6.2">
@@ -1292,7 +1288,28 @@
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#network-layout"><span class="header-section-number">6</span> Network layout</a></li>
 <li>
-<a class="nav-link" href="#full-graph-layout"><span class="header-section-number">6.1</span> Full graph layout</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#full-network"><span class="header-section-number">6.1.1</span> Full network</a></li></ul>
+<a class="nav-link" href="#full-graph-layout"><span class="header-section-number">6.1</span> Full graph layout</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#gephi-layout"><span class="header-section-number">6.1.1</span> Gephi layout</a></li>
+<li><a class="nav-link" href="#fruchtermanreingold-force-directed-layout"><span class="header-section-number">6.1.2</span> Fruchterman–Reingold force-directed layout</a></li>
+<li><a class="nav-link" href="#diamond-layout"><span class="header-section-number">6.1.3</span> Diamond layout</a></li>
+<li><a class="nav-link" href="#kk-layout"><span class="header-section-number">6.1.4</span> KK layout</a></li>
+<li><a class="nav-link" href="#nicley-layout"><span class="header-section-number">6.1.5</span> Nicley layout</a></li>
+<li><a class="nav-link" href="#petal-layout"><span class="header-section-number">6.1.6</span> Petal layout</a></li>
+<li><a class="nav-link" href="#circle-layout"><span class="header-section-number">6.1.7</span> Circle layout</a></li>
+<li><a class="nav-link" href="#diamond-outline-layout"><span class="header-section-number">6.1.8</span> Diamond outline layout</a></li>
+<li><a class="nav-link" href="#grid-layout"><span class="header-section-number">6.1.9</span> Grid layout</a></li>
+<li><a class="nav-link" href="#heart_centered-layout"><span class="header-section-number">6.1.10</span> Heart_centered layout</a></li>
+<li><a class="nav-link" href="#lgl-layout"><span class="header-section-number">6.1.11</span> Lgl layout</a></li>
+<li><a class="nav-link" href="#randomly-layout"><span class="header-section-number">6.1.12</span> Randomly layout</a></li>
+<li><a class="nav-link" href="#rectangle-layout"><span class="header-section-number">6.1.13</span> Rectangle layout</a></li>
+<li><a class="nav-link" href="#square-layout"><span class="header-section-number">6.1.14</span> Square layout</a></li>
+<li><a class="nav-link" href="#star-layout"><span class="header-section-number">6.1.15</span> Star layout</a></li>
+<li><a class="nav-link" href="#star_concentric-layout"><span class="header-section-number">6.1.16</span> Star_concentric layout</a></li>
+<li><a class="nav-link" href="#stress-layout"><span class="header-section-number">6.1.17</span> Stress layout</a></li>
+<li><a class="nav-link" href="#circular_modules_gephi_layout"><span class="header-section-number">6.1.18</span> circular_modules_gephi_layout</a></li>
+<li><a class="nav-link" href="#consensus_module_gephi"><span class="header-section-number">6.1.19</span> consensus_module_gephi</a></li>
+<li><a class="nav-link" href="#consensus_module_equal_gephi"><span class="header-section-number">6.1.20</span> consensus_module_equal_gephi</a></li>
+</ul>
 </li>
 <li>
 <a class="nav-link" href="#sub-graph-layout"><span class="header-section-number">6.2</span> Sub graph layout</a><ul class="nav navbar-nav">
@@ -1307,7 +1324,8 @@
 
       <div class="book-extra">
         <ul class="list-unstyled">
-          
+<li><a id="book-source" href="https://github.com/Jiawang1209/ggNetView/blob/master/05-layout.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/Jiawang1209/ggNetView/edit/master/05-layout.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>
@@ -1319,7 +1337,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-05-22.</p>
+    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-05-24.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

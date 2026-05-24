@@ -10,11 +10,17 @@ bookdown::gitbook:
         <li><a href="https://github.com/Jiawang1209/ggNetView" target="blank">Published with bookdown</a></li>
     edit: https://github.com/Jiawang1209/ggNetView/%s
     download: ["pdf", "epub"]
+
+bookdown::bs4_book:
+  css: style.css
+  repo: https://github.com/Jiawang1209/ggNetView
+  config:
+    toc:
+      depth: 4
+
 bookdown::pdf_book:
   includes:
     in_header: preamble.tex
   latex_engine: xelatex
   citation_package: natbib
   keep_tex: yes
-bookdown::epub_book: default
-bookdown::bs4_book: default

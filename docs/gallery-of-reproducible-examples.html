@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 11 Gallery of Reproducible Examples | ggNetView manual documentation</title>
 <meta name="author" content="Yue Liu">
-<meta name="description" content="11.1 Water   11.2 WGCNA">
+<meta name="description" content="Load R Package library(tidyverse)  # data manipulation / piping utilities library(ggNetView)  # graph builders + info-extraction helpers  11.1 Microbial Community Network  The data from Liu, X.,...">
 <meta name="generator" content="bookdown 0.45 with bs4_book()">
 <meta property="og:title" content="Chapter 11 Gallery of Reproducible Examples | ggNetView manual documentation">
 <meta property="og:type" content="book">
-<meta property="og:description" content="11.1 Water   11.2 WGCNA">
+<meta property="og:description" content="Load R Package library(tidyverse)  # data manipulation / piping utilities library(ggNetView)  # graph builders + info-extraction helpers  11.1 Microbial Community Network  The data from Liu, X.,...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 11 Gallery of Reproducible Examples | ggNetView manual documentation">
-<meta name="twitter:description" content="11.1 Water   11.2 WGCNA">
+<meta name="twitter:description" content="Load R Package library(tidyverse)  # data manipulation / piping utilities library(ggNetView)  # graph builders + info-extraction helpers  11.1 Microbial Community Network  The data from Liu, X.,...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.11.0/transition.js"></script><script src="libs/bs3compat-0.11.0/tabs.js"></script><script src="libs/bs3compat-0.11.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -21,6 +21,7 @@
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -56,7 +57,7 @@
 </ul>
 
         <div class="book-extra">
-          
+          <p><a id="book-repo" href="https://github.com/Jiawang1209/ggNetView">View book source <i class="fab fa-github"></i></a></p>
         </div>
       </nav>
 </div>
@@ -64,15 +65,310 @@
 <h1>
 <span class="header-section-number">11</span> Gallery of Reproducible Examples<a class="anchor" aria-label="anchor" href="#gallery-of-reproducible-examples"><i class="fas fa-link"></i></a>
 </h1>
-<div id="water" class="section level2" number="11.1">
+<blockquote>
+<p>Load R Package</p>
+</blockquote>
+<div class="sourceCode" id="cb626"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>   <span class="co"># data manipulation / piping utilities</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Jiawang1209/ggNetView">ggNetView</a></span><span class="op">)</span>   <span class="co"># graph builders + info-extraction helpers</span></span></code></pre></div>
+<div id="microbial-community-network" class="section level2" number="11.1">
 <h2>
-<span class="header-section-number">11.1</span> Water<a class="anchor" aria-label="anchor" href="#water"><i class="fas fa-link"></i></a>
+<span class="header-section-number">11.1</span> Microbial Community Network<a class="anchor" aria-label="anchor" href="#microbial-community-network"><i class="fas fa-link"></i></a>
 </h2>
+<blockquote>
+<p>The data from <code>Liu, X., Wang, M., Liu, B. et al. Keystone taxa mediate the trade-off between microbial community stability and performance in activated sludges. Nat Water 3, 723–733 (2025).</code> <a href="https://doi.org/10.1038/s44221-025-00451-6">DOI:10.1038/s44221-025-00451-6</a></p>
+</blockquote>
+<div class="sourceCode" id="cb627"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load data</span></span>
+<span></span>
+<span><span class="co"># OTU table: read the pre-filtered ASV abundance data (relative abundance range 0.00001-0.01)</span></span>
+<span><span class="co"># Use read_delim() to read the CSV file, and convert the first column ("...1") to row names</span></span>
+<span><span class="va">otu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_delim</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"./Input/Figure3a-b_ASV_data_0.00001_0.01.csv"</span>, delim <span class="op">=</span> <span class="st">","</span>, col_names <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">column_to_rownames</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"...1"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># OTU taxonomy table: read the ASV annotation information from the MiDAS database,</span></span>
+<span><span class="co"># including taxonomy, Mean Relative Abundance (MRA), and functional annotations.</span></span>
+<span><span class="co"># This table will be used to annotate the network nodes (e.g. by Phylum).</span></span>
+<span><span class="va">tax</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_delim</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"./Input/Figure3a-b_ASV-MiDAS-MRA-function-taxonomy-all-new.csv"</span>, col_names <span class="op">=</span> <span class="cn">T</span>, delim <span class="op">=</span> <span class="st">","</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Build the network graph object</span></span>
+<span><span class="co"># build_graph_from_mat() computes pairwise correlations among taxa from the OTU abundance matrix</span></span>
+<span><span class="co"># and constructs a network graph object for downstream visualization.</span></span>
+<span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/build_graph_from_mat.html">build_graph_from_mat</a></span><span class="op">(</span></span>
+<span>  mat              <span class="op">=</span> <span class="va">otu</span>,        <span class="co"># input OTU abundance matrix</span></span>
+<span>  transfrom.method <span class="op">=</span> <span class="st">"ln"</span>,       <span class="co"># data transformation method: natural log (stabilize variance)</span></span>
+<span>  method           <span class="op">=</span> <span class="st">"WGCNA"</span>,    <span class="co"># correlation method: WGCNA (weighted gene co-expression network)</span></span>
+<span>  r.threshold      <span class="op">=</span> <span class="fl">0.44</span>,       <span class="co"># correlation coefficient threshold: keep edges with |r| &gt;= 0.44</span></span>
+<span>  p.threshold      <span class="op">=</span> <span class="fl">0.05</span>,       <span class="co"># significance threshold: keep edges with p &lt; 0.05</span></span>
+<span>  node_annotation  <span class="op">=</span> <span class="va">tax</span>         <span class="co"># node annotation table providing taxonomic info for each node</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># ====== Figure 1: network plot colored by Modularity (module assignment) ======</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj     <span class="op">=</span> <span class="va">obj</span>,           <span class="co"># input network graph object</span></span>
+<span>  layout        <span class="op">=</span> <span class="st">"gephi"</span>,       <span class="co"># layout algorithm: Gephi-style (ForceAtlas2-like)</span></span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,    <span class="co"># module layout: place adjacent modules close together</span></span>
+<span>  group.by      <span class="op">=</span> <span class="st">"Modularity"</span>,  <span class="co"># grouping variable: color nodes by module ID</span></span>
+<span>  center        <span class="op">=</span> <span class="cn">F</span>,             <span class="co"># do not center the network</span></span>
+<span>  jitter        <span class="op">=</span> <span class="cn">TRUE</span>,          <span class="co"># add small random offsets to node positions to avoid overlap</span></span>
+<span>  jitter_sd     <span class="op">=</span> <span class="fl">0.15</span>,          <span class="co"># standard deviation of the jitter</span></span>
+<span>  shrink        <span class="op">=</span> <span class="fl">0.9</span>,           <span class="co"># shrink factor: tighten nodes within each module</span></span>
+<span>  linealpha     <span class="op">=</span> <span class="fl">0.2</span>,           <span class="co"># transparency of edges</span></span>
+<span>  linecolor     <span class="op">=</span> <span class="st">"#d9d9d9"</span>      <span class="co"># default edge color: light grey</span></span>
+<span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="co"># Manually assign fill colors for the 16 modules</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#00A9FF"</span>, <span class="st">"#0BB702"</span>, <span class="st">"#C77CFF"</span>, <span class="st">"#00C19A"</span>, <span class="st">"#ED68ED"</span>, </span>
+<span>                               <span class="st">"#8494FF"</span>, <span class="st">"#00B8E7"</span>, <span class="st">"#FF61CC"</span>, <span class="st">"#F8766D"</span>, <span class="st">"#E68613"</span>,</span>
+<span>                               <span class="st">"#ABA300"</span>, <span class="st">"#7CAE00"</span>, <span class="st">"#CD9600"</span>, <span class="st">"#00BE67"</span>, <span class="st">"#00BFC4"</span>,</span>
+<span>                               <span class="st">"#FF68A1"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>    <span class="co"># remove legend</span></span>
+<span></span>
+<span><span class="co"># Save Figure 1 as a PDF (commented out; uncomment to enable saving)</span></span>
+<span><span class="co"># ggsave(filename = "Figure3a-b/Figure3a.pdf",</span></span>
+<span><span class="co">#        plot     = p1,</span></span>
+<span><span class="co">#        height   = 12,</span></span>
+<span><span class="co">#        width    = 12)</span></span>
+<span></span>
+<span><span class="va">p1</span>   <span class="co"># display Figure 1</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-126-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb628"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ====== Figure 2: add  outlier ======</span></span>
+<span></span>
+<span><span class="va">module_colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#00A9FF"</span>, <span class="st">"#0BB702"</span>, <span class="st">"#C77CFF"</span>, <span class="st">"#00C19A"</span>, <span class="st">"#ED68ED"</span>, </span>
+<span>                   <span class="st">"#8494FF"</span>, <span class="st">"#00B8E7"</span>, <span class="st">"#FF61CC"</span>, <span class="st">"#F8766D"</span>, <span class="st">"#E68613"</span>,</span>
+<span>                   <span class="st">"#ABA300"</span>, <span class="st">"#7CAE00"</span>, <span class="st">"#CD9600"</span>, <span class="st">"#00BE67"</span>, <span class="st">"#00BFC4"</span>,</span>
+<span>                   <span class="st">"#FF68A1"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj        <span class="op">=</span> <span class="va">obj</span>,             <span class="co"># input network graph object</span></span>
+<span>  layout           <span class="op">=</span> <span class="st">"gephi"</span>,         <span class="co"># layout algorithm: Gephi-style (ForceAtlas2-like)</span></span>
+<span>  layout.module    <span class="op">=</span> <span class="st">"adjacent"</span>,      <span class="co"># module layout: place adjacent modules close together</span></span>
+<span>  group.by         <span class="op">=</span> <span class="st">"Modularity"</span>,    <span class="co"># grouping variable: color nodes by module ID</span></span>
+<span>  center           <span class="op">=</span> <span class="cn">F</span>,               <span class="co"># do not force a node at the layout centre</span></span>
+<span>  pointalpha       <span class="op">=</span> <span class="fl">0.5</span>,             <span class="co"># node transparency (0 = invisible, 1 = opaque)</span></span>
+<span>  label            <span class="op">=</span> <span class="cn">T</span>,               <span class="co"># draw module text labels</span></span>
+<span>  label_layout     <span class="op">=</span> <span class="st">"two_column"</span>,    <span class="co"># label_layout defaults to "two_column": labels are placed in two fixed</span></span>
+<span>  label_wrap_width <span class="op">=</span> <span class="fl">18</span>,              <span class="co"># wrap long module / pathway names at ~18 chars per line</span></span>
+<span>  label_outer_pad  <span class="op">=</span> <span class="fl">0.25</span>,            <span class="co"># distance from the network edge to each label column</span></span>
+<span>  jitter           <span class="op">=</span> <span class="cn">TRUE</span>,            <span class="co"># add small random offsets to node positions</span></span>
+<span>  jitter_sd        <span class="op">=</span> <span class="fl">0.15</span>,            <span class="co"># standard deviation of the jitter</span></span>
+<span>  shrink           <span class="op">=</span> <span class="fl">0.9</span>,             <span class="co"># shrink factor: tighten nodes within each module</span></span>
+<span>  linealpha        <span class="op">=</span> <span class="fl">0.2</span>,             <span class="co"># transparency of edges</span></span>
+<span>  linecolor        <span class="op">=</span> <span class="st">"#d9d9d9"</span>,       <span class="co"># default edge colour: light grey</span></span>
+<span>  add_outer        <span class="op">=</span> <span class="cn">T</span>,               <span class="co"># add per-module outer boundary (KDE/HDR contour)</span></span>
+<span>  outeralpha       <span class="op">=</span> <span class="fl">0.3</span>,             <span class="co"># per-module boundary fill transparency</span></span>
+<span>  outerwidth       <span class="op">=</span> <span class="fl">1</span>,               <span class="co"># per-module boundary line width</span></span>
+<span>  add_group_outer  <span class="op">=</span> <span class="cn">T</span>,               <span class="co"># add an outer circle around the whole network</span></span>
+<span>  fill             <span class="op">=</span> <span class="va">module_colors</span>,   <span class="co"># &lt;-- node fill colours; module outers use the same palette</span></span>
+<span>  color            <span class="op">=</span> <span class="va">module_colors</span>    <span class="co"># &lt;-- module boundary line colours (matches the fills)</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>     <span class="co"># hide all legends</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Save Figure 2 as a PDF (commented out; uncomment to enable saving)</span></span>
+<span><span class="co"># ggsave(filename = "Figure2.pdf",</span></span>
+<span><span class="co">#        plot     = p2,</span></span>
+<span><span class="co">#        height   = 12,</span></span>
+<span><span class="co">#        width    = 12)</span></span>
+<span></span>
+<span><span class="va">p2</span>   <span class="co"># display Figure 2</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-126-2.png" alt="" width="960" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb629"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ====== Figure 3: add  outlier ======</span></span>
+<span></span>
+<span><span class="va">module_colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#00A9FF"</span>, <span class="st">"#0BB702"</span>, <span class="st">"#C77CFF"</span>, <span class="st">"#00C19A"</span>, <span class="st">"#ED68ED"</span>, </span>
+<span>                   <span class="st">"#8494FF"</span>, <span class="st">"#00B8E7"</span>, <span class="st">"#FF61CC"</span>, <span class="st">"#F8766D"</span>, <span class="st">"#E68613"</span>,</span>
+<span>                   <span class="st">"#ABA300"</span>, <span class="st">"#7CAE00"</span>, <span class="st">"#CD9600"</span>, <span class="st">"#00BE67"</span>, <span class="st">"#00BFC4"</span>,</span>
+<span>                   <span class="st">"#FF68A1"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj        <span class="op">=</span> <span class="va">obj</span>,             <span class="co"># input network graph object</span></span>
+<span>  layout           <span class="op">=</span> <span class="st">"gephi"</span>,         <span class="co"># layout algorithm: Gephi-style (ForceAtlas2-like)</span></span>
+<span>  layout.module    <span class="op">=</span> <span class="st">"adjacent"</span>,      <span class="co"># module layout: place adjacent modules close together</span></span>
+<span>  group.by         <span class="op">=</span> <span class="st">"Modularity"</span>,    <span class="co"># grouping variable: color nodes by module ID</span></span>
+<span>  center           <span class="op">=</span> <span class="cn">F</span>,               <span class="co"># do not force a node at the layout centre</span></span>
+<span>  pointalpha       <span class="op">=</span> <span class="fl">0.5</span>,             <span class="co"># node transparency (0 = invisible, 1 = opaque)</span></span>
+<span>  label            <span class="op">=</span> <span class="cn">T</span>,               <span class="co"># draw module text labels</span></span>
+<span>  label_layout     <span class="op">=</span> <span class="st">"two_column_follow"</span>, <span class="co"># "two_column_follow": ring layout that follows each module's real</span></span>
+<span>  label_wrap_width <span class="op">=</span> <span class="fl">18</span>,              <span class="co"># wrap long module / pathway names at ~18 chars per line</span></span>
+<span>  label_outer_pad  <span class="op">=</span> <span class="fl">0.25</span>,            <span class="co"># outer ellipse padding: how far labels sit beyond the network</span></span>
+<span>  jitter           <span class="op">=</span> <span class="cn">TRUE</span>,            <span class="co"># add small random offsets to node positions</span></span>
+<span>  jitter_sd        <span class="op">=</span> <span class="fl">0.15</span>,            <span class="co"># standard deviation of the jitter</span></span>
+<span>  shrink           <span class="op">=</span> <span class="fl">0.9</span>,             <span class="co"># shrink factor: tighten nodes within each module</span></span>
+<span>  linealpha        <span class="op">=</span> <span class="fl">0.2</span>,             <span class="co"># transparency of edges</span></span>
+<span>  linecolor        <span class="op">=</span> <span class="st">"#d9d9d9"</span>,       <span class="co"># default edge colour: light grey</span></span>
+<span>  add_outer        <span class="op">=</span> <span class="cn">T</span>,               <span class="co"># add per-module outer boundary (KDE/HDR contour)</span></span>
+<span>  bandwidth_scale  <span class="op">=</span> <span class="fl">2.0</span>,             <span class="co"># KDE bandwidth multiplier; &gt;1 -&gt; smoother / rounder boundary</span></span>
+<span>  outeralpha       <span class="op">=</span> <span class="fl">0.3</span>,             <span class="co"># per-module boundary fill transparency</span></span>
+<span>  outerwidth       <span class="op">=</span> <span class="fl">1</span>,               <span class="co"># per-module boundary line width</span></span>
+<span>  add_group_outer  <span class="op">=</span> <span class="cn">T</span>,               <span class="co"># add an outer circle around the whole network</span></span>
+<span>  fill             <span class="op">=</span> <span class="va">module_colors</span>,   <span class="co"># &lt;-- node fill colours; module outers use the same palette</span></span>
+<span>  color            <span class="op">=</span> <span class="va">module_colors</span>,   <span class="co"># &lt;-- module boundary line colours (matches the fills)</span></span>
+<span>  remove           <span class="op">=</span> <span class="cn">T</span>,               <span class="co"># drop the "Others" module from rendering (keep layout intact)</span></span>
+<span>  mapping_line     <span class="op">=</span> <span class="cn">T</span>                <span class="co"># colour edges by their sign / weight category</span></span>
+<span>                                      <span class="co"># (e.g. positive vs negative correlations get different colours)</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>     <span class="co"># hide all legends</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Save Figure 3 as a PDF (commented out; uncomment to enable saving)</span></span>
+<span><span class="co"># ggsave(filename = "Figure3.pdf",</span></span>
+<span><span class="co">#        plot     = p3,</span></span>
+<span><span class="co">#        height   = 12,</span></span>
+<span><span class="co">#        width    = 12)</span></span>
+<span></span>
+<span><span class="va">p3</span>   <span class="co"># display Figure 3</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-126-3.png" alt="" width="960" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb630"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ====== Figure 4: add  outlier ======</span></span>
+<span></span>
+<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj        <span class="op">=</span> <span class="va">obj</span>,             <span class="co"># input network graph object</span></span>
+<span>  layout           <span class="op">=</span> <span class="st">"gephi"</span>,         <span class="co"># layout algorithm: Gephi-style (ForceAtlas2-like)</span></span>
+<span>  layout.module    <span class="op">=</span> <span class="st">"adjacent"</span>,      <span class="co"># module layout: place adjacent modules close together</span></span>
+<span>  group.by         <span class="op">=</span> <span class="st">"Modularity"</span>,    <span class="co"># grouping variable: color nodes by module ID</span></span>
+<span>  center           <span class="op">=</span> <span class="cn">F</span>,               <span class="co"># do not force a node at the layout centre</span></span>
+<span>  pointalpha       <span class="op">=</span> <span class="fl">0.5</span>,             <span class="co"># node transparency (0 = invisible, 1 = opaque)</span></span>
+<span>  label            <span class="op">=</span> <span class="cn">T</span>,               <span class="co"># draw module text labels</span></span>
+<span>  label_layout     <span class="op">=</span> <span class="st">"label_circle"</span>,  <span class="co"># "label_circle" ring layout that follows each module's real angular</span></span>
+<span>  label_wrap_width <span class="op">=</span> <span class="fl">18</span>,              <span class="co"># wrap long module / pathway names at ~18 chars per line</span></span>
+<span>  label_outer_pad  <span class="op">=</span> <span class="fl">0.25</span>,            <span class="co"># outer ellipse padding: how far labels sit beyond the network</span></span>
+<span>  jitter           <span class="op">=</span> <span class="cn">TRUE</span>,            <span class="co"># add small random offsets to node positions</span></span>
+<span>  jitter_sd        <span class="op">=</span> <span class="fl">0.15</span>,            <span class="co"># standard deviation of the jitter</span></span>
+<span>  shrink           <span class="op">=</span> <span class="fl">0.9</span>,             <span class="co"># shrink factor: tighten nodes within each module</span></span>
+<span>  linealpha        <span class="op">=</span> <span class="fl">0.2</span>,             <span class="co"># transparency of edges</span></span>
+<span>  linecolor        <span class="op">=</span> <span class="st">"#d9d9d9"</span>,       <span class="co"># default edge colour: light grey</span></span>
+<span>  add_outer        <span class="op">=</span> <span class="cn">T</span>,               <span class="co"># add per-module outer boundary (KDE/HDR contour)</span></span>
+<span>  outeralpha       <span class="op">=</span> <span class="fl">0.3</span>,             <span class="co"># per-module boundary fill transparency</span></span>
+<span>  outerwidth       <span class="op">=</span> <span class="fl">1</span>,               <span class="co"># per-module boundary line width</span></span>
+<span>  add_group_outer  <span class="op">=</span> <span class="cn">T</span>,               <span class="co"># add an outer circle around the whole network</span></span>
+<span>  fill             <span class="op">=</span> <span class="va">module_colors</span>,   <span class="co"># &lt;-- node fill colours; module outers use the same palette</span></span>
+<span>  color            <span class="op">=</span> <span class="va">module_colors</span>    <span class="co"># &lt;-- module boundary line colours (matches the fills)</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>     <span class="co"># hide all legends</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Save Figure 4 as a PDF (commented out; uncomment to enable saving)</span></span>
+<span><span class="co"># ggsave(filename = "Figure4.pdf",</span></span>
+<span><span class="co">#        plot     = p4,</span></span>
+<span><span class="co">#        height   = 12,</span></span>
+<span><span class="co">#        width    = 12)</span></span>
+<span></span>
+<span><span class="va">p4</span>   <span class="co"># display Figure 4</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-126-4.png" alt="" width="960" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb631"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ====== Figure 5: network plot colored by Phylum, with positive/negative edges mapped ======</span></span>
+<span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj     <span class="op">=</span> <span class="va">obj</span>,           <span class="co"># input the same network graph object</span></span>
+<span>  layout        <span class="op">=</span> <span class="st">"gephi"</span>,       <span class="co"># layout algorithm: Gephi-style</span></span>
+<span>  layout.module <span class="op">=</span> <span class="st">"adjacent"</span>,    <span class="co"># adjacent module layout</span></span>
+<span>  fill.by       <span class="op">=</span> <span class="st">"Phylum"</span>,      <span class="co"># grouping variable: color nodes by Phylum</span></span>
+<span>  center        <span class="op">=</span> <span class="cn">F</span>,             <span class="co"># do not center the network</span></span>
+<span>  jitter        <span class="op">=</span> <span class="cn">TRUE</span>,          <span class="co"># add jitter to node positions</span></span>
+<span>  jitter_sd     <span class="op">=</span> <span class="fl">0.15</span>,          <span class="co"># jitter standard deviation</span></span>
+<span>  mapping_line  <span class="op">=</span> <span class="cn">TRUE</span>,          <span class="co"># map edge color by correlation sign (positive / negative)</span></span>
+<span>  shrink        <span class="op">=</span> <span class="fl">0.9</span>,           <span class="co"># shrink factor for modules</span></span>
+<span>  linealpha     <span class="op">=</span> <span class="fl">0.2</span>,           <span class="co"># edge transparency</span></span>
+<span>  linecolor     <span class="op">=</span> <span class="st">"#d9d9d9"</span>      <span class="co"># default edge color (overridden when mapping_line = TRUE)</span></span>
+<span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="co"># Manually assign fill colors for Phylum: a soft palette repeated 3 times to cover many phyla</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#8dd3c7"</span>, </span>
+<span>                                   <span class="st">"#ffffb3"</span>, <span class="st">"#bebada"</span>, <span class="st">"#fb8072"</span>, <span class="st">"#80b1d3"</span>, </span>
+<span>                                   <span class="st">"#fdb462"</span>, <span class="st">"#b3de69"</span>, <span class="st">"#fccde5"</span>, <span class="st">"#cab2d6"</span>, </span>
+<span>                                   <span class="st">"#bc80bd"</span>, <span class="st">"#ccebc5"</span>, <span class="st">"#ffed6f"</span>, <span class="st">"#a6cee3"</span>, </span>
+<span>                                   <span class="st">"#b2df8a"</span>, <span class="st">"#fb9a99"</span>, <span class="st">"#bdbdbd"</span>, <span class="st">"#a6cee3"</span>, </span>
+<span>                                   <span class="st">"#1f78b4"</span>, <span class="st">"#b2df8a"</span>, <span class="st">"#33a02c"</span>, <span class="st">"#fb9a99"</span>, </span>
+<span>                                   <span class="st">"#e31a1c"</span>, <span class="st">"#fdbf6f"</span>, <span class="st">"#ff7f00"</span>, <span class="st">"#cab2d6"</span>, </span>
+<span>                                   <span class="st">"#6a3d9a"</span>, <span class="st">"#ffff99"</span>, <span class="st">"#b15928"</span><span class="op">)</span>, times <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="co"># Edge colors: red for positive correlations, blue for negative correlations</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Positive"</span> <span class="op">=</span> <span class="st">"#d6604d"</span>,</span>
+<span>                                <span class="st">"Negative"</span> <span class="op">=</span> <span class="st">"#92c5de"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html">scale_size</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>      <span class="co"># map node size to the range [1, 5]</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>    <span class="co"># remove legend</span></span>
+<span></span>
+<span><span class="co"># Save Figure 5 as a PDF (commented out; uncomment to enable saving)</span></span>
+<span><span class="co"># ggsave(filename = "Figure5.pdf",</span></span>
+<span><span class="co">#        plot     = p5,</span></span>
+<span><span class="co">#        height   = 12,</span></span>
+<span><span class="co">#        width    = 12)</span></span>
+<span></span>
+<span><span class="va">p5</span>   <span class="co"># display Figure 5</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-126-5.png" alt="" width="960" style="display: block; margin: auto;"></div>
 </div>
-<div id="wgcna" class="section level2" number="11.2">
+<div id="wgcna-network" class="section level2" number="11.2">
 <h2>
-<span class="header-section-number">11.2</span> WGCNA<a class="anchor" aria-label="anchor" href="#wgcna"><i class="fas fa-link"></i></a>
+<span class="header-section-number">11.2</span> WGCNA network<a class="anchor" aria-label="anchor" href="#wgcna-network"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb632"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"./Input/WGCNA.tom-block.1.RData"</span><span class="op">)</span></span>
+<span><span class="va">TOM_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">TOM</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">plot.mat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"./Input/plot.mat.Rds"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">trans_TOM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/trans_TOM_in_WGCNA.html">trans_TOM_in_WGCNA</a></span><span class="op">(</span><span class="va">TOM_mat</span>, <span class="va">plot.mat</span>, top_k <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"./Input/net.Rds"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">module</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">net</span><span class="op">$</span><span class="va">colors</span><span class="op">)</span>,</span>
+<span>  Module <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">net</span><span class="op">$</span><span class="va">colors</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="va">net</span><span class="op">$</span><span class="va">colors</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/build_graph_from_wgcna.html">build_graph_from_wgcna</a></span><span class="op">(</span></span>
+<span>  wgcna_tom <span class="op">=</span> <span class="va">trans_TOM</span>,</span>
+<span>  module <span class="op">=</span> <span class="va">module</span>,</span>
+<span>  node_annotation <span class="op">=</span> <span class="va">id</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">obj</span></span></code></pre></div>
+<pre><code>## # A tbl_graph: 4787 nodes and 4783 edges
+## #
+## # An unrooted forest with 4 trees
+## #
+## # Node Data: 4,787 × 8 (active)
+##    name     Module modularity modularity2 modularity3 Modularity Degree Strength
+##    &lt;chr&gt;    &lt;chr&gt;  &lt;fct&gt;      &lt;fct&gt;       &lt;chr&gt;       &lt;fct&gt;       &lt;dbl&gt;    &lt;dbl&gt;
+##  1 HBA1_41… 0      0          0           0           0               5   0.578 
+##  2 HBB_4169 0      0          0           0           0               4   0.507 
+##  3 CA1_3480 0      0          0           0           0               3   0.360 
+##  4 PMP2_15… 0      0          0           0           0               2   0.162 
+##  5 ZC3HAV1… 0      0          0           0           0               2   0.0755
+##  6 RGS10_5  0      0          0           0           0               1   0.172 
+##  7 ITGA2B_7 0      0          0           0           0               1   0.134 
+##  8 MARK3_9  0      0          0           0           0               1   0.0957
+##  9 PTPRJ_10 0      0          0           0           0               1   0.0227
+## 10 THOC5_11 0      0          0           0           0               1   0.0447
+## # ℹ 4,777 more rows
+## #
+## # Edge Data: 4,783 × 3
+##    from    to weight
+##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
+## 1   121  1075  0.145
+## 2  1075  1272  0.246
+## 3    93  1066  0.132
+## # ℹ 4,780 more rows</code></pre>
+<div class="sourceCode" id="cb634"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView.html">ggNetView</a></span><span class="op">(</span></span>
+<span>  graph_obj <span class="op">=</span> <span class="va">obj</span>,</span>
+<span>  layout <span class="op">=</span> <span class="st">"WGCNA"</span>,  <span class="co"># 使用 WGCNA 布局</span></span>
+<span>  layout.module <span class="op">=</span> <span class="st">"order"</span>,  <span class="co"># 或其他选项</span></span>
+<span>  group.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  fill.by <span class="op">=</span> <span class="st">"Modularity"</span>,</span>
+<span>  center <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  shrink <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  jitter <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  jitter_sd <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  pointsize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-127-1.png" alt="" width="960" style="display: block; margin: auto;"></div>
 
 </div>
 </div>
@@ -83,13 +379,14 @@
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#gallery-of-reproducible-examples"><span class="header-section-number">11</span> Gallery of Reproducible Examples</a></li>
-<li><a class="nav-link" href="#water"><span class="header-section-number">11.1</span> Water</a></li>
-<li><a class="nav-link" href="#wgcna"><span class="header-section-number">11.2</span> WGCNA</a></li>
+<li><a class="nav-link" href="#microbial-community-network"><span class="header-section-number">11.1</span> Microbial Community Network</a></li>
+<li><a class="nav-link" href="#wgcna-network"><span class="header-section-number">11.2</span> WGCNA network</a></li>
 </ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
-          
+<li><a id="book-source" href="https://github.com/Jiawang1209/ggNetView/blob/master/10-Gallery_of_Reproducible_Examples.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/Jiawang1209/ggNetView/edit/master/10-Gallery_of_Reproducible_Examples.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>
@@ -101,7 +398,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-05-22.</p>
+    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-05-24.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

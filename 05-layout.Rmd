@@ -50,9 +50,8 @@ graph_obj
 
 ## Full graph layout
 
-### Full network
 
-#### Gephi layout
+### Gephi layout
 
 > layout.module = "random"
 
@@ -111,7 +110,7 @@ p <- ggNetView(
 p
 ```
 
-#### Fruchterman–Reingold force-directed layout
+### Fruchterman–Reingold force-directed layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # FR2: a force-directed layout (springs pull connected nodes, repulsion pushes
@@ -130,7 +129,7 @@ p
 ```
 
 
-#### Diamond layout
+### Diamond layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "diamond": modules arranged on a rhombic / diamond-shaped lattice.
@@ -150,7 +149,7 @@ p
 
 
 
-#### KK layout
+### KK layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # Kamada-Kawai force-directed layout: like FR but optimises a stress function;
@@ -169,7 +168,7 @@ p
 ```
 
 
-#### Nicley layout
+### Nicley layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "nicely": igraph's auto-pick layout — chooses a reasonable algorithm based on
@@ -189,7 +188,7 @@ p
 
 
 
-#### Petal layout
+### Petal layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "petal": each module is laid out as a circular petal radiating from the
@@ -208,7 +207,7 @@ p
 ```
 
 
-#### Circle layout
+### Circle layout
 
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
@@ -230,7 +229,7 @@ p
 
 
 
-#### Diamond outline layout
+### Diamond outline layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "diamond_outline": diamond layout but nodes pushed toward the module border —
@@ -248,7 +247,7 @@ p <- ggNetView(
 p
 ```
 
-#### Grid layout
+### Grid layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "grid": nodes snapped to a regular rectangular grid.
@@ -266,7 +265,7 @@ p <- ggNetView(
 p
 ```
 
-#### Heart_centered layout
+### Heart_centered layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "heart_centered": stylised heart-shaped frame with nodes pulled toward the
@@ -285,7 +284,7 @@ p
 ```
 
 
-#### Lgl layout
+### Lgl layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "lgl" (Large Graph Layout): force-directed layout designed for large graphs;
@@ -303,7 +302,7 @@ p <- ggNetView(
 p
 ```
 
-#### Randomly layout
+### Randomly layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "randomly": nodes placed at uniformly random positions inside the canvas.
@@ -322,7 +321,7 @@ p
 ```
 
 
-#### Rectangle layout
+### Rectangle layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "rectangle": nodes laid out along a rectangular frame.
@@ -341,7 +340,7 @@ p
 ```
 
 
-#### Square layout
+### Square layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "square": like rectangle but constrained to a square aspect ratio.
@@ -360,7 +359,7 @@ p
 
 
 
-#### Star layout
+### Star layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "star": one central node + others arranged as rays radiating outward.
@@ -379,7 +378,7 @@ p
 ```
 
 
-#### Star_concentric layout
+### Star_concentric layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "star_concentric": star layout with multiple concentric rings — nodes ranked
@@ -398,7 +397,7 @@ p
 ```
 
 
-#### Stress layout
+### Stress layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 # "stress": stress-majorisation layout (from graphlayouts). Generally produces
@@ -419,7 +418,7 @@ p
 
 
 
-#### circular_modules_gephi_layout
+### circular_modules_gephi_layout
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 p_modules_gephi <- ggNetView(
@@ -459,7 +458,7 @@ p_modules_equal_gephi
 ```
 
 
-#### consensus_module_gephi
+### consensus_module_gephi
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 p_consensus_module <- ggNetView(
@@ -494,7 +493,7 @@ p_consensus_module2
 ```
 
 
-#### consensus_module_equal_gephi
+### consensus_module_equal_gephi
 
 ```{r fig.align='center', fig.width=8, fig.height=8}
 p_consensus_module3 <- ggNetView(
