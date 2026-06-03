@@ -125,7 +125,7 @@
 
 \title{ggNetView manual documentation}
 \author{Yue Liu}
-\date{2026-05-24}
+\date{2026-06-03}
 
 \begin{document}
 \maketitle
@@ -1039,9 +1039,9 @@ Build graph object
 \end{Shaded}
 
 \begin{verbatim}
-## IGRAPH a62ec39 UNW- 100 200 -- 
+## IGRAPH 36fcfc3 UNW- 100 200 -- 
 ## + attr: name (v/c), group (v/c), weight (e/n)
-## + edges from a62ec39 (vertex names):
+## + edges from 36fcfc3 (vertex names):
 ##  [1] A1 --D40 A2 --D39 A3 --D38 A4 --D37 A5 --D36 A6 --D35 A7 --D34 A8 --D33
 ##  [9] A9 --D32 A10--D31 B1 --D30 B2 --D29 B3 --D28 B4 --D27 B5 --D26 B6 --D25
 ## [17] B7 --D24 B8 --D23 B9 --D22 B10--D21 B11--D20 B12--D19 B13--D18 B14--D17
@@ -7625,6 +7625,345 @@ When a matrix is passed to \texttt{mat}, all topology properties are computed.
 ## #   Genus <chr>, Species <chr>, IVI <dbl>
 \end{verbatim}
 
+\chapter{Zi-Pi}\label{zi-pi}
+
+\begin{quote}
+Load R Package
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)   }\CommentTok{\# data manipulation / piping utilities}
+\FunctionTok{library}\NormalTok{(ggNetView)   }\CommentTok{\# graph builders + info{-}extraction helpers}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+Example data
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Access built{-}in example datasets in ggNetView}
+
+\CommentTok{\# {-}{-}{-}{-} Dataset 1: Relative abundance table of rarefied ASVs/OTUs {-}{-}{-}{-}}
+\CommentTok{\# Rows = ASVs/OTUs (features / variables), Columns = samples}
+\FunctionTok{data}\NormalTok{(}\StringTok{"otu\_rare\_relative"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(otu\_rare\_relative)  }\CommentTok{\# Check matrix dimensions: n\_features x n\_samples }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859   18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{otu\_rare\_relative[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{] }\CommentTok{\# Preview first 5 rows x 5 cols to confirm data layout}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              KO1        KO2        KO3        KO4        KO5
+## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
+## ASV_2 0.05750000 0.03393333 0.06046667 0.05810000 0.07320000
+## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
+## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
+## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# {-}{-}{-}{-} Dataset 2: Taxonomic annotation table for ASVs/OTUs {-}{-}{-}{-}}
+\CommentTok{\# Rows = ASVs/OTUs (row names should match the abundance table above)}
+\CommentTok{\# Columns = taxonomic ranks (Kingdom \textasciitilde{} Species, etc.)}
+\FunctionTok{data}\NormalTok{(}\StringTok{"tax\_tab"}\NormalTok{)}
+\FunctionTok{dim}\NormalTok{(tax\_tab)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2859    8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tax\_tab[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 5
+##   OTUID  Kingdom  Phylum          Class          Order            
+##   <chr>  <chr>    <chr>           <chr>          <chr>            
+## 1 ASV_2  Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 2 ASV_3  Bacteria Verrucomicrobia Spartobacteria Unassigned       
+## 3 ASV_31 Bacteria Actinobacteria  Actinobacteria Actinomycetales  
+## 4 ASV_27 Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
+## 5 ASV_9  Bacteria Unassigned      Unassigned     Unassigned
+\end{verbatim}
+
+\begin{quote}
+Build graph object
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# {-}{-}{-}{-} Build a co{-}occurrence network from an abundance matrix {-}{-}{-}{-}}
+\CommentTok{\# Internal pipeline: transform {-}\textgreater{} correlation {-}\textgreater{} p{-}value adjustment {-}\textgreater{}}
+\CommentTok{\# edge filtering {-}\textgreater{} community detection {-}\textgreater{} attach taxonomy.}
+\NormalTok{graph\_obj }\OtherTok{\textless{}{-}} \FunctionTok{build\_graph\_from\_mat}\NormalTok{(}
+  \AttributeTok{mat              =}\NormalTok{ otu\_rare\_relative,  }\CommentTok{\# variables x samples numeric matrix}
+  \AttributeTok{transfrom.method =} \StringTok{"none"}\NormalTok{,             }\CommentTok{\# input already relative abundance, no extra transform}
+  \AttributeTok{method           =} \StringTok{"WGCNA"}\NormalTok{,            }\CommentTok{\# correlation backend: WGCNA::corAndPvalue}
+  \AttributeTok{proc             =} \StringTok{"bonferroni"}\NormalTok{,       }\CommentTok{\# multiple{-}testing correction}
+  \AttributeTok{r.threshold      =} \FloatTok{0.7}\NormalTok{,                }\CommentTok{\# |r| cutoff for keeping an edge}
+  \AttributeTok{p.threshold      =} \FloatTok{0.05}\NormalTok{,               }\CommentTok{\# adjusted p{-}value cutoff}
+  \AttributeTok{node\_annotation  =}\NormalTok{ tax\_tab,            }\CommentTok{\# taxonomy joined onto each node by name}
+  \AttributeTok{top\_modules      =} \DecValTok{15}\NormalTok{,                 }\CommentTok{\# keep top{-}15 modules; rest {-}\textgreater{} "Others"}
+  \AttributeTok{seed             =} \DecValTok{1115}                \CommentTok{\# fix RNG for reproducibility}
+\NormalTok{)}
+
+\NormalTok{graph\_obj   }\CommentTok{\# tbl\_graph with Modularity / Degree / Strength + taxonomy columns}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tbl_graph: 213 nodes and 844 edges
+## #
+## # An undirected simple graph with 29 components
+## #
+## # Node Data: 213 x 14 (active)
+##    name    modularity modularity2 modularity3 Modularity Degree Strength Kingdom
+##    <chr>   <fct>      <ord>       <chr>       <ord>       <dbl>    <dbl> <chr>  
+##  1 ASV_649 5          5           5           5              27     26.5 Bacter~
+##  2 ASV_705 5          5           5           5              27     26.5 Bacter~
+##  3 ASV_12~ 5          5           5           5              27     26.5 Bacter~
+##  4 ASV_13~ 5          5           5           5              27     26.5 Bacter~
+##  5 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  6 ASV_14~ 5          5           5           5              27     26.5 Bacter~
+##  7 ASV_24~ 5          5           5           5              27     26.5 Bacter~
+##  8 ASV_25~ 5          5           5           5              27     26.4 Bacter~
+##  9 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## 10 ASV_28~ 5          5           5           5              27     26.5 Bacter~
+## # i 203 more rows
+## # i 6 more variables: Phylum <chr>, Class <chr>, Order <chr>, Family <chr>,
+## #   Genus <chr>, Species <chr>
+## #
+## # Edge Data: 844 x 5
+##    from    to weight correlation corr_direction
+##   <int> <int>  <dbl>       <dbl> <chr>         
+## 1   194   195  0.959       0.959 Positive      
+## 2   185   208  0.954       0.954 Positive      
+## 3   185   213  0.957       0.957 Positive      
+## # i 841 more rows
+\end{verbatim}
+
+\begin{quote}
+Extract the two inputs Zi-Pi needs from graph object
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nodes\_bulk }\OtherTok{\textless{}{-}} \FunctionTok{get\_graph\_nodes}\NormalTok{(graph\_obj)      }\CommentTok{\# node table (module + degree cols)}
+\NormalTok{adj\_mat    }\OtherTok{\textless{}{-}} \FunctionTok{get\_graph\_adjacency}\NormalTok{(graph\_obj)  }\CommentTok{\# adjacency / correlation matrix}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Zi-Pi analysis and plot}\label{zi-pi-analysis-and-plot}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{role\_palette }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
+  \StringTok{"Peripherals"}  \OtherTok{=} \StringTok{"\#377eb8"}\NormalTok{,}
+  \StringTok{"Connectors"}   \OtherTok{=} \StringTok{"\#4daf4a"}\NormalTok{,}
+  \StringTok{"Module hubs"}  \OtherTok{=} \StringTok{"\#e41a1c"}\NormalTok{,}
+  \StringTok{"Network hubs"} \OtherTok{=} \StringTok{"\#ff7f00"}
+\NormalTok{)}
+
+\NormalTok{zp }\OtherTok{\textless{}{-}} \FunctionTok{ggnetview\_zipi}\NormalTok{(}
+  \AttributeTok{nodes\_bulk     =}\NormalTok{ nodes\_bulk,    }\CommentTok{\# node table: IDs in rownames or a \textasciigrave{}name\textasciigrave{} col}
+  \AttributeTok{z\_bulk\_mat     =}\NormalTok{ adj\_mat,       }\CommentTok{\# adjacency matrix; non{-}zero entries = edges}
+  \AttributeTok{modularity\_col =} \StringTok{"Modularity"}\NormalTok{,  }\CommentTok{\# column holding module labels (no NAs)}
+  \AttributeTok{degree\_col     =} \StringTok{"Degree"}\NormalTok{,      }\CommentTok{\# column holding node degree   (no NAs)}
+  \AttributeTok{zi\_threshold   =} \FloatTok{2.5}\NormalTok{,           }\CommentTok{\# Zi cutoff for role classification}
+  \AttributeTok{pi\_threshold   =} \FloatTok{0.62}\NormalTok{,          }\CommentTok{\# Pi cutoff for role classification}
+  \AttributeTok{na.rm          =} \ConstantTok{FALSE}\NormalTok{,         }\CommentTok{\# FALSE = keep unclassifiable nodes (type = NA)}
+  \AttributeTok{point\_colors   =}\NormalTok{ role\_palette,  }\CommentTok{\# point + legend colours, keyed by role}
+  \AttributeTok{bg\_colors      =} \FunctionTok{c}\NormalTok{(             }\CommentTok{\# quadrant background fills, keyed by role}
+    \StringTok{"Peripherals"}  \OtherTok{=} \StringTok{"\#f0f0f0"}\NormalTok{,}
+    \StringTok{"Connectors"}   \OtherTok{=} \StringTok{"\#d9f0d3"}\NormalTok{,}
+    \StringTok{"Module hubs"}  \OtherTok{=} \StringTok{"\#fde0dd"}\NormalTok{,}
+    \StringTok{"Network hubs"} \OtherTok{=} \StringTok{"\#fee8c8"}
+\NormalTok{  ),}
+  \AttributeTok{label\_colors   =}\NormalTok{ role\_palette,  }\CommentTok{\# quadrant text{-}label colours (default: black)}
+  \AttributeTok{label\_size     =} \DecValTok{5}\NormalTok{,             }\CommentTok{\# quadrant text{-}label size  (default 5.5)}
+  \AttributeTok{bg\_alpha       =} \FloatTok{0.35}           \CommentTok{\# background opacity 0..1    (default 0.25)}
+\NormalTok{)}
+
+
+\FunctionTok{class}\NormalTok{(zp)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "list"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{names}\NormalTok{(zp)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "data" "plot"
+\end{verbatim}
+
+\begin{quote}
+Output
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{zp}\SpecialCharTok{$}\NormalTok{plot                              }\CommentTok{\# the Zi{-}Pi quadrant plot}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-104-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(zp}\SpecialCharTok{$}\NormalTok{data)                        }\CommentTok{\# node table + Zi / Pi / type}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       name modularity modularity2 modularity3 Modularity Degree Strength
+## 1  ASV_649          5           5           5          5     27 26.51226
+## 2  ASV_705          5           5           5          5     27 26.46287
+## 3 ASV_1234          5           5           5          5     27 26.45519
+## 4 ASV_1373          5           5           5          5     27 26.51017
+## 5 ASV_1479          5           5           5          5     27 26.49888
+## 6 ASV_1481          5           5           5          5     27 26.51017
+##    Kingdom           Phylum               Class               Order
+## 1 Bacteria   Proteobacteria Alphaproteobacteria         Rhizobiales
+## 2 Bacteria   Actinobacteria      Actinobacteria     Actinomycetales
+## 3 Bacteria Gemmatimonadetes    Gemmatimonadetes    Gemmatimonadales
+## 4 Bacteria   Actinobacteria      Actinobacteria Solirubrobacterales
+## 5 Bacteria  Verrucomicrobia      Spartobacteria          Unassigned
+## 6 Bacteria   Proteobacteria Gammaproteobacteria          Unassigned
+##                 Family                                Genus
+## 1           Unassigned                           Unassigned
+## 2    Cellulomonadaceae                         Cellulomonas
+## 3    Gemmatimonadaceae                         Gemmatimonas
+## 4 Solirubrobacteraceae                      Solirubrobacter
+## 5           Unassigned Spartobacteria_genera_incertae_sedis
+## 6           Unassigned                           Unassigned
+##                   Species within_module_connectivities
+## 1              Unassigned                    0.7566222
+## 2   Cellulomonas_aerilata                    0.7566222
+## 3 Gemmatimonas_aurantiaca                    0.7566222
+## 4              Unassigned                    0.7566222
+## 5              Unassigned                    0.7566222
+## 6              Unassigned                    0.7566222
+##   among_module_connectivities        type
+## 1                           0 Peripherals
+## 2                           0 Peripherals
+## 3                           0 Peripherals
+## 4                           0 Peripherals
+## 5                           0 Peripherals
+## 6                           0 Peripherals
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{table}\NormalTok{(zp}\SpecialCharTok{$}\NormalTok{data}\SpecialCharTok{$}\NormalTok{type, }\AttributeTok{useNA =} \StringTok{"ifany"}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Peripherals   Connectors  Module hubs Network hubs 
+##          213            0            0            0
+\end{verbatim}
+
+\begin{quote}
+Minimal call: only the required arguments
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#  Minimal call: only the required arguments}
+
+\NormalTok{zp\_min }\OtherTok{\textless{}{-}} \FunctionTok{ggnetview\_zipi}\NormalTok{(}
+\NormalTok{  nodes\_bulk, adj\_mat,}
+  \AttributeTok{modularity\_col =} \StringTok{"Modularity"}\NormalTok{,}
+  \AttributeTok{degree\_col     =} \StringTok{"Degree"}
+\NormalTok{)}
+
+
+\CommentTok{\# The three point\_colors styles}
+\NormalTok{zp\_unnamed }\OtherTok{\textless{}{-}} \FunctionTok{ggnetview\_zipi}\NormalTok{(}
+\NormalTok{  nodes\_bulk, adj\_mat, }\StringTok{"Modularity"}\NormalTok{, }\StringTok{"Degree"}\NormalTok{,}
+  \AttributeTok{point\_colors =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#1b9e77"}\NormalTok{, }\StringTok{"\#d95f02"}\NormalTok{, }\StringTok{"\#7570b3"}\NormalTok{, }\StringTok{"\#e7298a"}\NormalTok{)  }\CommentTok{\# by fixed order}
+\NormalTok{)}
+
+\NormalTok{zp\_named }\OtherTok{\textless{}{-}} \FunctionTok{ggnetview\_zipi}\NormalTok{(}
+\NormalTok{  nodes\_bulk, adj\_mat, }\StringTok{"Modularity"}\NormalTok{, }\StringTok{"Degree"}\NormalTok{,}
+  \AttributeTok{point\_colors =} \FunctionTok{c}\NormalTok{(}\StringTok{"Network hubs"} \OtherTok{=} \StringTok{"purple"}\NormalTok{,                  }\CommentTok{\# override a subset;}
+                   \StringTok{"Module hubs"}  \OtherTok{=} \StringTok{"firebrick"}\NormalTok{)               }\CommentTok{\# others stay default}
+\NormalTok{)}
+
+\NormalTok{zp\_single }\OtherTok{\textless{}{-}} \FunctionTok{ggnetview\_zipi}\NormalTok{(}
+\NormalTok{  nodes\_bulk, adj\_mat, }\StringTok{"Modularity"}\NormalTok{, }\StringTok{"Degree"}\NormalTok{,}
+  \AttributeTok{point\_colors =} \StringTok{"steelblue"}                                   \CommentTok{\# all four roles}
+\NormalTok{)}
+
+\CommentTok{\# Background tweaks}
+
+\NormalTok{zp\_nobg }\OtherTok{\textless{}{-}} \FunctionTok{ggnetview\_zipi}\NormalTok{(}
+\NormalTok{  nodes\_bulk, adj\_mat, }\StringTok{"Modularity"}\NormalTok{, }\StringTok{"Degree"}\NormalTok{,}
+  \AttributeTok{bg\_alpha =} \DecValTok{0}                       \CommentTok{\# disable quadrant shading entirely}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{final\_plot }\OtherTok{\textless{}{-}}\NormalTok{ zp}\SpecialCharTok{$}\NormalTok{plot }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Zi{-}Pi topological roles"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"bottom"}\NormalTok{)}
+
+\NormalTok{final\_plot}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-106-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ggsave("zipi\_demo.pdf", final\_plot, width = 6, height = 6)  \# square fits aspect.ratio = 1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Pull out the most structurally important nodes (Network hubs):}
+\FunctionTok{subset}\NormalTok{(}
+\NormalTok{  zp}\SpecialCharTok{$}\NormalTok{data,}
+\NormalTok{  type }\SpecialCharTok{==} \StringTok{"Network hubs"}\NormalTok{,}
+  \AttributeTok{select =} \FunctionTok{c}\NormalTok{(name, type, within\_module\_connectivities, among\_module\_connectivities)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] name                         type                        
+## [3] within_module_connectivities among_module_connectivities 
+## <0 rows> (or 0-length row.names)
+\end{verbatim}
+
 \chapter{Multi-Network and comparison}\label{multi-network-and-comparison}
 
 \begin{quote}
@@ -7785,7 +8124,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-101-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-110-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -7860,7 +8199,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-102-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-111-1} \end{center}
 
 \begin{quote}
 add\_group\_outer = TRUE
@@ -7914,7 +8253,7 @@ add\_group\_outer = TRUE
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-103-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-112-1} \end{center}
 
 \subsection{layout = ``circular\_modules\_equal\_gephi\_layout''}\label{layout-circular_modules_equal_gephi_layout}
 
@@ -7963,7 +8302,7 @@ add\_group\_outer = TRUE
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-104-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-113-1} \end{center}
 
 \subsection{layout = ``circular\_modules\_equal\_gephi\_layout''}\label{layout-circular_modules_equal_gephi_layout-1}
 
@@ -8014,7 +8353,7 @@ link\_level = ``Node''
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-105-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-114-1} \end{center}
 
 \subsection{layout = ``circular\_modules\_equal\_gephi\_layout''}\label{layout-circular_modules_equal_gephi_layout-2}
 
@@ -8069,7 +8408,7 @@ link\_level = ``Module\&Node2''
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-106-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-115-1} \end{center}
 
 \subsection{add group compare}\label{add-group-compare}
 
@@ -8141,7 +8480,7 @@ link\_level = ``Module\&Node2''
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-107-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-116-1} \end{center}
 
 \section{multi network (4 groups)}\label{multi-network-4-groups}
 
@@ -8233,7 +8572,7 @@ link\_level = ``Module\&Node2''
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-109-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-118-1} \end{center}
 
 \subsection{group\_layout = ``square''}\label{group_layout-square}
 
@@ -8309,7 +8648,7 @@ link\_level = ``Module\&Node2''
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-110-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-119-1} \end{center}
 
 \section{multi network (8 groups)}\label{multi-network-8-groups}
 
@@ -8424,7 +8763,7 @@ link\_level = ``Module\&Node2''
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-112-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-121-1} \end{center}
 
 \subsection{group\_layout = ``snake\_vertical''}\label{group_layout-snake_vertical}
 
@@ -8507,7 +8846,7 @@ link\_level = ``Module\&Node2''
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-113-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-122-1} \end{center}
 
 \chapter{Network \& Environment}\label{network-environment}
 
@@ -8604,7 +8943,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-116-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-125-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8612,7 +8951,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-116-2} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-125-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8690,7 +9029,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-117-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-126-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8698,7 +9037,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-117-2} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-126-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -8787,7 +9126,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-118-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-127-1} \end{center}
 
 \section{Network Environment (two core)}\label{network-environment-two-core}
 
@@ -8854,7 +9193,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-119-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-128-1} \end{center}
 
 \section{Network Environment (three core)}\label{network-environment-three-core}
 
@@ -8934,7 +9273,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-120-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-129-1} \end{center}
 
 \section{Mantel test and drop\_nonsig = T}\label{mantel-test-and-drop_nonsig-t}
 
@@ -9069,7 +9408,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-121-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-130-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9218,7 +9557,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-122-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-131-1} \end{center}
 
 \section{Network Environment (combine-core to one point)}\label{network-environment-combine-core-to-one-point}
 
@@ -9352,7 +9691,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-123-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-132-1} \end{center}
 
 \section{Change group angle}\label{change-group-angle}
 
@@ -9494,7 +9833,7 @@ Example data
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-124-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-133-1} \end{center}
 
 \chapter{Multi-omics network analysis}\label{multi-omics-network-analysis}
 
@@ -9576,7 +9915,7 @@ The data from \texttt{Liu,\ X.,\ Wang,\ M.,\ Liu,\ B.\ et\ al.\ Keystone\ taxa\ 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-126-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-135-1} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9623,7 +9962,7 @@ The data from \texttt{Liu,\ X.,\ Wang,\ M.,\ Liu,\ B.\ et\ al.\ Keystone\ taxa\ 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-126-2} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-135-2} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9674,7 +10013,7 @@ The data from \texttt{Liu,\ X.,\ Wang,\ M.,\ Liu,\ B.\ et\ al.\ Keystone\ taxa\ 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-126-3} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-135-3} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9716,7 +10055,7 @@ The data from \texttt{Liu,\ X.,\ Wang,\ M.,\ Liu,\ B.\ et\ al.\ Keystone\ taxa\ 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-126-4} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-135-4} \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -9759,7 +10098,7 @@ The data from \texttt{Liu,\ X.,\ Wang,\ M.,\ Liu,\ B.\ et\ al.\ Keystone\ taxa\ 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-126-5} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-135-5} \end{center}
 
 \section{WGCNA network}\label{wgcna-network}
 
@@ -9842,7 +10181,7 @@ The data from \texttt{Liu,\ X.,\ Wang,\ M.,\ Liu,\ B.\ et\ al.\ Keystone\ taxa\ 
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-127-1} \end{center}
+\begin{center}\includegraphics{ggNetView-manual_files/figure-latex/unnamed-chunk-136-1} \end{center}
 
 \bibliography{book.bib,packages.bib}
 

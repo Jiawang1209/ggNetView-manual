@@ -1,0 +1,171 @@
+# Zi-Pi
+
+> Load R Package
+
+
+```{r warning=F, message=F}
+library(tidyverse)   # data manipulation / piping utilities
+library(ggNetView)   # graph builders + info-extraction helpers
+```
+
+
+>  Example data
+
+```{r}
+# Access built-in example datasets in ggNetView
+
+# ---- Dataset 1: Relative abundance table of rarefied ASVs/OTUs ----
+# Rows = ASVs/OTUs (features / variables), Columns = samples
+data("otu_rare_relative")
+dim(otu_rare_relative)  # Check matrix dimensions: n_features x n_samples 
+otu_rare_relative[1:5, 1:5] # Preview first 5 rows x 5 cols to confirm data layout
+
+# ---- Dataset 2: Taxonomic annotation table for ASVs/OTUs ----
+# Rows = ASVs/OTUs (row names should match the abundance table above)
+# Columns = taxonomic ranks (Kingdom ~ Species, etc.)
+data("tax_tab")
+dim(tax_tab)
+tax_tab[1:5, 1:5]
+```
+
+> Build graph object
+
+```{r}
+# ---- Build a co-occurrence network from an abundance matrix ----
+# Internal pipeline: transform -> correlation -> p-value adjustment ->
+# edge filtering -> community detection -> attach taxonomy.
+graph_obj <- build_graph_from_mat(
+  mat              = otu_rare_relative,  # variables x samples numeric matrix
+  transfrom.method = "none",             # input already relative abundance, no extra transform
+  method           = "WGCNA",            # correlation backend: WGCNA::corAndPvalue
+  proc             = "bonferroni",       # multiple-testing correction
+  r.threshold      = 0.7,                # |r| cutoff for keeping an edge
+  p.threshold      = 0.05,               # adjusted p-value cutoff
+  node_annotation  = tax_tab,            # taxonomy joined onto each node by name
+  top_modules      = 15,                 # keep top-15 modules; rest -> "Others"
+  seed             = 1115                # fix RNG for reproducibility
+)
+
+graph_obj   # tbl_graph with Modularity / Degree / Strength + taxonomy columns
+```
+
+
+
+> Extract the two inputs Zi-Pi needs from graph object
+
+
+```{r}
+nodes_bulk <- get_graph_nodes(graph_obj)      # node table (module + degree cols)
+adj_mat    <- get_graph_adjacency(graph_obj)  # adjacency / correlation matrix
+```
+
+
+## Zi-Pi analysis and plot
+
+```{r}
+
+role_palette <- c(
+  "Peripherals"  = "#377eb8",
+  "Connectors"   = "#4daf4a",
+  "Module hubs"  = "#e41a1c",
+  "Network hubs" = "#ff7f00"
+)
+
+zp <- ggnetview_zipi(
+  nodes_bulk     = nodes_bulk,    # node table: IDs in rownames or a `name` col
+  z_bulk_mat     = adj_mat,       # adjacency matrix; non-zero entries = edges
+  modularity_col = "Modularity",  # column holding module labels (no NAs)
+  degree_col     = "Degree",      # column holding node degree   (no NAs)
+  zi_threshold   = 2.5,           # Zi cutoff for role classification
+  pi_threshold   = 0.62,          # Pi cutoff for role classification
+  na.rm          = FALSE,         # FALSE = keep unclassifiable nodes (type = NA)
+  point_colors   = role_palette,  # point + legend colours, keyed by role
+  bg_colors      = c(             # quadrant background fills, keyed by role
+    "Peripherals"  = "#f0f0f0",
+    "Connectors"   = "#d9f0d3",
+    "Module hubs"  = "#fde0dd",
+    "Network hubs" = "#fee8c8"
+  ),
+  label_colors   = role_palette,  # quadrant text-label colours (default: black)
+  label_size     = 5,             # quadrant text-label size  (default 5.5)
+  bg_alpha       = 0.35           # background opacity 0..1    (default 0.25)
+)
+
+
+class(zp)
+
+
+names(zp)
+```
+
+
+
+> Output
+
+```{r fig.align='center', fig.width=8, fig.height=8}
+zp$plot                              # the Zi-Pi quadrant plot
+head(zp$data)                        # node table + Zi / Pi / type
+table(zp$data$type, useNA = "ifany") 
+```
+
+
+
+> Minimal call: only the required arguments
+
+```{r}
+#  Minimal call: only the required arguments
+
+zp_min <- ggnetview_zipi(
+  nodes_bulk, adj_mat,
+  modularity_col = "Modularity",
+  degree_col     = "Degree"
+)
+
+
+# The three point_colors styles
+zp_unnamed <- ggnetview_zipi(
+  nodes_bulk, adj_mat, "Modularity", "Degree",
+  point_colors = c("#1b9e77", "#d95f02", "#7570b3", "#e7298a")  # by fixed order
+)
+
+zp_named <- ggnetview_zipi(
+  nodes_bulk, adj_mat, "Modularity", "Degree",
+  point_colors = c("Network hubs" = "purple",                  # override a subset;
+                   "Module hubs"  = "firebrick")               # others stay default
+)
+
+zp_single <- ggnetview_zipi(
+  nodes_bulk, adj_mat, "Modularity", "Degree",
+  point_colors = "steelblue"                                   # all four roles
+)
+
+# Background tweaks
+
+zp_nobg <- ggnetview_zipi(
+  nodes_bulk, adj_mat, "Modularity", "Degree",
+  bg_alpha = 0                       # disable quadrant shading entirely
+)
+```
+
+
+
+
+```{r fig.align='center', fig.width=8, fig.height=8}
+final_plot <- zp$plot +
+  labs(title = "Zi-Pi topological roles") +
+  theme(legend.position = "bottom")
+
+final_plot
+# ggsave("zipi_demo.pdf", final_plot, width = 6, height = 6)  # square fits aspect.ratio = 1
+```
+
+
+
+```{r}
+# Pull out the most structurally important nodes (Network hubs):
+subset(
+  zp$data,
+  type == "Network hubs",
+  select = c(name, type, within_module_connectivities, among_module_connectivities)
+)
+```

@@ -4,15 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 8 Multi-Network and comparison | ggNetView manual documentation</title>
+<title>Chapter 9 Multi-Network and comparison | ggNetView manual documentation</title>
 <meta name="author" content="Yue Liu">
 <meta name="description" content="Load R Package library(tidyverse)  # data manipulation / piping utilities library(ggNetView)  # graph builders + info-extraction helpers Example data # Access built-in example datasets in...">
 <meta name="generator" content="bookdown 0.45 with bs4_book()">
-<meta property="og:title" content="Chapter 8 Multi-Network and comparison | ggNetView manual documentation">
+<meta property="og:title" content="Chapter 9 Multi-Network and comparison | ggNetView manual documentation">
 <meta property="og:type" content="book">
 <meta property="og:description" content="Load R Package library(tidyverse)  # data manipulation / piping utilities library(ggNetView)  # graph builders + info-extraction helpers Example data # Access built-in example datasets in...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 8 Multi-Network and comparison | ggNetView manual documentation">
+<meta name="twitter:title" content="Chapter 9 Multi-Network and comparison | ggNetView manual documentation">
 <meta name="twitter:description" content="Load R Package library(tidyverse)  # data manipulation / piping utilities library(ggNetView)  # graph builders + info-extraction helpers Example data # Access built-in example datasets in...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -50,10 +50,11 @@
 <li><a class="" href="extract-subgraph.html"><span class="header-section-number">5</span> Extract subgraph</a></li>
 <li><a class="" href="network-layout.html"><span class="header-section-number">6</span> Network layout</a></li>
 <li><a class="" href="network-topology-information.html"><span class="header-section-number">7</span> Network topology information</a></li>
-<li><a class="active" href="multi-network-and-comparison.html"><span class="header-section-number">8</span> Multi-Network and comparison</a></li>
-<li><a class="" href="network-environment.html"><span class="header-section-number">9</span> Network &amp; Environment</a></li>
-<li><a class="" href="multi-omics-network-analysis.html"><span class="header-section-number">10</span> Multi-omics network analysis</a></li>
-<li><a class="" href="gallery-of-reproducible-examples.html"><span class="header-section-number">11</span> Gallery of Reproducible Examples</a></li>
+<li><a class="" href="zi-pi.html"><span class="header-section-number">8</span> Zi-Pi</a></li>
+<li><a class="active" href="multi-network-and-comparison.html"><span class="header-section-number">9</span> Multi-Network and comparison</a></li>
+<li><a class="" href="network-environment.html"><span class="header-section-number">10</span> Network &amp; Environment</a></li>
+<li><a class="" href="multi-omics-network-analysis.html"><span class="header-section-number">11</span> Multi-omics network analysis</a></li>
+<li><a class="" href="gallery-of-reproducible-examples.html"><span class="header-section-number">12</span> Gallery of Reproducible Examples</a></li>
 </ul>
 
         <div class="book-extra">
@@ -61,20 +62,20 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="multi-network-and-comparison" class="section level1" number="8">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="multi-network-and-comparison" class="section level1" number="9">
 <h1>
-<span class="header-section-number">8</span> Multi-Network and comparison<a class="anchor" aria-label="anchor" href="#multi-network-and-comparison"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9</span> Multi-Network and comparison<a class="anchor" aria-label="anchor" href="#multi-network-and-comparison"><i class="fas fa-link"></i></a>
 </h1>
 <blockquote>
 <p>Load R Package</p>
 </blockquote>
-<div class="sourceCode" id="cb529"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb555"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>   <span class="co"># data manipulation / piping utilities</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Jiawang1209/ggNetView">ggNetView</a></span><span class="op">)</span>   <span class="co"># graph builders + info-extraction helpers</span></span></code></pre></div>
 <blockquote>
 <p>Example data</p>
 </blockquote>
-<div class="sourceCode" id="cb530"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb556"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Access built-in example datasets in ggNetView</span></span>
 <span></span>
 <span><span class="co"># ---- Dataset 1: Relative abundance table of rarefied ASVs/OTUs ----</span></span>
@@ -82,7 +83,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"otu_rare_relative"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">otu_rare_relative</span><span class="op">)</span>  <span class="co"># Check matrix dimensions: n_features x n_samples </span></span></code></pre></div>
 <pre><code>## [1] 2859   18</code></pre>
-<div class="sourceCode" id="cb532"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb558"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">otu_rare_relative</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> <span class="co"># Preview first 5 rows x 5 cols to confirm data layout</span></span></code></pre></div>
 <pre><code>##              KO1        KO2        KO3        KO4        KO5
 ## ASV_1 0.03306667 0.05453333 0.02013333 0.03613333 0.02686667
@@ -90,14 +91,14 @@
 ## ASV_3 0.01733333 0.01296667 0.02290000 0.02336667 0.03106667
 ## ASV_4 0.04266667 0.01093333 0.01416667 0.01933333 0.03346667
 ## ASV_6 0.02646667 0.01856667 0.02110000 0.02353333 0.03806667</code></pre>
-<div class="sourceCode" id="cb534"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb560"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Dataset 2: Taxonomic annotation table for ASVs/OTUs ----</span></span>
 <span><span class="co"># Rows = ASVs/OTUs (row names should match the abundance table above)</span></span>
 <span><span class="co"># Columns = taxonomic ranks (Kingdom ~ Species, etc.)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"tax_tab"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">tax_tab</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 2859    8</code></pre>
-<div class="sourceCode" id="cb536"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb562"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tax_tab</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
 <pre><code>## # A tibble: 5 × 5
 ##   OTUID  Kingdom  Phylum          Class          Order            
@@ -107,7 +108,7 @@
 ## 3 ASV_31 Bacteria Actinobacteria  Actinobacteria Actinomycetales  
 ## 4 ASV_27 Archaea  Thaumarchaeota  Unassigned     Nitrososphaerales
 ## 5 ASV_9  Bacteria Unassigned      Unassigned     Unassigned</code></pre>
-<div class="sourceCode" id="cb538"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb564"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Dataset 3: Sample metadata ----</span></span>
 <span><span class="co"># Rows = samples (sample IDs should match colnames of `otu_rare_relative`)</span></span>
 <span><span class="co"># Columns = experimental grouping variables (e.g. treatment, time point, site)</span></span>
@@ -132,15 +133,15 @@
 ## 16    WT4    WT
 ## 17    WT5    WT
 ## 18    WT6    WT</code></pre>
-<div id="comparison-of-multi-sample-networks" class="section level2" number="8.1">
+<div id="comparison-of-multi-sample-networks" class="section level2" number="9.1">
 <h2>
-<span class="header-section-number">8.1</span> Comparison of multi-sample networks<a class="anchor" aria-label="anchor" href="#comparison-of-multi-sample-networks"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.1</span> Comparison of multi-sample networks<a class="anchor" aria-label="anchor" href="#comparison-of-multi-sample-networks"><i class="fas fa-link"></i></a>
 </h2>
-<div id="layout-gephi-scale-false" class="section level3" number="8.1.1">
+<div id="layout-gephi-scale-false" class="section level3" number="9.1.1">
 <h3>
-<span class="header-section-number">8.1.1</span> layout = “gephi”, scale = FALSE<a class="anchor" aria-label="anchor" href="#layout-gephi-scale-false"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.1.1</span> layout = “gephi”, scale = FALSE<a class="anchor" aria-label="anchor" href="#layout-gephi-scale-false"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb540"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb566"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Multi-network "linked" view (no per-group scale normalisation) ----</span></span>
 <span><span class="co"># `ggNetView_multi_link()` builds ONE network per group (defined by `group_info`),</span></span>
 <span><span class="co"># lays each one out independently, and places all sub-networks on a circular</span></span>
@@ -172,11 +173,11 @@
 ## Adding another scale for size, which will replace the existing scale.
 ## Scale for size is already present.
 ## Adding another scale for size, which will replace the existing scale.</code></pre>
-<div class="sourceCode" id="cb542"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb568"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">out1</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span>   <span class="co"># the assembled ggplot object</span></span>
 <span><span class="va">p1</span></span></code></pre></div>
-<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-101-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
-<div class="sourceCode" id="cb543"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-110-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb569"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out1</span><span class="op">$</span><span class="va">info</span>           <span class="co"># auxiliary table: per-group node/edge counts, module info, etc.</span></span></code></pre></div>
 <pre><code>## # A tibble: 22 × 11
 ##    modA   modB   overlap sizeA sizeB overlap_coef  pvalue   FDR Group    GroupA
@@ -194,11 +195,11 @@
 ## # ℹ 12 more rows
 ## # ℹ 1 more variable: GroupB &lt;chr&gt;</code></pre>
 </div>
-<div id="layout-gephi-scale-true" class="section level3" number="8.1.2">
+<div id="layout-gephi-scale-true" class="section level3" number="9.1.2">
 <h3>
-<span class="header-section-number">8.1.2</span> layout = “gephi”, scale = TRUE<a class="anchor" aria-label="anchor" href="#layout-gephi-scale-true"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.1.2</span> layout = “gephi”, scale = TRUE<a class="anchor" aria-label="anchor" href="#layout-gephi-scale-true"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb545"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb571"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">####----Plot2----####</span></span>
 <span><span class="co"># ---- Same setup but with `scale = TRUE` -&gt; each group normalised to a common size ----</span></span>
 <span><span class="co"># Useful when groups have very different network sizes and you want them</span></span>
@@ -231,14 +232,14 @@
 ## Adding another scale for size, which will replace the existing scale.
 ## Scale for size is already present.
 ## Adding another scale for size, which will replace the existing scale.</code></pre>
-<div class="sourceCode" id="cb547"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb573"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">out2</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">p2</span></span></code></pre></div>
-<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-102-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-111-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 <blockquote>
 <p>add_group_outer = TRUE</p>
 </blockquote>
-<div class="sourceCode" id="cb548"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb574"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">####----Plot2----####</span></span>
 <span><span class="co"># ---- Same setup but with `scale = TRUE` -&gt; each group normalised to a common size ----</span></span>
 <span><span class="co"># Useful when groups have very different network sizes and you want them</span></span>
@@ -272,16 +273,16 @@
 ## Adding another scale for size, which will replace the existing scale.
 ## Scale for size is already present.
 ## Adding another scale for size, which will replace the existing scale.</code></pre>
-<div class="sourceCode" id="cb550"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb576"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="va">out3</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">p3</span></span></code></pre></div>
-<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-103-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-112-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="layout-circular_modules_equal_gephi_layout" class="section level3" number="8.1.3">
+<div id="layout-circular_modules_equal_gephi_layout" class="section level3" number="9.1.3">
 <h3>
-<span class="header-section-number">8.1.3</span> layout = “circular_modules_equal_gephi_layout”<a class="anchor" aria-label="anchor" href="#layout-circular_modules_equal_gephi_layout"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.1.3</span> layout = “circular_modules_equal_gephi_layout”<a class="anchor" aria-label="anchor" href="#layout-circular_modules_equal_gephi_layout"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb551"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb577"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Circular-modules layout: nodes within each module on equal arcs ----</span></span>
 <span><span class="co"># Better than "gephi" when you want module structure to dominate the picture.</span></span>
 <span><span class="co"># `link_level = "Node"`: cross-group links are drawn between individual NODES.</span></span>
@@ -312,19 +313,19 @@
 ## Adding another scale for size, which will replace the existing scale.
 ## Scale for size is already present.
 ## Adding another scale for size, which will replace the existing scale.</code></pre>
-<div class="sourceCode" id="cb553"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb579"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_multi_link</span> <span class="op">&lt;-</span> <span class="va">out_multi_link</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">p_multi_link</span></span></code></pre></div>
-<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-104-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-113-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="layout-circular_modules_equal_gephi_layout-1" class="section level3" number="8.1.4">
+<div id="layout-circular_modules_equal_gephi_layout-1" class="section level3" number="9.1.4">
 <h3>
-<span class="header-section-number">8.1.4</span> layout = “circular_modules_equal_gephi_layout”<a class="anchor" aria-label="anchor" href="#layout-circular_modules_equal_gephi_layout-1"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.1.4</span> layout = “circular_modules_equal_gephi_layout”<a class="anchor" aria-label="anchor" href="#layout-circular_modules_equal_gephi_layout-1"><i class="fas fa-link"></i></a>
 </h3>
 <blockquote>
 <p>link_level = “Node”</p>
 </blockquote>
-<div class="sourceCode" id="cb554"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb580"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Duplicate of the previous chunk (kept here for reference) ----</span></span>
 <span><span class="va">out_multi_link</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView_multi_link.html">ggNetView_multi_link</a></span><span class="op">(</span></span>
 <span>  mat                 <span class="op">=</span> <span class="va">otu_rare_relative</span>,</span>
@@ -353,19 +354,19 @@
 ## Adding another scale for size, which will replace the existing scale.
 ## Scale for size is already present.
 ## Adding another scale for size, which will replace the existing scale.</code></pre>
-<div class="sourceCode" id="cb556"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb582"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_multi_link</span> <span class="op">&lt;-</span> <span class="va">out_multi_link</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">p_multi_link</span></span></code></pre></div>
-<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-105-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-114-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="layout-circular_modules_equal_gephi_layout-2" class="section level3" number="8.1.5">
+<div id="layout-circular_modules_equal_gephi_layout-2" class="section level3" number="9.1.5">
 <h3>
-<span class="header-section-number">8.1.5</span> layout = “circular_modules_equal_gephi_layout”<a class="anchor" aria-label="anchor" href="#layout-circular_modules_equal_gephi_layout-2"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.1.5</span> layout = “circular_modules_equal_gephi_layout”<a class="anchor" aria-label="anchor" href="#layout-circular_modules_equal_gephi_layout-2"><i class="fas fa-link"></i></a>
 </h3>
 <blockquote>
 <p>link_level = “Module&amp;Node2”</p>
 </blockquote>
-<div class="sourceCode" id="cb557"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb583"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Cross-group links at "Module &amp; Node2" level ----</span></span>
 <span><span class="co"># Instead of drawing one line per shared node, draw bundled links between</span></span>
 <span><span class="co"># modules AND between the corresponding nodes — useful when there are many</span></span>
@@ -398,16 +399,16 @@
 ## Adding another scale for size, which will replace the existing scale.
 ## Scale for size is already present.
 ## Adding another scale for size, which will replace the existing scale.</code></pre>
-<div class="sourceCode" id="cb559"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb585"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_multi_link2</span> <span class="op">&lt;-</span> <span class="va">out_multi_link2</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">p_multi_link2</span></span></code></pre></div>
-<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-106-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-115-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="add-group-compare" class="section level3" number="8.1.6">
+<div id="add-group-compare" class="section level3" number="9.1.6">
 <h3>
-<span class="header-section-number">8.1.6</span> add group compare<a class="anchor" aria-label="anchor" href="#add-group-compare"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.1.6</span> add group compare<a class="anchor" aria-label="anchor" href="#add-group-compare"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb560"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb586"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Add cross-group comparison brackets + heavy styling -----------------</span></span>
 <span><span class="co"># This example shows almost every styling knob the function exposes:</span></span>
 <span><span class="co"># curved cross-group links, group-comparison annotations, per-group ring</span></span>
@@ -461,17 +462,17 @@
 ## Adding another scale for size, which will replace the existing scale.
 ## Scale for size is already present.
 ## Adding another scale for size, which will replace the existing scale.</code></pre>
-<div class="sourceCode" id="cb562"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb588"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_multi_link3</span> <span class="op">&lt;-</span> <span class="va">out_multi_link3</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">p_multi_link3</span></span></code></pre></div>
-<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-107-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-116-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
 </div>
-<div id="multi-network-4-groups" class="section level2" number="8.2">
+<div id="multi-network-4-groups" class="section level2" number="9.2">
 <h2>
-<span class="header-section-number">8.2</span> multi network (4 groups)<a class="anchor" aria-label="anchor" href="#multi-network-4-groups"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.2</span> multi network (4 groups)<a class="anchor" aria-label="anchor" href="#multi-network-4-groups"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb563"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb589"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Build a 4-group dataset by duplicating the first 6 samples as a fake "ko" group ----</span></span>
 <span><span class="co"># This is purely for demoing the multi-group layouts below; the new "ko" group</span></span>
 <span><span class="co"># carries the same abundance values as samples 1:6, just with renamed columns.</span></span>
@@ -485,11 +486,11 @@
 <span>                     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>                     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"ko"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span>,</span>
 <span>                                   Group  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"ko"</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co"># 6 new metadata rows, Group = "ko"</span></span></code></pre></div>
-<div id="group_layout-row" class="section level3" number="8.2.1">
+<div id="group_layout-row" class="section level3" number="9.2.1">
 <h3>
-<span class="header-section-number">8.2.1</span> group_layout = “row”<a class="anchor" aria-label="anchor" href="#group_layout-row"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.2.1</span> group_layout = “row”<a class="anchor" aria-label="anchor" href="#group_layout-row"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb564"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb590"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Place the 4 sub-networks on a single ROW ----</span></span>
 <span><span class="co"># `group_layout = "row"` puts all groups along one horizontal line (nrow = 1).</span></span>
 <span><span class="va">out_group4_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView_multi_link.html">ggNetView_multi_link</a></span><span class="op">(</span></span>
@@ -543,16 +544,16 @@
 ## Adding another scale for size, which will replace the existing scale.
 ## Scale for size is already present.
 ## Adding another scale for size, which will replace the existing scale.</code></pre>
-<div class="sourceCode" id="cb566"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb592"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_group_4_1</span> <span class="op">&lt;-</span> <span class="va">out_group4_1</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">p_group_4_1</span></span></code></pre></div>
-<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-109-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-118-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="group_layout-square" class="section level3" number="8.2.2">
+<div id="group_layout-square" class="section level3" number="9.2.2">
 <h3>
-<span class="header-section-number">8.2.2</span> group_layout = “square”<a class="anchor" aria-label="anchor" href="#group_layout-square"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.2.2</span> group_layout = “square”<a class="anchor" aria-label="anchor" href="#group_layout-square"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb567"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb593"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Place the 4 sub-networks on a 2x2 SQUARE grid ----</span></span>
 <span><span class="co"># `group_layout = "square"` arranges groups in a square frame (4 corners for 4 groups).</span></span>
 <span><span class="va">out_group4_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jiawang1209.github.io/ggNetView/reference/ggNetView_multi_link.html">ggNetView_multi_link</a></span><span class="op">(</span></span>
@@ -610,17 +611,17 @@
 ## Adding another scale for size, which will replace the existing scale.
 ## Scale for size is already present.
 ## Adding another scale for size, which will replace the existing scale.</code></pre>
-<div class="sourceCode" id="cb569"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb595"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_group_4_2</span> <span class="op">&lt;-</span> <span class="va">out_group4_2</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">p_group_4_2</span></span></code></pre></div>
-<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-110-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-119-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
 </div>
-<div id="multi-network-8-groups" class="section level2" number="8.3">
+<div id="multi-network-8-groups" class="section level2" number="9.3">
 <h2>
-<span class="header-section-number">8.3</span> multi network (8 groups)<a class="anchor" aria-label="anchor" href="#multi-network-8-groups"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.3</span> multi network (8 groups)<a class="anchor" aria-label="anchor" href="#multi-network-8-groups"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb570"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb596"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Build an 8-group dataset by repeatedly recycling otu_rare_relative columns ----</span></span>
 <span><span class="co"># This is purely for demoing the 8-group layouts below; abundance values are</span></span>
 <span><span class="co"># borrowed from the original matrix and renamed so each fake group has 6 samples.</span></span>
@@ -645,11 +646,11 @@
 <span><span class="co"># Final groups in otu_sample3 (8 total, CASE-SENSITIVE):</span></span>
 <span><span class="co">#   "WT", "KO", "OE"  (from the original 18 samples)</span></span>
 <span><span class="co">#   "ko", "oe", "wt", "aaa", "bbb"  (from the bind_rows additions)</span></span></code></pre></div>
-<div id="group_layout-triangle_down" class="section level3" number="8.3.1">
+<div id="group_layout-triangle_down" class="section level3" number="9.3.1">
 <h3>
-<span class="header-section-number">8.3.1</span> group_layout = “triangle_down”<a class="anchor" aria-label="anchor" href="#group_layout-triangle_down"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.3.1</span> group_layout = “triangle_down”<a class="anchor" aria-label="anchor" href="#group_layout-triangle_down"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb571"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb597"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Place the 8 sub-networks on a downward-pointing TRIANGLE frame ----</span></span>
 <span><span class="co"># `group_layout = "triangle_down"` arranges groups along a triangular outline</span></span>
 <span><span class="co"># with the apex pointing down. Useful for emphasising hierarchy or a "funnel"</span></span>
@@ -715,16 +716,16 @@
 ## Adding another scale for size, which will replace the existing scale.
 ## Scale for size is already present.
 ## Adding another scale for size, which will replace the existing scale.</code></pre>
-<div class="sourceCode" id="cb573"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb599"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_group_4_1</span> <span class="op">&lt;-</span> <span class="va">out_group4_1</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">p_group_4_1</span></span></code></pre></div>
-<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-112-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-121-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 </div>
-<div id="group_layout-snake_vertical" class="section level3" number="8.3.2">
+<div id="group_layout-snake_vertical" class="section level3" number="9.3.2">
 <h3>
-<span class="header-section-number">8.3.2</span> group_layout = “snake_vertical”<a class="anchor" aria-label="anchor" href="#group_layout-snake_vertical"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.3.2</span> group_layout = “snake_vertical”<a class="anchor" aria-label="anchor" href="#group_layout-snake_vertical"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb574"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb600"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---- Place sub-networks in a vertical SNAKE (zig-zag) frame ----</span></span>
 <span><span class="co"># `group_layout = "snake_vertical"` runs groups down-up-down... along a vertical</span></span>
 <span><span class="co"># meander. Useful when you have many groups and want them to fit a tall canvas.</span></span>
@@ -789,49 +790,49 @@
 ## Adding another scale for size, which will replace the existing scale.
 ## Scale for size is already present.
 ## Adding another scale for size, which will replace the existing scale.</code></pre>
-<div class="sourceCode" id="cb576"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb602"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_group_4_1</span> <span class="op">&lt;-</span> <span class="va">out_group4_1</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">p_group_4_1</span></span></code></pre></div>
-<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-113-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="ggNetView-manual_files/figure-html/unnamed-chunk-122-1.png" alt="" width="768" style="display: block; margin: auto;"></div>
 
 </div>
 </div>
 </div>
   <div class="chapter-nav">
-<div class="prev"><a href="network-topology-information.html"><span class="header-section-number">7</span> Network topology information</a></div>
-<div class="next"><a href="network-environment.html"><span class="header-section-number">9</span> Network &amp; Environment</a></div>
+<div class="prev"><a href="zi-pi.html"><span class="header-section-number">8</span> Zi-Pi</a></div>
+<div class="next"><a href="network-environment.html"><span class="header-section-number">10</span> Network &amp; Environment</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#multi-network-and-comparison"><span class="header-section-number">8</span> Multi-Network and comparison</a></li>
+<li><a class="nav-link" href="#multi-network-and-comparison"><span class="header-section-number">9</span> Multi-Network and comparison</a></li>
 <li>
-<a class="nav-link" href="#comparison-of-multi-sample-networks"><span class="header-section-number">8.1</span> Comparison of multi-sample networks</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#layout-gephi-scale-false"><span class="header-section-number">8.1.1</span> layout = “gephi”, scale = FALSE</a></li>
-<li><a class="nav-link" href="#layout-gephi-scale-true"><span class="header-section-number">8.1.2</span> layout = “gephi”, scale = TRUE</a></li>
-<li><a class="nav-link" href="#layout-circular_modules_equal_gephi_layout"><span class="header-section-number">8.1.3</span> layout = “circular_modules_equal_gephi_layout”</a></li>
-<li><a class="nav-link" href="#layout-circular_modules_equal_gephi_layout-1"><span class="header-section-number">8.1.4</span> layout = “circular_modules_equal_gephi_layout”</a></li>
-<li><a class="nav-link" href="#layout-circular_modules_equal_gephi_layout-2"><span class="header-section-number">8.1.5</span> layout = “circular_modules_equal_gephi_layout”</a></li>
-<li><a class="nav-link" href="#add-group-compare"><span class="header-section-number">8.1.6</span> add group compare</a></li>
+<a class="nav-link" href="#comparison-of-multi-sample-networks"><span class="header-section-number">9.1</span> Comparison of multi-sample networks</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#layout-gephi-scale-false"><span class="header-section-number">9.1.1</span> layout = “gephi”, scale = FALSE</a></li>
+<li><a class="nav-link" href="#layout-gephi-scale-true"><span class="header-section-number">9.1.2</span> layout = “gephi”, scale = TRUE</a></li>
+<li><a class="nav-link" href="#layout-circular_modules_equal_gephi_layout"><span class="header-section-number">9.1.3</span> layout = “circular_modules_equal_gephi_layout”</a></li>
+<li><a class="nav-link" href="#layout-circular_modules_equal_gephi_layout-1"><span class="header-section-number">9.1.4</span> layout = “circular_modules_equal_gephi_layout”</a></li>
+<li><a class="nav-link" href="#layout-circular_modules_equal_gephi_layout-2"><span class="header-section-number">9.1.5</span> layout = “circular_modules_equal_gephi_layout”</a></li>
+<li><a class="nav-link" href="#add-group-compare"><span class="header-section-number">9.1.6</span> add group compare</a></li>
 </ul>
 </li>
 <li>
-<a class="nav-link" href="#multi-network-4-groups"><span class="header-section-number">8.2</span> multi network (4 groups)</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#group_layout-row"><span class="header-section-number">8.2.1</span> group_layout = “row”</a></li>
-<li><a class="nav-link" href="#group_layout-square"><span class="header-section-number">8.2.2</span> group_layout = “square”</a></li>
+<a class="nav-link" href="#multi-network-4-groups"><span class="header-section-number">9.2</span> multi network (4 groups)</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#group_layout-row"><span class="header-section-number">9.2.1</span> group_layout = “row”</a></li>
+<li><a class="nav-link" href="#group_layout-square"><span class="header-section-number">9.2.2</span> group_layout = “square”</a></li>
 </ul>
 </li>
 <li>
-<a class="nav-link" href="#multi-network-8-groups"><span class="header-section-number">8.3</span> multi network (8 groups)</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#group_layout-triangle_down"><span class="header-section-number">8.3.1</span> group_layout = “triangle_down”</a></li>
-<li><a class="nav-link" href="#group_layout-snake_vertical"><span class="header-section-number">8.3.2</span> group_layout = “snake_vertical”</a></li>
+<a class="nav-link" href="#multi-network-8-groups"><span class="header-section-number">9.3</span> multi network (8 groups)</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#group_layout-triangle_down"><span class="header-section-number">9.3.1</span> group_layout = “triangle_down”</a></li>
+<li><a class="nav-link" href="#group_layout-snake_vertical"><span class="header-section-number">9.3.2</span> group_layout = “snake_vertical”</a></li>
 </ul>
 </li>
 </ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/Jiawang1209/ggNetView/blob/master/07-network_compare.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/Jiawang1209/ggNetView/edit/master/07-network_compare.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/Jiawang1209/ggNetView/blob/master/08-network_compare.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/Jiawang1209/ggNetView/edit/master/08-network_compare.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>
@@ -843,7 +844,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-05-24.</p>
+    <p>"<strong>ggNetView manual documentation</strong>" was written by Yue Liu. It was last built on 2026-06-03.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
